@@ -819,34 +819,34 @@ public:
     }
 
     // Prevent both the player and their pet from dealing any damage if Pacifist Mode is enabled
-    void OnBeforeDamageDealt(Unit* attacker, Unit* victim, uint32& damage) override
-    {
-        Player* player = nullptr;
+    void OnDamage(Unit* attacker, Unit* victim, uint32& damage) override
+{
+    Player* player = nullptr;
 
-        // Check if the attacker is the player or the player's pet
+    // Check if the attacker is the player or the player's pet
+    if (attacker->GetTypeId() == TYPEID_PLAYER)
+    {
+        player = attacker->ToPlayer();
+    }
+    else if (attacker->GetTypeId() == TYPEID_UNIT && attacker->ToCreature()->IsPet())
+    {
+        player = attacker->GetOwner() ? attacker->GetOwner()->ToPlayer() : nullptr;
+    }
+
+    // If the player has Pacifist Mode enabled, nullify the damage
+    if (player && sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
+    {
+        damage = 0; // Nullify damage dealt
         if (attacker->GetTypeId() == TYPEID_PLAYER)
         {
-            player = attacker->ToPlayer();
+            ChatHandler(player->GetSession()).PSendSysMessage("Pacifists cannot deal damage.");
         }
-        else if (attacker->GetTypeId() == TYPEID_UNIT && attacker->ToCreature()->IsPet())
+        else if (attacker->ToCreature()->IsPet())
         {
-            player = attacker->GetOwner() ? attacker->GetOwner()->ToPlayer() : nullptr;
-        }
-
-        // If the player has Pacifist Mode enabled, nullify the damage
-        if (player && sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
-        {
-            damage = 0; // Nullify damage dealt
-            if (attacker->GetTypeId() == TYPEID_PLAYER)
-            {
-                ChatHandler(player->GetSession()).PSendSysMessage("Pacifists cannot deal damage.");
-            }
-            else if (attacker->ToCreature()->IsPet())
-            {
-                ChatHandler(player->GetSession()).PSendSysMessage("Pacifists pets cannot deal damage.");
-            }
+            ChatHandler(player->GetSession()).PSendSysMessage("Pacifists' pets cannot deal damage.");
         }
     }
+}
 
     void OnLevelChanged(Player* player, uint8 oldlevel) override
     {
