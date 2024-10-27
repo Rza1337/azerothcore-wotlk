@@ -794,63 +794,32 @@ public:
 
 };
 
-class ChallengeMode_Pacifist : public ChallengeMode
+class ChallengeMode_Pacifist : public UnitScript
 {
 public:
-    ChallengeMode_Pacifist() : ChallengeMode("ChallengeMode_Pacifist", SETTING_PACIFIST) {}
+    ChallengeMode_Pacifist() : UnitScript("ChallengeMode_Pacifist") {}
 
-    // Prevent XP gain from creature kills but allow quest XP
-    void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
+    // Nullify damage dealt by pacifist players and pets
+    void OnDamage(Unit* attacker, Unit* /*victim*/, uint32& damage) override
     {
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
-        {
-            return;
-        }
+        Player* player = nullptr;
 
-        // Block XP gain from kills, but allow quest XP
-        if (xpSource == XPSOURCE_KILL && victim)
-        {
-            amount = 0; // No XP to the player for kills
-        }
-        else
-        {
-            ChallengeMode::OnGiveXP(player, amount, victim, xpSource); // Allow other XP types
-        }
-    }
-
-    // Prevent both the player and their pet from dealing any damage if Pacifist Mode is enabled
-    void OnDamage(Unit* attacker, Unit* victim, uint32& damage) override
-{
-    Player* player = nullptr;
-
-    // Check if the attacker is the player or the player's pet
-    if (attacker->GetTypeId() == TYPEID_PLAYER)
-    {
-        player = attacker->ToPlayer();
-    }
-    else if (attacker->GetTypeId() == TYPEID_UNIT && attacker->ToCreature()->IsPet())
-    {
-        player = attacker->GetOwner() ? attacker->GetOwner()->ToPlayer() : nullptr;
-    }
-
-    // If the player has Pacifist Mode enabled, nullify the damage
-    if (player && sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
-    {
-        damage = 0; // Nullify damage dealt
+        // Check if the attacker is a player or their pet
         if (attacker->GetTypeId() == TYPEID_PLAYER)
         {
+            player = attacker->ToPlayer();
+        }
+        else if (attacker->GetTypeId() == TYPEID_UNIT && attacker->ToCreature()->IsPet())
+        {
+            player = attacker->GetOwner() ? attacker->GetOwner()->ToPlayer() : nullptr;
+        }
+
+        // Nullify damage if pacifist mode is enabled for the player or pet owner
+        if (player && sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
+        {
+            damage = 0;
             ChatHandler(player->GetSession()).PSendSysMessage("Pacifists cannot deal damage.");
         }
-        else if (attacker->ToCreature()->IsPet())
-        {
-            ChatHandler(player->GetSession()).PSendSysMessage("Pacifists' pets cannot deal damage.");
-        }
-    }
-}
-
-    void OnLevelChanged(Player* player, uint8 oldlevel) override
-    {
-        ChallengeMode::OnLevelChanged(player, oldlevel);
     }
 };
 
