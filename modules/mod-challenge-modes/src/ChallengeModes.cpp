@@ -3,6 +3,8 @@
  */
 
 #include "ChallengeModes.h"
+#include "SpellMgr.h"
+
 
 ChallengeModes* ChallengeModes::instance()
 {
