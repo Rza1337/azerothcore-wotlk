@@ -20,6 +20,7 @@
 
 #include "DatabaseEnvFwd.h"
 #include "ScriptObjectFwd.h"
+#include <string_view>
 
 //#include "Duration.h"
 //#include "LFG.h"

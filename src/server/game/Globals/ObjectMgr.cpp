@@ -54,8 +54,6 @@
 #include <boost/algorithm/string.hpp>
 #include <numeric>
 
-#include "ItemEnchantmentMgr.h"
-
 ScriptMapMap sSpellScripts;
 ScriptMapMap sEventScripts;
 ScriptMapMap sWaypointScripts;

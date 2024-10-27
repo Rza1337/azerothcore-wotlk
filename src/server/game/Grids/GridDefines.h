@@ -21,6 +21,7 @@
 #include "Common.h"
 #include "MapDefines.h"
 #include "NGrid.h"
+#include <cmath>
 
 // Forward class definitions
 class Corpse;

@@ -21,6 +21,7 @@
 #define OUTDOORPVP_OBJECTIVE_UPDATE_INTERVAL 1000
 
 #include "OutdoorPvP.h"
+#include <memory>
 
 class Player;
 class GameObject;

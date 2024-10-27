@@ -22,7 +22,6 @@
 #include "ScriptedCreature.h"
 #include "ScriptedEscortAI.h"
 #include "SpellInfo.h"
-#include "SpellMgr.h"
 #include "Vehicle.h"
 #include "trial_of_the_champion.h"
 

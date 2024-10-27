@@ -47,6 +47,7 @@
 #include "SpellScript.h"
 #include "TemporarySummon.h"
 #include "Unit.h"
+#include "UpdateData.h"
 #include "Util.h"
 #include "VMapFactory.h"
 #include "Vehicle.h"
@@ -59,8 +60,6 @@
 //  there is probably some underlying problem with imports which should properly addressed
 //  see: https://github.com/azerothcore/azerothcore-wotlk/issues/9766
 #include "GridNotifiersImpl.h"
-#include "IVMapMgr.h"
-#include "VMapMgr2.h"
 
 extern pEffect SpellEffects[TOTAL_SPELL_EFFECTS];
 
@@ -7528,9 +7527,9 @@ SpellCastResult Spell::CheckItems()
                     // Xinef: Apply item level restriction if the enchanting spell has max level restrition set
                     if (m_CastItem && m_spellInfo->MaxLevel > 0)
                     {
-                        if (item->GetTemplate()->ItemLevel < m_CastItem->GetTemplate()->RequiredLevel)
+                        if (item->GetTemplate()->RequiredLevel < m_CastItem->GetTemplate()->RequiredLevel)
                             return SPELL_FAILED_LOWLEVEL;
-                        if (item->GetTemplate()->ItemLevel > m_spellInfo->MaxLevel)
+                        if (item->GetTemplate()->RequiredLevel > m_spellInfo->MaxLevel)
                             return SPELL_FAILED_HIGHLEVEL;
                     }
 

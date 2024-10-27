@@ -21,7 +21,6 @@
 #include "PassiveAI.h"
 #include "Player.h"
 #include "SpellAuraEffects.h"
-#include "SpellMgr.h"
 #include "SpellScript.h"
 #include "SpellScriptLoader.h"
 #include "Vehicle.h"

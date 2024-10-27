@@ -26,7 +26,6 @@
 #include "SpellScriptLoader.h"
 #include "TaskScheduler.h"
 #include "karazhan.h"
-#include "SpellMgr.h"
 
 enum Texts
 {

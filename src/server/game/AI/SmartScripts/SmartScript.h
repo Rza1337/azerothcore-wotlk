@@ -25,21 +25,9 @@
 #include "SmartScriptMgr.h"
 #include "Spell.h"
 #include "Unit.h"
-#include <deque>
 
 class SmartScript
 {
-    struct SmartScriptFrame
-    {
-        SmartScriptHolder& holder;
-        Unit* unit;
-        uint32 var0;
-        uint32 var1;
-        bool bvar;
-        SpellInfo const* spell;
-        GameObject* gob;
-    };
-
 public:
     SmartScript();
     ~SmartScript();
@@ -265,8 +253,7 @@ private:
             }
         }
     }
-    std::optional<std::reference_wrapper<
-        SmartScriptHolder>> FindLinkedEvent(uint32 link)
+    SmartScriptHolder FindLinkedEvent (uint32 link)
     {
         if (!mEvents.empty())
         {
@@ -274,16 +261,15 @@ private:
             {
                 if (i->event_id == link)
                 {
-                    return std::ref(*i);
+                    return (*i);
                 }
             }
         }
-        return std::nullopt;
+        SmartScriptHolder s;
+        return s;
     }
 
     GuidUnorderedSet _summonList;
-
-    std::deque<SmartScriptFrame> executionStack;
 };
 
 #endif

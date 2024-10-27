@@ -23,6 +23,7 @@
 #include "World.h"
 #include <boost/filesystem/path.hpp>
 #include <fstream>
+#include <iostream>
 
 typedef std::vector<FlyByCamera> FlyByCameraCollection;
 std::unordered_map<uint32, FlyByCameraCollection> sFlyByCameraStore;

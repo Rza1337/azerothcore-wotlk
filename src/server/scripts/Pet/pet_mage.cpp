@@ -26,7 +26,6 @@
 #include "Player.h"
 #include "ScriptedCreature.h"
 #include "SpellAuras.h"
-#include "SpellMgr.h"
 
 enum MageSpells
 {

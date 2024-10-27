@@ -18,7 +18,6 @@
 #include "SpellInfo.h"
 #include "Chat.h"
 #include "ConditionMgr.h"
-#include "Corpse.h"
 #include "DBCStores.h"
 #include "LootMgr.h"
 #include "Player.h"

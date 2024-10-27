@@ -19,6 +19,8 @@
 #define _WARDEN_WIN_H
 
 #include "ByteBuffer.h"
+#include "Cryptography/ARC4.h"
+#include "Cryptography/BigNumber.h"
 #include "Warden.h"
 #include <list>
 

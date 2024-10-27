@@ -23,6 +23,7 @@
 #include "DBCEnums.h"
 #include "EventProcessor.h"
 #include <array>
+#include <deque>
 
 constexpr auto COUNT_OF_PLAYERS_TO_AVERAGE_WAIT_TIME = 10;
 

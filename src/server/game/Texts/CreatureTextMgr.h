@@ -21,6 +21,7 @@
 #include "Creature.h"
 #include "GridNotifiers.h"
 #include "ObjectAccessor.h"
+#include "Opcodes.h"
 #include "SharedDefines.h"
 #include "WorldSession.h"
 
