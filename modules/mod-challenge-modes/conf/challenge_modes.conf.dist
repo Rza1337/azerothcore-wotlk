@@ -130,3 +130,12 @@ IronMan.ItemRewardAmount = 1
 IronMan.DisableLevel = 0
 IronMan.XPMultiplier = 1
 IronMan.AchievementReward = ""
+
+Pacifist.Enable = 1
+Pacifist.TitleRewards = ""
+Pacifist.XPMultiplier = 1
+Pacifist.TalentRewards = ""
+Pacifist.ItemRewards = ""
+Pacifist.ItemRewardAmount = 1
+Pacifist.DisableLevel = 0
+Pacifist.AchievementReward = ""

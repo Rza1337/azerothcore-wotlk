@@ -41,6 +41,8 @@ bool ChallengeModes::challengeEnabled(ChallengeModeSettings setting) const
             return questXpOnlyEnable;
         case SETTING_IRON_MAN:
             return ironManEnable;
+        case SETTING_PACIFIST:
+            return pacifistEnable;
         case HARDCORE_DEAD:
             break;
     }
@@ -67,6 +69,8 @@ uint32 ChallengeModes::getDisableLevel(ChallengeModeSettings setting) const
             return questXpOnlyDisableLevel;
         case SETTING_IRON_MAN:
             return ironManDisableLevel;
+        case SETTING_PACIFIST:
+            return pacifistDisableLevel;
         case HARDCORE_DEAD:
             break;
     }
@@ -93,6 +97,8 @@ float ChallengeModes::getXpBonusForChallenge(ChallengeModeSettings setting) cons
             return questXpOnlyXpBonus;
         case SETTING_IRON_MAN:
             return ironManXpBonus;
+        case SETTING_PACIFIST:
+            return pacifistXpBonus;
         case HARDCORE_DEAD:
             break;
     }
@@ -119,6 +125,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTitleMapForChallenge
             return &questXpOnlyTitleRewards;
         case SETTING_IRON_MAN:
             return &ironManTitleRewards;
+        case SETTING_PACIFIST:
+            return &pacifistTitleRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -145,6 +153,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTalentMapForChalleng
             return &questXpOnlyTalentRewards;
         case SETTING_IRON_MAN:
             return &ironManTalentRewards;
+        case SETTING_PACIFIST:
+            return &pacifistTalentRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -171,6 +181,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getItemMapForChallenge(
             return &questXpOnlyItemRewards;
         case SETTING_IRON_MAN:
             return &ironManItemRewards;
+        case SETTING_PACIFIST:
+            return &pacifistItemRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -197,6 +209,8 @@ uint32 ChallengeModes::getItemRewardAmount(ChallengeModeSettings setting) const
             return questXpOnlyItemRewardAmount;
         case SETTING_IRON_MAN:
             return ironManItemRewardAmount;
+        case SETTING_PACIFIST:
+            return pacifistItemRewardAmount;
         case HARDCORE_DEAD:
             break;
     }
@@ -223,6 +237,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getAchievementMapForCha
             return &questXpOnlyAchievementReward;
         case SETTING_IRON_MAN:
             return &ironManAchievementReward;
+        case SETTING_PACIFIST:
+            return &pacifistAchievementReward;
         case HARDCORE_DEAD:
             break;
     }
@@ -279,6 +295,8 @@ private:
             sChallengeModes->verySlowXpGainEnable    = sConfigMgr->GetOption<bool>("VerySlowXpGain.Enable", true);
             sChallengeModes->questXpOnlyEnable       = sConfigMgr->GetOption<bool>("QuestXpOnly.Enable", true);
             sChallengeModes->ironManEnable           = sConfigMgr->GetOption<bool>("IronMan.Enable", true);
+            sChallengeModes->pacifistEnable          = sConfigMgr->GetOption<bool>("Pacifist.Enable", true);
+
 
             sChallengeModes->hardcoreDisableLevel          = sConfigMgr->GetOption<uint32>("Hardcore.DisableLevel", 0);
             sChallengeModes->semiHardcoreDisableLevel      = sConfigMgr->GetOption<uint32>("SemiHardcore.DisableLevel", 0);
@@ -288,6 +306,8 @@ private:
             sChallengeModes->verySlowXpGainDisableLevel    = sConfigMgr->GetOption<uint32>("VerySlowXpGain.DisableLevel", 0);
             sChallengeModes->questXpOnlyDisableLevel       = sConfigMgr->GetOption<uint32>("QuestXpOnly.DisableLevel", 0);
             sChallengeModes->ironManDisableLevel           = sConfigMgr->GetOption<uint32>("IronMan.DisableLevel", 0);
+            sChallengeModes->pacifistDisableLevel          = sConfigMgr->GetOption<uint32>("Pacifist.DisableLevel", 0);
+
 
             sChallengeModes->hardcoreXpBonus         = sConfigMgr->GetOption<float>("Hardcore.XPMultiplier", 1.0f);
             sChallengeModes->semiHardcoreXpBonus     = sConfigMgr->GetOption<float>("SemiHardcore.XPMultiplier", 1.0f);
@@ -297,6 +317,8 @@ private:
             sChallengeModes->slowXpGainBonus         = sConfigMgr->GetOption<float>("SlowXpGain.XPMultiplier", 0.50f);
             sChallengeModes->verySlowXpGainBonus     = sConfigMgr->GetOption<float>("VerySlowXpGain.XPMultiplier", 0.25f);
             sChallengeModes->ironManXpBonus          = sConfigMgr->GetOption<float>("IronMan.XPMultiplier", 1.0f);
+            sChallengeModes->pacifistXpBonus         = sConfigMgr->GetOption<float>("Pacifist.XPMultiplier", 1.0f);
+
 
             sChallengeModes->hardcoreItemRewardAmount         = sConfigMgr->GetOption<uint32>("Hardcore.ItemRewardAmount", 1);
             sChallengeModes->semiHardcoreItemRewardAmount     = sConfigMgr->GetOption<uint32>("SemiHardcore.ItemRewardAmount", 1);
@@ -306,6 +328,7 @@ private:
             sChallengeModes->verySlowXpGainItemRewardAmount   = sConfigMgr->GetOption<uint32>("VerySlowXpGain.ItemRewardAmount", 1);
             sChallengeModes->questXpOnlyItemRewardAmount      = sConfigMgr->GetOption<uint32>("QuestXpOnly.ItemRewardAmount", 1);
             sChallengeModes->ironManItemRewardAmount          = sConfigMgr->GetOption<uint32>("IronMan.ItemRewardAmount", 1);
+            sChallengeModes->pacifistItemRewardAmount         = sConfigMgr->GetOption<uint32>("Pacifist.ItemRewardAmount", 1);
 
             LoadStringToMap(sChallengeModes->hardcoreAchievementReward, sConfigMgr->GetOption<std::string>("Hardcore.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->semiHardcoreAchievementReward, sConfigMgr->GetOption<std::string>("SemiHardcore.AchievementReward", ""));
@@ -315,6 +338,7 @@ private:
             LoadStringToMap(sChallengeModes->verySlowXpGainAchievementReward, sConfigMgr->GetOption<std::string>("VerySlowXpGain.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->questXpOnlyAchievementReward, sConfigMgr->GetOption<std::string>("QuestXpOnly.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->ironManAchievementReward, sConfigMgr->GetOption<std::string>("IronMan.AchievementReward", ""));
+            LoadStringToMap(sChallengeModes->pacifistAchievementReward, sConfigMgr->GetOption<std::string>("Pacifist.AchievementReward", ""));
         }
     }
 };
@@ -770,6 +794,67 @@ public:
 
 };
 
+class ChallengeMode_Pacifist : public ChallengeMode
+{
+public:
+    ChallengeMode_Pacifist() : ChallengeMode("ChallengeMode_Pacifist", SETTING_PACIFIST) {}
+
+    // Prevent XP gain from creature kills but allow quest XP
+    void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
+    {
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
+        {
+            return;
+        }
+
+        // Block XP gain from kills, but allow quest XP
+        if (xpSource == XPSOURCE_KILL && victim)
+        {
+            amount = 0; // No XP to the player for kills
+        }
+        else
+        {
+            ChallengeMode::OnGiveXP(player, amount, victim, xpSource); // Allow other XP types
+        }
+    }
+
+    // Prevent both the player and their pet from dealing any damage if Pacifist Mode is enabled
+    void OnBeforeDamageDealt(Unit* attacker, Unit* victim, uint32& damage) override
+    {
+        Player* player = nullptr;
+
+        // Check if the attacker is the player or the player's pet
+        if (attacker->GetTypeId() == TYPEID_PLAYER)
+        {
+            player = attacker->ToPlayer();
+        }
+        else if (attacker->GetTypeId() == TYPEID_UNIT && attacker->ToCreature()->IsPet())
+        {
+            player = attacker->GetOwner() ? attacker->GetOwner()->ToPlayer() : nullptr;
+        }
+
+        // If the player has Pacifist Mode enabled, nullify the damage
+        if (player && sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
+        {
+            damage = 0; // Nullify damage dealt
+            if (attacker->GetTypeId() == TYPEID_PLAYER)
+            {
+                ChatHandler(player->GetSession()).PSendSysMessage("Pacifists cannot deal damage.");
+            }
+            else if (attacker->ToCreature()->IsPet())
+            {
+                ChatHandler(player->GetSession()).PSendSysMessage("Pacifists pets cannot deal damage.");
+            }
+        }
+    }
+
+    void OnLevelChanged(Player* player, uint8 oldlevel) override
+    {
+        ChallengeMode::OnLevelChanged(player, oldlevel);
+    }
+};
+
+
 class gobject_challenge_modes : public GameObjectScript
 {
 private:
@@ -829,6 +914,10 @@ public:
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Iron Man Mode", 0, SETTING_IRON_MAN);
         }
+        if (sChallengeModes->challengeEnabled(SETTING_PACIFIST) && !playerSettingEnabled(player, SETTING_PACIFIST))
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Pacifist Mode", 0, SETTING_PACIFIST);
+        }
         SendGossipMenuFor(player, 12669, go->GetGUID());
         return true;
     }
@@ -860,4 +949,5 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_VerySlowXpGain();
     new ChallengeMode_QuestXpOnly();
     new ChallengeMode_IronMan();
+    new ChallengeMode_Pacifist();
 }
