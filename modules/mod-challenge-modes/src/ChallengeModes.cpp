@@ -969,8 +969,7 @@ ChatCommandTable GetCommands() const override
 {
     static ChatCommandTable commandTable =
     {
-        ChatCommandBuilder("challenge", HandleChallengeCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No,
-            ChatCommandTable
+        ChatCommandBuilder("challenge", ChatCommandTable
             {
                 ChatCommandBuilder("enable", HandleEnableChallengeCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No),
                 ChatCommandBuilder("disable", HandleDisableChallengeCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No),
