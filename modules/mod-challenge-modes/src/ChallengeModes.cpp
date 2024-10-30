@@ -967,9 +967,10 @@ public:
 
     ChatCommandTable GetCommands() const override // Use ChatCommandTable here
     {
-        static ChatCommandTable commandTable = // And here as well
+        static ChatCommandTable commandTable = // Correct initialization structure
         {
             { "challenge", SEC_ADMINISTRATOR, false, nullptr, "", 
+                ChatCommandTable
                 {
                     { "enable", SEC_ADMINISTRATOR, false, &HandleEnableChallengeCommand, "Enable a specific challenge" },
                     { "disable", SEC_ADMINISTRATOR, false, &HandleDisableChallengeCommand, "Disable a specific challenge" },
