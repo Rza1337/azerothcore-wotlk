@@ -969,17 +969,23 @@ public:
     {
         static ChatCommandTable commandTable =
         {
-            ChatCommandBuilder("challenge", SEC_ADMINISTRATOR, false, nullptr, "",
+            ChatCommandBuilder("challenge", HandleChallengeCommand, SEC_ADMINISTRATOR, Console::NoConsole, 
                 ChatCommandTable
                 {
-                    ChatCommandBuilder("enable", SEC_ADMINISTRATOR, false, &HandleEnableChallengeCommand, "Enable a specific challenge"),
-                    ChatCommandBuilder("disable", SEC_ADMINISTRATOR, false, &HandleDisableChallengeCommand, "Disable a specific challenge"),
-                    ChatCommandBuilder("active", SEC_ADMINISTRATOR, false, &HandleViewActiveChallengesCommand, "View active challenges"),
-                    ChatCommandBuilder("talent", SEC_ADMINISTRATOR, false, &HandleTalentPointsCommand, "Add or remove talent points")
+                    ChatCommandBuilder("enable", HandleEnableChallengeCommand, SEC_ADMINISTRATOR, Console::NoConsole),
+                    ChatCommandBuilder("disable", HandleDisableChallengeCommand, SEC_ADMINISTRATOR, Console::NoConsole),
+                    ChatCommandBuilder("active", HandleViewActiveChallengesCommand, SEC_ADMINISTRATOR, Console::NoConsole),
+                    ChatCommandBuilder("talent", HandleTalentPointsCommand, SEC_ADMINISTRATOR, Console::NoConsole)
                 }
             )
         };
         return commandTable;
+    }
+
+    static bool HandleChallengeCommand(ChatHandler* handler, const char* /*args*/)
+    {
+        handler->SendSysMessage("Challenge command:");
+        return true;
     }
 
     // Enable Challenge Command
