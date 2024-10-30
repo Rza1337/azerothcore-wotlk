@@ -1001,7 +1001,7 @@ ChatCommandTable GetCommands() const override
             return false;
 
         int setting = atoi(args);
-        if (setting < 0 || setting >= HARDCORE_DEAD)
+        if (setting < 0 || setting >= SETTING_CASHLESS)
         {
             handler->SendSysMessage("Invalid challenge setting ID.");
             return false;
@@ -1020,7 +1020,7 @@ ChatCommandTable GetCommands() const override
             return false;
 
         int setting = atoi(args);
-        if (setting < 0 || setting >= HARDCORE_DEAD)
+        if (setting < 0 || setting >= SETTING_CASHLESS)
         {
             handler->SendSysMessage("Invalid challenge setting ID.");
             return false;
@@ -1037,7 +1037,7 @@ ChatCommandTable GetCommands() const override
         Player* player = handler->GetSession()->GetPlayer();
         std::string activeChallenges = "Active Challenges for " + player->GetName() + ":\n";
 
-        for (int i = 0; i <= HARDCORE_DEAD; ++i)
+        for (int i = 0; i <= SETTING_CASHLESS; ++i)
         {
             if (sChallengeModes->challengeEnabledForPlayer(static_cast<ChallengeModeSettings>(i), player))
             {
