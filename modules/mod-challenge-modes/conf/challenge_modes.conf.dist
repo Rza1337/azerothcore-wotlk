@@ -20,12 +20,15 @@ ChallengeModes.Enable = 1
 #        Hardcore - Players who die are permanently ghosts and can never be revived.
 #        SemiHardcore - Players who die lose all worn equipment and carried gold. Cannot be enabled at the same time as Hardcore.
 #        SelfCrafted - Players can only wear equipment that they have crafted.
-#        ItemQualityLevel - Players can only wear equipment that is of Normal or Poor quality
+#        ItemQualityLevel - Players can only wear equipment that is of Normal or Poor quality.
 #        SlowXpGain - Players receive 0.5x the normal amount of XP.
-#        VerySlowXpGain - Players receive 0.25x the normal amount of XP. Provides all rewards of SlowXpGain as well.
-#        QuestXpOnly - Players can receive XP only from quests
-#        IronManMode - Enforces the Iron Man ruleset (https://wowchallenges.com/challangeinfo/iron-man/)
-#
+#        VerySlowXpGain - Players receive 0.25x the normal amount of XP.
+#        TurtleMode - Players receive 0.1x the normal amount of XP.
+#        QuestXpOnly - Players can receive XP only from quests.
+#        IronManMode - Enforces the Iron Man ruleset (https://wowchallenges.com/challangeinfo/iron-man/).
+#        Pacifist - Prevents players and their pet doing damage.
+#        Questless - Players are restricted from earning quest XP.
+#        Cashless - Players cannot acquire currency (gold, silver, copper).
 #
 #    The options for each mode follow the same format. "<Challenge>" is replaced with the name of the challenge, such as Hardcore. The following options are possible:
 #    <Challenge>.Enable = 1
@@ -35,8 +38,8 @@ ChallengeModes.Enable = 1
 #        The IDs used are from CharTitles.dbc. The format is the level followed by the title ID, separated by commas.
 #        Example: <Challenge>.TitleRewards = "60 143, 70 123, 80 145"
 #    <Challenge>.XPMultiplier = ""
-#        Multiplies XP the player gains if this challege is enabled. This is a multiplier values, so bonus are applied multiplicatively.
-#        This reward option is not available for SlowXpGain and VerySlowXpGain
+#        Multiplies XP the player gains if this challenge is enabled. This is a multiplier value, so bonus are applied multiplicatively.
+#        This reward option is not available for SlowXpGain and VerySlowXpGain.
 #        Example: <Challenge>.XPMultiplier = "1.5"
 #    <Challenge>.TalentRewards = ""
 #        Rewards talent points for players when reaching the given levels with the challenge enabled.
@@ -113,6 +116,15 @@ VerySlowXpGain.DisableLevel = 0
 VerySlowXpGain.XPMultiplier = 0.25
 VerySlowXpGain.AchievementReward = ""
 
+TurtleMode.Enable = 1
+TurtleMode.TitleRewards = ""
+TurtleMode.TalentRewards = ""
+TurtleMode.ItemRewards = ""
+TurtleMode.ItemRewardAmount = 1
+TurtleMode.DisableLevel = 0
+TurtleMode.XPMultiplier = 0.1
+TurtleMode.AchievementReward = ""
+
 QuestXpOnly.Enable = 1
 QuestXpOnly.TitleRewards = ""
 QuestXpOnly.XPMultiplier = 1
@@ -139,3 +151,21 @@ Pacifist.ItemRewards = ""
 Pacifist.ItemRewardAmount = 1
 Pacifist.DisableLevel = 0
 Pacifist.AchievementReward = ""
+
+Questless.Enable = 1
+Questless.TitleRewards = ""
+Questless.XPMultiplier = 1
+Questless.TalentRewards = ""
+Questless.ItemRewards = ""
+Questless.ItemRewardAmount = 1
+Questless.DisableLevel = 0
+Questless.AchievementReward = ""
+
+Cashless.Enable = 1
+Cashless.TitleRewards = ""
+Cashless.XPMultiplier = 1
+Cashless.TalentRewards = ""
+Cashless.ItemRewards = ""
+Cashless.ItemRewardAmount = 1
+Cashless.DisableLevel = 0
+Cashless.AchievementReward = ""
