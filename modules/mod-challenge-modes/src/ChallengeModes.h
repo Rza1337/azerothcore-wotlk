@@ -42,6 +42,8 @@ class ChallengeModes
 {
 public:
     static ChallengeModes* instance();
+    ChallengeModes();
+    void InitializeAdditionalSpells();
 
     bool challengesEnabled, hardcoreEnable, semiHardcoreEnable, selfCraftedEnable, itemQualityLevelEnable, slowXpGainEnable, verySlowXpGainEnable, turtleModeEnable, questXpOnlyEnable, ironManEnable, pacifistEnable, questlessEnable, cashlessEnable;
     uint32 hardcoreDisableLevel, semiHardcoreDisableLevel, selfCraftedDisableLevel, itemQualityLevelDisableLevel, slowXpGainDisableLevel, verySlowXpGainDisableLevel, turtleModeDisableLevel, questXpOnlyDisableLevel, ironManDisableLevel, pacifistDisableLevel, questlessDisableLevel, cashlessDisableLevel;

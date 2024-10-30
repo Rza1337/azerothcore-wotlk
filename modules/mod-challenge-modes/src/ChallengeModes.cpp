@@ -75,349 +75,127 @@ void ChallengeModes::LearnSpellsForNewLevel(Player* player, uint8 fromLevel) {
     }
 }
 
- ChallengeModes::AdditionalSpellsList ChallengeModes::m_additionalSpells =
-    {
-        {3,
-        {
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{348}, // Immolate
-            }},
-        }},
-        {6,
-        {
-            {SPELLFAMILY_WARRIOR,
-            {
-                AddSpell{3127}, // parry
-            }},
-        }},
-        {8,
-        {
-            {SPELLFAMILY_HUNTER,
-            {
-                AddSpell{3127}, // parry
-            }},
-            {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{3127}, // parry
-            }},
-        }},
-        {10,
-        {
-            {SPELLFAMILY_HUNTER,
-            {
-                AddSpell{1515}, // tame beast
-                AddSpell{6991}, // Tier füttern
-                AddSpell{883}, // Pet Call
-                AddSpell{2641}, //Dismiss
-            }},
-        }},
-        {12,
-        {
-            {SPELLFAMILY_ROGUE,
-            {
-                AddSpell{3127}, // parry
-            }},
-            {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{7328}, // Redemption (R1)
-            }},
-        }},
-        {14,
-        {
-            {SPELLFAMILY_HUNTER,
-            {
-                AddSpell{6197}, // eagle eye
-            }},
-        }},
-        {16,
-        {
-            {SPELLFAMILY_ROGUE,
-            {
-                AddSpell{1804}, // Pick Lock
-            }},
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{1455}, // Life Tap (R2)
-            }},
-        }},
-        {20,
-        {
-            {SPELLFAMILY_WARRIOR,
-            {
-                AddSpell{674},   // dual wield
-                AddSpell{12678}, // stance mastery
-            }},
-            {SPELLFAMILY_HUNTER,
-            {
-                AddSpell{674}, // dual wield
-            }},
-            {SPELLFAMILY_WARLOCK,
-            {
-              AddSpell{5784},   // [Felsteed]
-            }},
-            {SPELLFAMILY_PALADIN,
-            {
-              AddSpell{34769, TeamId::TEAM_HORDE}, // Schlachtross beschwören
-              AddSpell{13819, TeamId::TEAM_ALLIANCE}, // Schlachtross beschwören
-            }},
-            {SPELLFAMILY_MAGE,
-            {
-              AddSpell{3567, TeamId::TEAM_HORDE}, // Teleport: Orgrimmar
-              AddSpell{32272, TeamId::TEAM_HORDE}, // Teleport: Silvermoon
-              AddSpell{3563, TeamId::TEAM_HORDE}, // Teleport: Undercity
-              AddSpell{3561, TeamId::TEAM_ALLIANCE}, // Teleport: Stormwind
-              AddSpell{3562, TeamId::TEAM_ALLIANCE}, // Teleport: Ironforge
-              AddSpell{32271, TeamId::TEAM_ALLIANCE}, // Teleport: Exodar
-            }},
-        }},
-        {24,
-        {
-            {SPELLFAMILY_HUNTER,
-            {
-                AddSpell{1462}, //  Beast Lore
-                AddSpell{19885}, //  Track Hidden
-            }},
-            {SPELLFAMILY_ROGUE,
-            {
-                AddSpell{2836}, //  Detect Traps
-            }},
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{5500}, //  Sense Demons
-            }},
-            {SPELLFAMILY_SHAMAN,
-            {
-                AddSpell{6196}, //  Far Sight
-            }},
-            {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{10322}, // Redemption (R2)
-            }},
-        }},
-        {26,
-        {
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{1456}, // Life Tap (R3)
-            }},
-        }},
-        {30,
-        {
-            {SPELLFAMILY_SHAMAN,
-            {
-                AddSpell{66842}, // Call of the Elements
-            }},
-            {SPELLFAMILY_MAGE,
-            {
-              AddSpell{3566, TeamId::TEAM_HORDE}, // Teleport: Thunder Bluf
-              AddSpell{3565, TeamId::TEAM_ALLIANCE}, // Teleport: Darnassus
-            }},
-        }},
-        {32,
-        {
-            {SPELLFAMILY_DRUID,
-            {
-                AddSpell{5225}, // Track Humanoids
-            }},
-        }},
-        {35,
-        {
-            {SPELLFAMILY_MAGE,
-            {
-              AddSpell{49358, TeamId::TEAM_HORDE}, // Teleport: Stonard
-              AddSpell{49361, TeamId::TEAM_HORDE}, // Portal: Stonard
-              AddSpell{49359, TeamId::TEAM_ALLIANCE}, // Teleport: Theramore
-              AddSpell{49360, TeamId::TEAM_ALLIANCE}, // Portal: Theramore
-            }},
-        }},
-        {36,
-        {
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{11687}, // Life Tap (R4)
-            }},
-            {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{10324}, // Redemption (R3)
-            }},
-        }},
-        {40,
-        {
-            {SPELLFAMILY_SHAMAN,
-            {
-                  AddSpell{66843}, // Call of the Ancestors
-                  AddSpell{8737}, // Mail Rüstung
-            }},
-            {SPELLFAMILY_GENERIC,
-            {
-                  AddSpell{33388}, // Baby Mount
-            }},
-            {SPELLFAMILY_HUNTER,
-            {
-                  AddSpell{8737}, // Mail Rüstung
-            }},
-            {SPELLFAMILY_WARRIOR,
-            {
-                  AddSpell{750}, // PlatteMail Rüstung
-            }},
-            {SPELLFAMILY_PALADIN,
-            {
-                  AddSpell{34767, TeamId::TEAM_HORDE}, // Schlachtross beschwören
-                  AddSpell{23214, TeamId::TEAM_ALLIANCE}, // Schlachtross beschwören
-                  AddSpell{750}, // PlatteMail Rüstung
-            }},
-            {SPELLFAMILY_WARLOCK,
-            {
-                  AddSpell{23161}, // Dreadsteed
-            }},
-            {SPELLFAMILY_DRUID,
-            {
-                  AddSpell{20719}, // Feline Grace
-                  AddSpell{62600}, // Savage Defense
-            }},
-            {SPELLFAMILY_MAGE,
-            {
-                  AddSpell{11417, TeamId::TEAM_HORDE}, // Portal: Orgrimmar
-                  AddSpell{32267, TeamId::TEAM_HORDE}, // Portal: Silvermoon
-                  AddSpell{11418, TeamId::TEAM_HORDE}, // Portal: Undercity
-                  AddSpell{10059, TeamId::TEAM_ALLIANCE}, // Portal: Stormwind
-                  AddSpell{11416, TeamId::TEAM_ALLIANCE}, // Portal: Ironforge
-                  AddSpell{32266, TeamId::TEAM_ALLIANCE}, // Portal: Exodar
-            }},
-         },
-        {46,
-        {
-           SPELLFAMILY_WARLOCK,
-        {
-               AddSpell{11688}, // Life Tap (R5)
-        }},
-        }},
-        {48,
-        {
-        {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{20772}, // Redemption (R4)
-            }},
-        }},
-        {50,
-        {
-            {SPELLFAMILY_SHAMAN,
-            {
-                AddSpell{66844}, // Call of the Spirits
-            }},
-            {SPELLFAMILY_MAGE,
-            {
-                  AddSpell{11420, TeamId::TEAM_HORDE}, // Portal: Thunder Bluff
-                  AddSpell{11419, TeamId::TEAM_ALLIANCE}, // Portal: Darnassus
-            }},
-        }},
-        {56,
-        {
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{11689}, // Life Tap (R6)
-            }},
-        }},
-        {60,
-        {
-            {SPELLFAMILY_MAGE,
-            {
-                  AddSpell{35715, TeamId::TEAM_HORDE}, // Teleport: Shattrath
-                  AddSpell{33690, TeamId::TEAM_ALLIANCE}, // Teleport: Shattrath
-            }},
-            {SPELLFAMILY_GENERIC,
-            {
-                  AddSpell{33391}, // Adult Mount
-            }},
-            {SPELLFAMILY_PALADIN,
-            {
-                  AddSpell{20773}, // Redemption (R5)
-            }},
-        }},
-        {62,
-        {
-            {SPELLFAMILY_MAGE,
-            {
-                AddSpell{25306}, // Fireball (R12)
-            }},
-        }},
-        {65,
-        {
-            {SPELLFAMILY_MAGE,
-            {
-                  AddSpell{35717, TeamId::TEAM_HORDE}, // Portal: Shattrath
-                  AddSpell{33691, TeamId::TEAM_ALLIANCE}, // Portal: Shattrath
-            }},
-        }},
-        {66,
-        {
-            {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{53736, TeamId::TEAM_HORDE},    // Seal of Corruption
-                AddSpell{31801, TeamId::TEAM_ALLIANCE}, // Seal of Vengeance
-            }},
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{29858}, // Soulshatter
-            }},
-        }},
-        {68,
-        {
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{27222}, // Life Tap (R7)
-            }},
-        }},
-        {70,
-        {
-            {SPELLFAMILY_SHAMAN,
-            {
-                AddSpell{2825, TeamId::TEAM_HORDE},     // Bloodlust
-                AddSpell{32182, TeamId::TEAM_ALLIANCE}, // Heroism
-            }},
-            {SPELLFAMILY_GENERIC,
-            {
-                AddSpell{34090},     // Fly baby mounts
-            }},
-        }},
-        {71,
-        {
-            {SPELLFAMILY_DRUID,
-            {
-                AddSpell{40120},     // Swift Flight Form                
-            }},
-        }},
-        {72,
-        {
-            {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{48949}, // Redemption (R6)
-                
-            }},
-        }},
-        {79,
-        {
-            {SPELLFAMILY_PALADIN,
-            {
-                AddSpell{48950}, // Redemption (R7)
+ChallengeModes::AdditionalSpellsList ChallengeModes::m_additionalSpells;
 
-            }},
-        }},
-        {80,
-        {
-            {SPELLFAMILY_WARLOCK,
-            {
-                AddSpell{47836}, // Seed of Corruption (rank 3)
-                AddSpell{57946}, // Life Tap (R8)
-            }},
-            {SPELLFAMILY_GENERIC,
-            {
-                AddSpell{34091}, // Quick fly mounts
-                AddSpell{54197}, // Flying in Northrend
-            }},
-        }},
-    };
+ChallengeModes::ChallengeModes() {
+    InitializeAdditionalSpells();
+}
+
+void ChallengeModes::InitializeAdditionalSpells() {
+    // Level 3
+    m_additionalSpells[3][SPELLFAMILY_WARLOCK] = { AddSpell{348} }; // Immolate
+
+    // Level 6
+    m_additionalSpells[6][SPELLFAMILY_WARRIOR] = { AddSpell{3127} }; // Parry
+
+    // Level 8
+    m_additionalSpells[8][SPELLFAMILY_HUNTER] = { AddSpell{3127} }; // Parry
+    m_additionalSpells[8][SPELLFAMILY_PALADIN] = { AddSpell{3127} }; // Parry
+
+    // Level 10
+    m_additionalSpells[10][SPELLFAMILY_HUNTER] = { AddSpell{1515}, AddSpell{6991}, AddSpell{883}, AddSpell{2641} };
+
+    // Level 12
+    m_additionalSpells[12][SPELLFAMILY_ROGUE] = { AddSpell{3127} };
+    m_additionalSpells[12][SPELLFAMILY_PALADIN] = { AddSpell{7328} };
+
+    // Level 14
+    m_additionalSpells[14][SPELLFAMILY_HUNTER] = { AddSpell{6197} };
+
+    // Level 16
+    m_additionalSpells[16][SPELLFAMILY_ROGUE] = { AddSpell{1804} };
+    m_additionalSpells[16][SPELLFAMILY_WARLOCK] = { AddSpell{1455} };
+
+    // Level 20
+    m_additionalSpells[20][SPELLFAMILY_WARRIOR] = { AddSpell{674}, AddSpell{12678} };
+    m_additionalSpells[20][SPELLFAMILY_HUNTER] = { AddSpell{674} };
+    m_additionalSpells[20][SPELLFAMILY_WARLOCK] = { AddSpell{5784} };
+    m_additionalSpells[20][SPELLFAMILY_PALADIN] = { AddSpell{34769, TeamId::TEAM_HORDE}, AddSpell{13819, TeamId::TEAM_ALLIANCE} };
+    m_additionalSpells[20][SPELLFAMILY_MAGE] = { AddSpell{3567, TeamId::TEAM_HORDE}, AddSpell{32272, TeamId::TEAM_HORDE}, AddSpell{3563, TeamId::TEAM_HORDE}, AddSpell{3561, TeamId::TEAM_ALLIANCE}, AddSpell{3562, TeamId::TEAM_ALLIANCE}, AddSpell{32271, TeamId::TEAM_ALLIANCE} };
+
+    // Level 24
+    m_additionalSpells[24][SPELLFAMILY_HUNTER] = { AddSpell{1462}, AddSpell{19885} };
+    m_additionalSpells[24][SPELLFAMILY_ROGUE] = { AddSpell{2836} };
+    m_additionalSpells[24][SPELLFAMILY_WARLOCK] = { AddSpell{5500} };
+    m_additionalSpells[24][SPELLFAMILY_SHAMAN] = { AddSpell{6196} };
+    m_additionalSpells[24][SPELLFAMILY_PALADIN] = { AddSpell{10322} };
+
+    // Level 26
+    m_additionalSpells[26][SPELLFAMILY_WARLOCK] = { AddSpell{1456} };
+
+    // Level 30
+    m_additionalSpells[30][SPELLFAMILY_SHAMAN] = { AddSpell{66842} };
+    m_additionalSpells[30][SPELLFAMILY_MAGE] = { AddSpell{3566, TeamId::TEAM_HORDE}, AddSpell{3565, TeamId::TEAM_ALLIANCE} };
+
+    // Level 32
+    m_additionalSpells[32][SPELLFAMILY_DRUID] = { AddSpell{5225} };
+
+    // Level 35
+    m_additionalSpells[35][SPELLFAMILY_MAGE] = { AddSpell{49358, TeamId::TEAM_HORDE}, AddSpell{49361, TeamId::TEAM_HORDE}, AddSpell{49359, TeamId::TEAM_ALLIANCE}, AddSpell{49360, TeamId::TEAM_ALLIANCE} };
+
+    // Level 36
+    m_additionalSpells[36][SPELLFAMILY_WARLOCK] = { AddSpell{11687} };
+    m_additionalSpells[36][SPELLFAMILY_PALADIN] = { AddSpell{10324} };
+
+    // Level 40
+    m_additionalSpells[40][SPELLFAMILY_SHAMAN] = { AddSpell{66843}, AddSpell{8737} };
+    m_additionalSpells[40][SPELLFAMILY_GENERIC] = { AddSpell{33388} };
+    m_additionalSpells[40][SPELLFAMILY_HUNTER] = { AddSpell{8737} };
+    m_additionalSpells[40][SPELLFAMILY_WARRIOR] = { AddSpell{750} };
+    m_additionalSpells[40][SPELLFAMILY_PALADIN] = { AddSpell{34767, TeamId::TEAM_HORDE}, AddSpell{23214, TeamId::TEAM_ALLIANCE}, AddSpell{750} };
+    m_additionalSpells[40][SPELLFAMILY_WARLOCK] = { AddSpell{23161} };
+    m_additionalSpells[40][SPELLFAMILY_DRUID] = { AddSpell{20719}, AddSpell{62600} };
+    m_additionalSpells[40][SPELLFAMILY_MAGE] = { AddSpell{11417, TeamId::TEAM_HORDE}, AddSpell{32267, TeamId::TEAM_HORDE}, AddSpell{11418, TeamId::TEAM_HORDE}, AddSpell{10059, TeamId::TEAM_ALLIANCE}, AddSpell{11416, TeamId::TEAM_ALLIANCE}, AddSpell{32266, TeamId::TEAM_ALLIANCE} };
+
+    // Level 46
+    m_additionalSpells[46][SPELLFAMILY_WARLOCK] = { AddSpell{11688} };
+
+    // Level 48
+    m_additionalSpells[48][SPELLFAMILY_PALADIN] = { AddSpell{20772} };
+
+    // Level 50
+    m_additionalSpells[50][SPELLFAMILY_SHAMAN] = { AddSpell{66844} };
+    m_additionalSpells[50][SPELLFAMILY_MAGE] = { AddSpell{11420, TeamId::TEAM_HORDE}, AddSpell{11419, TeamId::TEAM_ALLIANCE} };
+
+    // Level 56
+    m_additionalSpells[56][SPELLFAMILY_WARLOCK] = { AddSpell{11689} };
+
+    // Level 60
+    m_additionalSpells[60][SPELLFAMILY_MAGE] = { AddSpell{35715, TeamId::TEAM_HORDE}, AddSpell{33690, TeamId::TEAM_ALLIANCE} };
+    m_additionalSpells[60][SPELLFAMILY_GENERIC] = { AddSpell{33391} };
+    m_additionalSpells[60][SPELLFAMILY_PALADIN] = { AddSpell{20773} };
+
+    // Level 62
+    m_additionalSpells[62][SPELLFAMILY_MAGE] = { AddSpell{25306} };
+
+    // Level 65
+    m_additionalSpells[65][SPELLFAMILY_MAGE] = { AddSpell{35717, TeamId::TEAM_HORDE}, AddSpell{33691, TeamId::TEAM_ALLIANCE} };
+
+    // Level 66
+    m_additionalSpells[66][SPELLFAMILY_PALADIN] = { AddSpell{53736, TeamId::TEAM_HORDE}, AddSpell{31801, TeamId::TEAM_ALLIANCE} };
+    m_additionalSpells[66][SPELLFAMILY_WARLOCK] = { AddSpell{29858} };
+
+    // Level 68
+    m_additionalSpells[68][SPELLFAMILY_WARLOCK] = { AddSpell{27222} };
+
+    // Level 70
+    m_additionalSpells[70][SPELLFAMILY_SHAMAN] = { AddSpell{2825, TeamId::TEAM_HORDE}, AddSpell{32182, TeamId::TEAM_ALLIANCE} };
+    m_additionalSpells[70][SPELLFAMILY_GENERIC] = { AddSpell{34090} };
+
+    // Level 71
+    m_additionalSpells[71][SPELLFAMILY_DRUID] = { AddSpell{40120} };
+
+    // Level 72
+    m_additionalSpells[72][SPELLFAMILY_PALADIN] = { AddSpell{48949} };
+
+    // Level 79
+    m_additionalSpells[79][SPELLFAMILY_PALADIN] = { AddSpell{48950} };
+
+    // Level 80
+    m_additionalSpells[80][SPELLFAMILY_WARLOCK] = { AddSpell{47836}, AddSpell{57946} };
+    m_additionalSpells[80][SPELLFAMILY_GENERIC] = { AddSpell{34091}, AddSpell{54197} };
+}
+
 
     bool ChallengeModes::IsIgnoredSpell(uint32 spellID)
     {
