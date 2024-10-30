@@ -6,6 +6,11 @@
 #include "SpellMgr.h"
 #include "ChatCommand.h"
 #include "Player.h"
+#include "Chat.h"
+#include "Config.h"
+#include "DisableMgr.h"
+#include "ScriptMgr.h"
+#include "SpellInfo.h"
 
 using namespace Acore::ChatCommands; // Brings ChatCommandTable into scope
 
