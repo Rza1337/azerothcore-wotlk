@@ -4,9 +4,10 @@
 
 #include "ChallengeModes.h"
 #include "SpellMgr.h"
-#include "Chat.h"
+#include "ChatCommand.h"
 #include "Player.h"
 
+using namespace Acore::ChatCommands; // Brings ChatCommandTable into scope
 
 ChallengeModes* ChallengeModes::instance()
 {
@@ -964,9 +965,9 @@ class ChallengeModes_Commands : public CommandScript
 public:
     ChallengeModes_Commands() : CommandScript("ChallengeModes_Commands") {}
 
-    std::vector<ChatCommand> GetCommands() const override
+    ChatCommandTable GetCommands() const override // Use ChatCommandTable here
     {
-        static std::vector<ChatCommand> commandTable =
+        static ChatCommandTable commandTable = // And here as well
         {
             { "challenge", SEC_ADMINISTRATOR, false, nullptr, "", 
                 {
