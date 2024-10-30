@@ -14,6 +14,11 @@
 
 using namespace Acore::ChatCommands; // Brings ChatCommandTable into scope
 
+ChallengeModes::ChallengeModes() 
+{
+
+}
+
 ChallengeModes* ChallengeModes::instance()
 {
     static ChallengeModes instance;
