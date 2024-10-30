@@ -965,10 +965,10 @@ public:
 
 };
 
-class ChallengeModes_Commands : public CommandScript
+class ChallengeMode_Commands : public CommandScript
 {
 public:
-    ChallengeModes_Commands() : CommandScript("ChallengeModes_Commands") {}
+    ChallengeMode_Commands() : CommandScript("ChallengeMode_Commands") {}
 
 ChatCommandTable GetCommands() const override
 {
