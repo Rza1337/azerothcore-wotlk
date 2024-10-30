@@ -29,6 +29,52 @@ bool ChallengeModes::challengeEnabledForPlayer(ChallengeModeSettings setting, Pl
     return player->GetPlayerSetting("mod-challenge-modes", setting).value;
 }
 
+void ChallengeModes::LearnSpellsForNewLevel(Player* player, uint8 fromLevel) {
+    uint8 upToLevel = player->GetLevel();
+    uint32 family = GetSpellFamily(player);
+
+    for (int level = fromLevel; level <= upToLevel; level++) {
+        ApplyAdditionalSpells(level, family, player);
+
+        for (uint32 i = 0; i < sSpellMgr->GetSpellInfoStoreSize(); ++i) {
+            SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(i);
+            if (!spellInfo || spellInfo->SpellFamilyName != family || 
+                (spellInfo->AttributesEx7 & SPELL_ATTR7_ALLIANCE_SPECIFIC_SPELL && player->GetTeamId() != TEAM_ALLIANCE) ||
+                (spellInfo->AttributesEx7 & SPELL_ATTR7_HORDE_SPECIFIC_SPELL && player->GetTeamId() != TEAM_HORDE) ||
+                spellInfo->PowerType == POWER_FOCUS || 
+                IsIgnoredSpell(spellInfo->Id) || 
+                DisableMgr::IsDisabledFor(DISABLE_TYPE_SPELL, spellInfo->Id, player) ||
+                (spellInfo->BaseLevel != uint32(level) && sSpellMgr->IsSpellValid(spellInfo))) {
+                continue;
+            }
+
+            bool valid = false;
+            auto bounds = sSpellMgr->GetSkillLineAbilityMapBounds(spellInfo->Id);
+
+            for (auto itr = bounds.first; itr != bounds.second; ++itr) {
+                if (itr->second->Spell == spellInfo->Id && itr->second->RaceMask == 0 && itr->second->AcquireMethod == 0) {
+                    valid = true;
+                    SpellInfo const* prevSpell = spellInfo->GetPrevRankSpell();
+
+                    if (prevSpell && !player->HasSpell(prevSpell->Id)) {
+                        valid = false;
+                        break;
+                    }
+
+                    if (GetTalentSpellPos(itr->second->Spell))
+                        if (!prevSpell || !player->HasSpell(prevSpell->Id) || spellInfo->GetRank() == 1)
+                            valid = false;
+
+                    break;
+                }
+            }
+
+            if (valid)
+                player->learnSpell(spellInfo->Id);
+        }
+    }
+}
+
 bool ChallengeModes::challengeEnabled(ChallengeModeSettings setting) const
 {
     switch (setting)
@@ -1170,7 +1216,6 @@ public:
         return new gobject_challenge_modesAI(object);
     }
 
-public:
     std::unordered_set<uint32> m_ignoreSpells =
     {
         64380, 23885, 23880, 44461, 25346, 10274, 10273, 8418,  8419,  7270,  7269,  7268,  54648, 12536, 24530, 70909, 12494, 57933, 24224, 27095, 27096, 27097, 27099, 32841, 56131, 56160, 56161, 48153, 34754, 64844, 64904, 48085, 33110, 48084,
@@ -1551,71 +1596,6 @@ public:
     bool IsIgnoredSpell(uint32 spellID)
     {
         return m_ignoreSpells.find(spellID) != m_ignoreSpells.end();
-    }
-
-    void LearnSpellsForNewLevel(Player* player, uint8 fromLevel)
-    {
-        uint8 upToLevel = player->GetLevel();
-        uint32 family = GetSpellFamily(player);
-
-        for (int level = fromLevel; level <= upToLevel; level++)
-        {
-            ApplyAdditionalSpells(level, family, player);
-
-            for (uint32 i = 0; i < sSpellMgr->GetSpellInfoStoreSize(); ++i)
-            {
-                SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(i);
-
-                if (!spellInfo)
-                    continue;
-
-                if (spellInfo->SpellFamilyName != family)
-                    continue;
-
-                if ((spellInfo->AttributesEx7 & SPELL_ATTR7_ALLIANCE_SPECIFIC_SPELL && player->GetTeamId() != TEAM_ALLIANCE) || (spellInfo->AttributesEx7 & SPELL_ATTR7_HORDE_SPECIFIC_SPELL && player->GetTeamId() != TEAM_HORDE))
-                    continue;
-
-                if (spellInfo->PowerType == POWER_FOCUS)
-                    continue;
-
-                if (IsIgnoredSpell(spellInfo->Id))
-                    continue;
-
-                if (DisableMgr::IsDisabledFor(DISABLE_TYPE_SPELL, spellInfo->Id, player))
-                    continue;
-
-                if (spellInfo->BaseLevel != uint32(level) && sSpellMgr->IsSpellValid(spellInfo))
-                    continue;
-
-                bool valid = false;
-
-                SkillLineAbilityMapBounds bounds = sSpellMgr->GetSkillLineAbilityMapBounds(spellInfo->Id);
-
-                for (auto itr = bounds.first; itr != bounds.second; ++itr)
-                {
-                    if (itr->second->Spell == spellInfo->Id && itr->second->RaceMask == 0 && itr->second->AcquireMethod == 0)
-                    {
-                        valid = true;
-                        SpellInfo const* prevSpell = spellInfo->GetPrevRankSpell();
-
-                        if (prevSpell && !player->HasSpell(prevSpell->Id))
-                        {
-                            valid = false;
-                            break;
-                        }
-
-                        if (GetTalentSpellPos(itr->second->Spell))
-                            if (!prevSpell || !player->HasSpell(prevSpell->Id) || spellInfo->GetRank() == 1)
-                                valid = false;
-
-                        break;
-                    }
-                }
-
-                if (valid)
-                    player->learnSpell(spellInfo->Id);
-            }
-        }
     }
 
     void ApplyAdditionalSpells(uint8 level, uint32 playerSpellFamily, Player* player)

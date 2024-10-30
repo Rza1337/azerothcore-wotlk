@@ -1,5 +1,5 @@
-#ifndef AZEROTHCORE_CHALLENGEMODES_H
-#define AZEROTHCORE_CHALLENGEMODES_H
+#ifndef CHALLENGEMODES_H
+#define CHALLENGEMODES_H
 
 #include "ScriptMgr.h"
 #include "Player.h"
