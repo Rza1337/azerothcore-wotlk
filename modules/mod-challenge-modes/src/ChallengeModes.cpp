@@ -914,6 +914,7 @@ public:
 
     void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
     {
+        (void)victim;
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_QUESTLESS, player))
         {
             return;
@@ -938,7 +939,7 @@ public:
     void OnMoneyChanged(Player* player, int32& amount) override
     {
         // Check if cashless mode is enabled
-        if (sChallengeModes->challengesEnabledForPlayer(SETTING_CASHLESS, player)) {
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_CASHLESS, player)) {
             if (amount > 0)
             {
                 amount = 0;
