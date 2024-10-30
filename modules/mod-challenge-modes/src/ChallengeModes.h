@@ -126,4 +126,4 @@ public:
 
 #define sChallengeModes ChallengeModes::instance()
 
-#endif //AZEROTHCORE_CHALLENGEMODES_H
+#endif //CHALLENGEMODES_H
