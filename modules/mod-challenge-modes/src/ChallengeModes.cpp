@@ -75,6 +75,62 @@ void ChallengeModes::LearnSpellsForNewLevel(Player* player, uint8 fromLevel) {
     }
 }
 
+    bool ChallengeModes::IsIgnoredSpell(uint32 spellID)
+    {
+        return m_ignoreSpells.find(spellID) != m_ignoreSpells.end();
+    }
+
+    void ChallengeModes::ApplyAdditionalSpells(uint8 level, uint32 playerSpellFamily, Player* player)
+    {
+        auto spells = m_additionalSpells.find(level);
+        if (spells != m_additionalSpells.end())
+        {
+            SpellFamilyToExtraSpells spellsMap = spells->second;
+
+            auto spellsForPlayersFamily = spellsMap.find(playerSpellFamily);
+            if (spellsForPlayersFamily != spellsMap.end())
+            {
+                std::vector<AddSpell> additionalSpellsToTeach = spellsForPlayersFamily->second;
+                for (auto const& spell : additionalSpellsToTeach)
+                {
+                    if (!(player->HasSpell(spell.spellId)) && (spell.faction == TeamId::TEAM_NEUTRAL || spell.faction == player->GetTeamId()))
+                    {
+                        player->learnSpell(spell.spellId);
+                    }
+                }
+            }
+        }
+    }
+
+    uint32 ChallengeModes::GetSpellFamily(const Player* p)
+    {
+        switch (p->getClass())
+        {
+        case CLASS_ROGUE:
+            return SPELLFAMILY_ROGUE;
+        case CLASS_DEATH_KNIGHT:
+            return SPELLFAMILY_DEATHKNIGHT;
+        case CLASS_WARRIOR:
+            return SPELLFAMILY_WARRIOR;
+        case CLASS_PRIEST:
+            return SPELLFAMILY_PRIEST;
+        case CLASS_MAGE:
+            return SPELLFAMILY_MAGE;
+        case CLASS_PALADIN:
+            return SPELLFAMILY_PALADIN;
+        case CLASS_HUNTER:
+            return SPELLFAMILY_HUNTER;
+        case CLASS_DRUID:
+            return SPELLFAMILY_DRUID;
+        case CLASS_SHAMAN:
+            return SPELLFAMILY_SHAMAN;
+        case CLASS_WARLOCK:
+            return SPELLFAMILY_WARLOCK;
+        default:
+            return SPELLFAMILY_GENERIC;
+        }
+    }
+
 bool ChallengeModes::challengeEnabled(ChallengeModeSettings setting) const
 {
     switch (setting)
@@ -1592,62 +1648,6 @@ public:
             }},
         }},
     };
-
-    bool ChallengeModes::IsIgnoredSpell(uint32 spellID)
-    {
-        return m_ignoreSpells.find(spellID) != m_ignoreSpells.end();
-    }
-
-    void ChallengeModes::ApplyAdditionalSpells(uint8 level, uint32 playerSpellFamily, Player* player)
-    {
-        auto spells = m_additionalSpells.find(level);
-        if (spells != m_additionalSpells.end())
-        {
-            SpellFamilyToExtraSpells spellsMap = spells->second;
-
-            auto spellsForPlayersFamily = spellsMap.find(playerSpellFamily);
-            if (spellsForPlayersFamily != spellsMap.end())
-            {
-                std::vector<AddSpell> additionalSpellsToTeach = spellsForPlayersFamily->second;
-                for (auto const& spell : additionalSpellsToTeach)
-                {
-                    if (!(player->HasSpell(spell.spellId)) && (spell.faction == TeamId::TEAM_NEUTRAL || spell.faction == player->GetTeamId()))
-                    {
-                        player->learnSpell(spell.spellId);
-                    }
-                }
-            }
-        }
-    }
-
-    uint32 ChallengeModes::GetSpellFamily(const Player* p)
-    {
-        switch (p->getClass())
-        {
-        case CLASS_ROGUE:
-            return SPELLFAMILY_ROGUE;
-        case CLASS_DEATH_KNIGHT:
-            return SPELLFAMILY_DEATHKNIGHT;
-        case CLASS_WARRIOR:
-            return SPELLFAMILY_WARRIOR;
-        case CLASS_PRIEST:
-            return SPELLFAMILY_PRIEST;
-        case CLASS_MAGE:
-            return SPELLFAMILY_MAGE;
-        case CLASS_PALADIN:
-            return SPELLFAMILY_PALADIN;
-        case CLASS_HUNTER:
-            return SPELLFAMILY_HUNTER;
-        case CLASS_DRUID:
-            return SPELLFAMILY_DRUID;
-        case CLASS_SHAMAN:
-            return SPELLFAMILY_SHAMAN;
-        case CLASS_WARLOCK:
-            return SPELLFAMILY_WARLOCK;
-        default:
-            return SPELLFAMILY_GENERIC;
-        }
-    }
 };
 
 // Add all scripts in one
