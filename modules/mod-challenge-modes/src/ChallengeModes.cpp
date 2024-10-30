@@ -139,7 +139,6 @@ void ChallengeModes::InitializeAdditionalSpells() {
 
     // Level 40
     m_additionalSpells[40][SPELLFAMILY_SHAMAN] = { AddSpell{66843}, AddSpell{8737} };
-    m_additionalSpells[40][SPELLFAMILY_GENERIC] = { AddSpell{33388} };
     m_additionalSpells[40][SPELLFAMILY_HUNTER] = { AddSpell{8737} };
     m_additionalSpells[40][SPELLFAMILY_WARRIOR] = { AddSpell{750} };
     m_additionalSpells[40][SPELLFAMILY_PALADIN] = { AddSpell{34767, TeamId::TEAM_HORDE}, AddSpell{23214, TeamId::TEAM_ALLIANCE}, AddSpell{750} };
@@ -162,7 +161,6 @@ void ChallengeModes::InitializeAdditionalSpells() {
 
     // Level 60
     m_additionalSpells[60][SPELLFAMILY_MAGE] = { AddSpell{35715, TeamId::TEAM_HORDE}, AddSpell{33690, TeamId::TEAM_ALLIANCE} };
-    m_additionalSpells[60][SPELLFAMILY_GENERIC] = { AddSpell{33391} };
     m_additionalSpells[60][SPELLFAMILY_PALADIN] = { AddSpell{20773} };
 
     // Level 62
@@ -180,7 +178,6 @@ void ChallengeModes::InitializeAdditionalSpells() {
 
     // Level 70
     m_additionalSpells[70][SPELLFAMILY_SHAMAN] = { AddSpell{2825, TeamId::TEAM_HORDE}, AddSpell{32182, TeamId::TEAM_ALLIANCE} };
-    m_additionalSpells[70][SPELLFAMILY_GENERIC] = { AddSpell{34090} };
 
     // Level 71
     m_additionalSpells[71][SPELLFAMILY_DRUID] = { AddSpell{40120} };
@@ -193,7 +190,6 @@ void ChallengeModes::InitializeAdditionalSpells() {
 
     // Level 80
     m_additionalSpells[80][SPELLFAMILY_WARLOCK] = { AddSpell{47836}, AddSpell{57946} };
-    m_additionalSpells[80][SPELLFAMILY_GENERIC] = { AddSpell{34091}, AddSpell{54197} };
 }
 
 
