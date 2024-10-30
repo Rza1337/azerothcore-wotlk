@@ -910,7 +910,7 @@ public:
 class ChallengeMode_Questless : public ChallengeMode
 {
 public:
-    ChallengeMode_Questless() : UnitScript("ChallengeMode_Questless") {}
+    ChallengeMode_Questless() : ChallengeMode("ChallengeMode_Questless", SETTING_QUESTLESS){}
 
     void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
     {
@@ -933,7 +933,7 @@ public:
 class ChallengeMode_Cashless : public ChallengeMode
 {
 public:
-    ChallengeMode_Cashless() : UnitScript("ChallengeMode_Cashless") {}
+    ChallengeMode_Cashless() : ChallengeMode("ChallengeMode_Cashless", SETTING_CASHLESS) {}
 
     void OnMoneyChanged(Player* player, int32& amount) override
     {
