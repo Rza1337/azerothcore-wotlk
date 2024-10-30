@@ -1155,7 +1155,6 @@ public:
     {
         return new gobject_challenge_modesAI(object);
     }
-};
 
 private:
     std::unordered_set<uint32> m_ignoreSpells =
@@ -1655,6 +1654,7 @@ private:
             return SPELLFAMILY_GENERIC;
         }
     }
+};
 
 // Add all scripts in one
 void AddSC_mod_challenge_modes()
