@@ -951,7 +951,7 @@ public:
     {
 
         if( oldLevel < player->GetLevel() ) {
-            LearnSpellsForNewLevel(player, oldLevel);
+            sChallengeModes->LearnSpellsForNewLevel(player, oldLevel);
         }
 
         ChallengeMode::OnLevelChanged(player, oldLevel);
