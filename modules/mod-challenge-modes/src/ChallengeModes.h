@@ -158,7 +158,7 @@ public:
         using SpellFamilyToExtraSpells = std::unordered_map<uint32, std::vector<AddSpell>>;
         using AdditionalSpellsList = std::unordered_map<uint8, SpellFamilyToExtraSpells>;
          // -------------------------------------------- ^^^^^ level
-        AdditionalSpellsList m_additionalSpells; 
+        static AdditionalSpellsList m_additionalSpells; 
 };
 
 #define sChallengeModes ChallengeModes::instance()
