@@ -969,13 +969,13 @@ public:
     {
         static ChatCommandTable commandTable =
         {
-            ChatCommandBuilder("challenge", HandleChallengeCommand, SEC_ADMINISTRATOR, Console::NoConsole, 
+            ChatCommandBuilder("challenge", HandleChallengeCommand, SEC_ADMINISTRATOR, false, 
                 ChatCommandTable
                 {
-                    ChatCommandBuilder("enable", HandleEnableChallengeCommand, SEC_ADMINISTRATOR, Console::NoConsole),
-                    ChatCommandBuilder("disable", HandleDisableChallengeCommand, SEC_ADMINISTRATOR, Console::NoConsole),
-                    ChatCommandBuilder("active", HandleViewActiveChallengesCommand, SEC_ADMINISTRATOR, Console::NoConsole),
-                    ChatCommandBuilder("talent", HandleTalentPointsCommand, SEC_ADMINISTRATOR, Console::NoConsole)
+                    ChatCommandBuilder("enable", HandleEnableChallengeCommand, SEC_ADMINISTRATOR, false),
+                    ChatCommandBuilder("disable", HandleDisableChallengeCommand, SEC_ADMINISTRATOR, false),
+                    ChatCommandBuilder("active", HandleViewActiveChallengesCommand, SEC_ADMINISTRATOR, false),
+                    ChatCommandBuilder("talent", HandleTalentPointsCommand, SEC_ADMINISTRATOR, false)
                 }
             )
         };
