@@ -118,6 +118,7 @@ public:
     [[nodiscard]] const std::unordered_map<uint8, uint32> *getItemMapForChallenge(ChallengeModeSettings setting) const;
     [[nodiscard]] const std::unordered_map<uint8, uint32> *getAchievementMapForChallenge(ChallengeModeSettings setting) const;
     [[nodiscard]] uint32 getItemRewardAmount(ChallengeModeSettings setting) const;
+    void LearnSpellsForNewLevel(Player* player, uint8 fromLevel);
 };
 
 #define sChallengeModes ChallengeModes::instance()
