@@ -155,7 +155,6 @@ public:
         };
 
          // { level: { SPELL_FAMILY_NAME: [{ spellId: uint32, faction: TeamId }] } }
-        using AdditionalSpellsList = std::unordered_map<uint8, SpellFamilyToExtraSpells>;
         using SpellFamilyToExtraSpells = std::unordered_map<uint32, std::vector<AddSpell>>;
         using AdditionalSpellsList = std::unordered_map<uint8, SpellFamilyToExtraSpells>;
          // -------------------------------------------- ^^^^^ level
