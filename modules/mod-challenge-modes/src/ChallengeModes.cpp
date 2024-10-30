@@ -965,22 +965,20 @@ class ChallengeModes_Commands : public CommandScript
 public:
     ChallengeModes_Commands() : CommandScript("ChallengeModes_Commands") {}
 
-    ChatCommandTable GetCommands() const override // Use ChatCommandTable here
+    ChatCommandTable GetCommands() const override
     {
-        static ChatCommandTable commandTable = // Correct initialization structure
-        {
-            { "challenge", SEC_ADMINISTRATOR, false, nullptr, "", 
-                ChatCommandTable
-                {
-                    { "enable", SEC_ADMINISTRATOR, false, &HandleEnableChallengeCommand, "Enable a specific challenge" },
-                    { "disable", SEC_ADMINISTRATOR, false, &HandleDisableChallengeCommand, "Disable a specific challenge" },
-                    { "active", SEC_ADMINISTRATOR, false, &HandleViewActiveChallengesCommand, "View active challenges" },
-                    { "talent", SEC_ADMINISTRATOR, false, &HandleTalentPointsCommand, "Add or remove talent points" },
-                }
+      static ChatCommandTable commandTable = {
+        { "challenge", SEC_ADMINISTRATOR, false, nullptr, "", 
+            {
+                { "enable", SEC_ADMINISTRATOR, false, &HandleEnableChallengeCommand, "Enable a specific challenge" },
+                { "disable", SEC_ADMINISTRATOR, false, &HandleDisableChallengeCommand, "Disable a specific challenge" },
+                { "active", SEC_ADMINISTRATOR, false, &HandleViewActiveChallengesCommand, "View active challenges" },
+                { "talent", SEC_ADMINISTRATOR, false, &HandleTalentPointsCommand, "Add or remove talent points" }
             }
-        };
-        return commandTable;
-    }
+         }
+     };
+     return commandTable;
+}
 
     // Enable Challenge Command
     static bool HandleEnableChallengeCommand(ChatHandler* handler, const char* args)
