@@ -1170,7 +1170,7 @@ public:
         return new gobject_challenge_modesAI(object);
     }
 
-private:
+public:
     std::unordered_set<uint32> m_ignoreSpells =
     {
         64380, 23885, 23880, 44461, 25346, 10274, 10273, 8418,  8419,  7270,  7269,  7268,  54648, 12536, 24530, 70909, 12494, 57933, 24224, 27095, 27096, 27097, 27099, 32841, 56131, 56160, 56161, 48153, 34754, 64844, 64904, 48085, 33110, 48084,
@@ -1553,7 +1553,7 @@ private:
         return m_ignoreSpells.find(spellID) != m_ignoreSpells.end();
     }
 
-    void ChallengeModes::LearnSpellsForNewLevel(Player* player, uint8 fromLevel)
+    void LearnSpellsForNewLevel(Player* player, uint8 fromLevel)
     {
         uint8 upToLevel = player->GetLevel();
         uint32 family = GetSpellFamily(player);
