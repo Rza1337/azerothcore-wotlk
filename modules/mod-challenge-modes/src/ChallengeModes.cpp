@@ -965,22 +965,23 @@ class ChallengeModes_Commands : public CommandScript
 public:
     ChallengeModes_Commands() : CommandScript("ChallengeModes_Commands") {}
 
-    ChatCommandTable GetCommands() const override
+ChatCommandTable GetCommands() const override
+{
+    static ChatCommandTable commandTable =
     {
-        static ChatCommandTable commandTable =
-        {
-            ChatCommandBuilder("challenge", HandleChallengeCommand, SEC_ADMINISTRATOR, false, 
-                ChatCommandTable
-                {
-                    ChatCommandBuilder("enable", HandleEnableChallengeCommand, SEC_ADMINISTRATOR, false),
-                    ChatCommandBuilder("disable", HandleDisableChallengeCommand, SEC_ADMINISTRATOR, false),
-                    ChatCommandBuilder("active", HandleViewActiveChallengesCommand, SEC_ADMINISTRATOR, false),
-                    ChatCommandBuilder("talent", HandleTalentPointsCommand, SEC_ADMINISTRATOR, false)
-                }
-            )
-        };
-        return commandTable;
-    }
+        ChatCommandBuilder("challenge", HandleChallengeCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No,
+            ChatCommandTable
+            {
+                ChatCommandBuilder("enable", HandleEnableChallengeCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No),
+                ChatCommandBuilder("disable", HandleDisableChallengeCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No),
+                ChatCommandBuilder("active", HandleViewActiveChallengesCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No),
+                ChatCommandBuilder("talent", HandleTalentPointsCommand, SEC_ADMINISTRATOR, Acore::ChatCommands::Console::No)
+            }
+        )
+    };
+    return commandTable;
+}
+
 
     static bool HandleChallengeCommand(ChatHandler* handler, const char* /*args*/)
     {
