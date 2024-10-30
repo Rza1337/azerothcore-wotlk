@@ -119,6 +119,9 @@ public:
     [[nodiscard]] const std::unordered_map<uint8, uint32> *getAchievementMapForChallenge(ChallengeModeSettings setting) const;
     [[nodiscard]] uint32 getItemRewardAmount(ChallengeModeSettings setting) const;
     void LearnSpellsForNewLevel(Player* player, uint8 fromLevel);
+    uint32 GetSpellFamily(const Player* p);
+    void ApplyAdditionalSpells(uint8 level, uint32 playerSpellFamily, Player* player);
+    bool IsIgnoredSpell(uint32 spellID);
 };
 
 #define sChallengeModes ChallengeModes::instance()

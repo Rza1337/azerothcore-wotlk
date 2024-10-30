@@ -1593,12 +1593,12 @@ public:
         }},
     };
 
-    bool IsIgnoredSpell(uint32 spellID)
+    bool ChallengeModes::IsIgnoredSpell(uint32 spellID)
     {
         return m_ignoreSpells.find(spellID) != m_ignoreSpells.end();
     }
 
-    void ApplyAdditionalSpells(uint8 level, uint32 playerSpellFamily, Player* player)
+    void ChallengeModes::ApplyAdditionalSpells(uint8 level, uint32 playerSpellFamily, Player* player)
     {
         auto spells = m_additionalSpells.find(level);
         if (spells != m_additionalSpells.end())
@@ -1620,7 +1620,7 @@ public:
         }
     }
 
-    uint32 GetSpellFamily(const Player* p)
+    uint32 ChallengeModes::GetSpellFamily(const Player* p)
     {
         switch (p->getClass())
         {
