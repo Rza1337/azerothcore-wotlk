@@ -267,6 +267,7 @@ uint32 ChallengeModes::getItemRewardAmount(ChallengeModeSettings setting) const
     return 0;
 }
 
+
 const std::unordered_map<uint8, uint32> *ChallengeModes::getAchievementMapForChallenge(ChallengeModeSettings setting) const
 {
     switch (setting)
@@ -1552,7 +1553,7 @@ private:
         return m_ignoreSpells.find(spellID) != m_ignoreSpells.end();
     }
 
-    void LearnSpellsForNewLevel(Player* player, uint8 fromLevel)
+    void ChallengeModes::LearnSpellsForNewLevel(Player* player, uint8 fromLevel)
     {
         uint8 upToLevel = player->GetLevel();
         uint32 family = GetSpellFamily(player);
