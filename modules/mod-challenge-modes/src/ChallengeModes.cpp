@@ -503,6 +503,47 @@ private:
     ChallengeModeSettings settingName;
 };
 
+class Challenge_CommandScript : public CommandScript
+{
+public:
+    Challenge_CommandScript() : CommandScript("Challenge_CommandScript") { }
+
+    std::vector<ChatCommand> GetCommands() const override
+    {
+        static std::vector<ChatCommand> challengeCommandTable =
+        {
+            { "status", SEC_PLAYER, true, &HandleChallengeStatusCommand, "" },
+        };
+
+        static std::vector<ChatCommand> commandTable =
+        {
+            { "challenge", SEC_PLAYER, true, nullptr, "", challengeCommandTable }
+        };
+
+        return commandTable;
+    }
+
+    static bool HandleChallengeStatusCommand(ChatHandler* handler, char const* /*args*/)
+    {
+        // Ensure the command includes a player name
+        if (!*args)
+        {
+            handler->PSendSysMessage("Please specify a player name.");
+            return false;
+        }
+
+        std::string playerName = args;
+        Player* targetPlayer = ObjectAccessor::FindPlayerByName(playerName);
+
+        if ( sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player) ) {
+            ChatHandler(player->GetSession()).PSendSysMessage("Hardcore Mode is Enabled.");
+        } else {
+            ChatHandler(player->GetSession()).PSendSysMessage("Hardcore Mode is Disabled.");
+        }
+        return true;
+    }
+};
+
 class ChallengeMode_Hardcore : public ChallengeMode
 {
 public:
@@ -1078,4 +1119,5 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_Pacifist();
     new ChallengeMode_Questless();
     new ChallengeMode_Cashless();
+    new Challenge_CommandScript();
 }
