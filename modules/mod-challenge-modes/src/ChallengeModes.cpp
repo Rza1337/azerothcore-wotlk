@@ -947,14 +947,14 @@ public:
         }
     }
 
-    void OnLevelChanged(Player* player, uint8 oldlevel) override
+    void OnLevelChanged(Player* player, uint8 oldLevel) override
     {
 
         if( oldLevel < player->GetLevel() ) {
             LearnSpellsForNewLevel(player, oldLevel);
         }
 
-        ChallengeMode::OnLevelChanged(player, oldlevel);
+        ChallengeMode::OnLevelChanged(player, oldLevel);
     }
 
 };
