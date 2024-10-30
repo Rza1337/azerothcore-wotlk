@@ -956,7 +956,7 @@ public:
 
     void OnLevelChanged(Player* player, uint8 oldLevel) override
     {
-        if (sChallengeModes->challengeEnabledForPlayer(SETTING_CASHLESS, player)) {
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_CASHLESS, player))
         {
             if (oldLevel < player->GetLevel())
             {
