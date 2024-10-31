@@ -23,7 +23,6 @@
 #include "ItemTemplate.h"
 #include "LootMgr.h"
 #include "Unit.h"
-#include "World.h"
 #include <list>
 
 #define MAX_AGGRO_RESET_TIME 10 // in seconds
@@ -370,7 +369,6 @@ typedef std::unordered_map<uint32, EquipmentInfoContainerInternal> EquipmentInfo
 struct CreatureData
 {
     CreatureData() = default;
-    ObjectGuid::LowType spawnId{0};
     uint32 id1{0};                                             // entry in creature_template
     uint32 id2{0};                                             // entry in creature_template
     uint32 id3{0};                                             // entry in creature_template

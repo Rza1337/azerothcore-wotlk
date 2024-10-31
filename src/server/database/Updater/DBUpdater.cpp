@@ -76,15 +76,9 @@ std::string DBUpdater<LoginDatabaseConnection>::GetTableName()
 }
 
 template<>
-std::string DBUpdater<LoginDatabaseConnection>::GetSourceDirectory()
-{
-    return BuiltInConfig::GetSourceDirectory();
-}
-
-template<>
 std::string DBUpdater<LoginDatabaseConnection>::GetBaseFilesDirectory()
 {
-    return DBUpdater<LoginDatabaseConnection>::GetSourceDirectory() + "/data/sql/base/db_auth/";
+    return BuiltInConfig::GetSourceDirectory() + "/data/sql/base/db_auth/";
 }
 
 template<>
@@ -97,7 +91,7 @@ bool DBUpdater<LoginDatabaseConnection>::IsEnabled(uint32 const updateMask)
 template<>
 std::string DBUpdater<LoginDatabaseConnection>::GetDBModuleName()
 {
-    return "auth";
+    return "db-auth";
 }
 
 // World Database
@@ -114,15 +108,9 @@ std::string DBUpdater<WorldDatabaseConnection>::GetTableName()
 }
 
 template<>
-std::string DBUpdater<WorldDatabaseConnection>::GetSourceDirectory()
-{
-    return BuiltInConfig::GetSourceDirectory();
-}
-
-template<>
 std::string DBUpdater<WorldDatabaseConnection>::GetBaseFilesDirectory()
 {
-    return DBUpdater<WorldDatabaseConnection>::GetSourceDirectory() + "/data/sql/base/db_world/";
+    return BuiltInConfig::GetSourceDirectory() + "/data/sql/base/db_world/";
 }
 
 template<>
@@ -135,7 +123,7 @@ bool DBUpdater<WorldDatabaseConnection>::IsEnabled(uint32 const updateMask)
 template<>
 std::string DBUpdater<WorldDatabaseConnection>::GetDBModuleName()
 {
-    return "world";
+    return "db-world";
 }
 
 // Character Database
@@ -152,15 +140,9 @@ std::string DBUpdater<CharacterDatabaseConnection>::GetTableName()
 }
 
 template<>
-std::string DBUpdater<CharacterDatabaseConnection>::GetSourceDirectory()
-{
-    return BuiltInConfig::GetSourceDirectory();
-}
-
-template<>
 std::string DBUpdater<CharacterDatabaseConnection>::GetBaseFilesDirectory()
 {
-    return DBUpdater<CharacterDatabaseConnection>::GetSourceDirectory() + "/data/sql/base/db_characters/";
+    return BuiltInConfig::GetSourceDirectory() + "/data/sql/base/db_characters/";
 }
 
 template<>
@@ -173,48 +155,8 @@ bool DBUpdater<CharacterDatabaseConnection>::IsEnabled(uint32 const updateMask)
 template<>
 std::string DBUpdater<CharacterDatabaseConnection>::GetDBModuleName()
 {
-    return "characters";
+    return "db-characters";
 }
-
-#ifdef MOD_PLAYERBOTS
-// Playerbots Database
-template<>
-std::string DBUpdater<PlayerbotsDatabaseConnection>::GetConfigEntry()
-{
-    return "Updates.Playerbots";
-}
-
-template<>
-std::string DBUpdater<PlayerbotsDatabaseConnection>::GetTableName()
-{
-    return "Playerbots";
-}
-
-template<>
-std::string DBUpdater<PlayerbotsDatabaseConnection>::GetSourceDirectory()
-{
-    return BuiltInConfig::GetSourceDirectory() + "/modules/mod-playerbots";
-}
-
-template<>
-std::string DBUpdater<PlayerbotsDatabaseConnection>::GetBaseFilesDirectory()
-{
-    return DBUpdater<PlayerbotsDatabaseConnection>::GetSourceDirectory() + "/sql/playerbots/base/";
-}
-
-template<>
-bool DBUpdater<PlayerbotsDatabaseConnection>::IsEnabled(uint32 const updateMask)
-{
-    // This way silences warnings under msvc
-    return (updateMask & DatabaseLoader::DATABASE_PLAYERBOTS) ? true : false;
-}
-
-template<>
-std::string DBUpdater<PlayerbotsDatabaseConnection>::GetDBModuleName()
-{
-    return "db_playerbot";
-}
-#endif
 
 // All
 template<class T>
@@ -281,7 +223,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool, std::string_view modulesL
 
     LOG_INFO("sql.updates", "Updating {} database...", DBUpdater<T>::GetTableName());
 
-    Path const sourceDirectory(DBUpdater<T>::GetSourceDirectory());
+    Path const sourceDirectory(BuiltInConfig::GetSourceDirectory());
 
     if (!is_directory(sourceDirectory))
     {
@@ -356,7 +298,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool, std::vector<std::string> 
         return false;
     }
 
-    Path const sourceDirectory(DBUpdater<T>::GetSourceDirectory());
+    Path const sourceDirectory(BuiltInConfig::GetSourceDirectory());
     if (!is_directory(sourceDirectory))
     {
         return false;
@@ -581,7 +523,3 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
 template class AC_DATABASE_API DBUpdater<LoginDatabaseConnection>;
 template class AC_DATABASE_API DBUpdater<WorldDatabaseConnection>;
 template class AC_DATABASE_API DBUpdater<CharacterDatabaseConnection>;
-
-#ifdef MOD_PLAYERBOTS
-template class AC_DATABASE_API DBUpdater<PlayerbotsDatabaseConnection>;
-#endif
