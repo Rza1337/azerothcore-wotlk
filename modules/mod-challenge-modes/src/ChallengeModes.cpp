@@ -508,32 +508,24 @@ class Challenge_CommandScript : public CommandScript
 public:
     Challenge_CommandScript() : CommandScript("Challenge_CommandScript") { }
 
-    std::vector<ChatCommand> GetCommands() const override
+    ChatCommandTable GetCommands() const override
     {
-        static std::vector<ChatCommand> challengeCommandTable =
+        static ChatCommandTable challengeCommandTable =
         {
-            { "status", SEC_PLAYER, true, &HandleChallengeStatusCommand, "" },
+            { "status", HandleChallengeStatusCommand, SEC_GAMEMASTER, Console::No },
         };
 
-        static std::vector<ChatCommand> commandTable =
+        static ChatCommandTable commandTable =
         {
-            { "challenge", SEC_PLAYER, true, nullptr, "", challengeCommandTable }
+            { "challenge", challengeCommandTable }
         };
 
         return commandTable;
     }
 
-    static bool HandleChallengeStatusCommand(ChatHandler* handler, char const* /*args*/)
+    static bool HandleChallengeStatusCommand(ChatHandler* handler, std::string args)
     {
-        // Ensure the command includes a player name
-        if (!*args)
-        {
-            handler->PSendSysMessage("Please specify a player name.");
-            return false;
-        }
-
-        std::string playerName = args;
-        Player* targetPlayer = ObjectAccessor::FindPlayerByName(playerName);
+        Player* targetPlayer = handler->getSelectedPlayerOrSelf();
 
         if ( sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player) ) {
             ChatHandler(player->GetSession()).PSendSysMessage("Hardcore Mode is Enabled.");
