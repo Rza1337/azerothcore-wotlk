@@ -1113,79 +1113,17 @@ public:
         }
     }
 
-    static bool mapContainsKey(const std::unordered_map<uint8, uint32>* mapToCheck, uint8 key)
+};
+
+class ChallengeMode_Pacifist_Rewards : public ChallengeMode
+{
+public:
+    ChallengeMode_Pacifist_Rewards() : ChallengeMode("ChallengeMode_Pacifist_Rewards", SETTING_PACIFIST){}
+
+    void OnLevelChanged(Player* player, uint8 oldlevel) override
     {
-        return (mapToCheck->find(key) != mapToCheck->end());
+        ChallengeMode::OnLevelChanged(player, oldlevel);
     }
-
-    void OnGiveXP(Player* player, uint32& amount, Unit* /*victim*/, uint8 /*xpSource*/) override
-    {
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
-        {
-            return;
-        }
-        amount *= sChallengeModes->getXpBonusForChallenge(SETTING_PACIFIST);
-    }
-
-    void OnLevelChanged(Player* player, uint8 /*oldlevel*/) override
-    {
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
-        {
-            return;
-        }
-
-        const std::unordered_map<uint8, uint32>* titleRewardMap = sChallengeModes->getTitleMapForChallenge(SETTING_PACIFIST);
-        const std::unordered_map<uint8, uint32>* talentRewardMap = sChallengeModes->getTalentMapForChallenge(SETTING_PACIFIST);
-        const std::unordered_map<uint8, uint32>* itemRewardMap = sChallengeModes->getItemMapForChallenge(SETTING_PACIFIST);
-        const std::unordered_map<uint8, uint32>* achievementRewardMap = sChallengeModes->getAchievementMapForChallenge(SETTING_PACIFIST);
-        uint8 level = player->GetLevel();
-
-        if (mapContainsKey(titleRewardMap, level))
-        {
-            CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(titleRewardMap->at(level));
-            if (!titleInfo)
-            {
-                LOG_ERROR("mod-challenge-modes", "Invalid title ID {}!", titleRewardMap->at(level));
-                return;
-            }
-            ChatHandler handler(player->GetSession());
-            std::string tNameLink = handler.GetNameLink(player);
-            std::string titleNameStr = Acore::StringFormat(player->getGender() == GENDER_MALE ? titleInfo->nameMale[handler.GetSessionDbcLocale()] : titleInfo->nameFemale[handler.GetSessionDbcLocale()], player->GetName());
-            player->SetTitle(titleInfo);
-        }
-
-        if (mapContainsKey(talentRewardMap, level))
-        {
-            player->RewardExtraBonusTalentPoints(talentRewardMap->at(level));
-        }
-
-        if (mapContainsKey(achievementRewardMap, level))
-        {
-            AchievementEntry const* achievementInfo = sAchievementStore.LookupEntry(achievementRewardMap->at(level));
-            if (!achievementInfo)
-            {
-                LOG_ERROR("mod-challenge-modes", "Invalid Achievement ID {}!", achievementRewardMap->at(level));
-                return;
-            }
-
-            ChatHandler handler(player->GetSession());
-            std::string tNameLink = handler.GetNameLink(player);
-            player->CompletedAchievement(achievementInfo);
-        }
-
-        if (mapContainsKey(itemRewardMap, level))
-        {
-            uint32 itemEntry = itemRewardMap->at(level);
-            uint32 itemAmount = sChallengeModes->getItemRewardAmount(SETTING_PACIFIST); // Fetch item amount from config
-            player->SendItemRetrievalMail({ { itemEntry, itemAmount } });
-        }
-
-        if (sChallengeModes->getDisableLevel(SETTING_PACIFIST) && sChallengeModes->getDisableLevel(SETTING_PACIFIST) <= level)
-        {
-            player->UpdatePlayerSetting("mod-challenge-modes", SETTING_PACIFIST, 0);
-        }
-    }
-
 };
 
 class ChallengeMode_Questless : public ChallengeMode
@@ -1209,7 +1147,6 @@ public:
     {
         ChallengeMode::OnLevelChanged(player, oldlevel);
     }
-
 };
 
 class ChallengeMode_Cashless : public ChallengeMode
@@ -1346,6 +1283,7 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_QuestXpOnly();
     new ChallengeMode_IronMan();
     new ChallengeMode_Pacifist();
+    new ChallengeMode_Pacifist_Rewards();
     new ChallengeMode_Questless();
     new ChallengeMode_Cashless();
     new Challenge_CommandScript();
