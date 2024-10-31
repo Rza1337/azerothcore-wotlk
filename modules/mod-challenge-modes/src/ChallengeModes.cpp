@@ -512,7 +512,10 @@ public:
     {
         static ChatCommandTable challengeCommandTable = 
         {
-            { "status", HandleChallengeStatusCommand, SEC_ADMINISTRATOR, Console::No }
+            { "status", HandleChallengeStatusCommand, SEC_PLAYER, Console::No }
+            { "enable", HandleChallengeEnableCommand, SEC_ADMINISTRATOR, Console::No }
+            { "disable", HandleChallengeDisableCommand, SEC_ADMINISTRATOR, Console::No }
+            { "talents", HandleChallengeTalentPointsCommand, SEC_ADMINISTRATOR, Console::No }
         };
 
         static ChatCommandTable commandTable =
@@ -527,14 +530,140 @@ public:
     {
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
 
-        if (sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, targetPlayer))
+        handler->PSendSysMessage("Challenge mode information for: " + std::string(targetPlayer->GetPlayerName()));
+
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_IRON_MAN, targetPlayer))
         {
-            handler->SendGlobalGMSysMessage("Hardcore Mode is Enabled.");
+            handler->PSendSysMessage("Iron Man Mode is Enabled.");
         }
         else
         {
-            handler->SendGlobalGMSysMessage("Hardcore Mode is Disabled.");
+            handler->PSendSysMessage("Iron Man Mode is Disabled.");
         }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, targetPlayer))
+        {
+            handler->PSendSysMessage("Hardcore Mode is Enabled.");
+        }
+        else
+        {
+            handler->PSendSysMessage("Hardcore Mode is Disabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SEMI_HARDCORE, targetPlayer))
+        {
+            handler->PSendSysMessage("Semi-Hardcore Mode is Enabled.");
+        }
+        else
+        {
+            handler->PSendSysMessage("Semi-Hardcore Mode is Disabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_CASHLESS, targetPlayer))
+        {
+            handler->PSendSysMessage("Cashless Mode is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_ITEM_QUALITY_LEVEL, targetPlayer))
+        {
+            handler->PSendSysMessage("Low Quality Items is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, targetPlayer))
+        {
+            handler->PSendSysMessage("Pacifist is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_QUEST_XP_ONLY, targetPlayer))
+        {
+            handler->PSendSysMessage("Quest XP Only is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_QUESTLESS, targetPlayer))
+        {
+            handler->PSendSysMessage("Questless mode is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELF_CRAFTED, targetPlayer))
+        {
+            handler->PSendSysMessage("Self Crafted is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SLOW_XP_GAIN, targetPlayer))
+        {
+            handler->PSendSysMessage("Slow XP is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_TURTLE_MODE, targetPlayer))
+        {
+            handler->PSendSysMessage("Very Very Very Slow mode is Enabled.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_VERY_SLOW_XP_GAIN, targetPlayer))
+        {
+            handler->PSendSysMessage("Very Slow mode is Enabled.");
+        }
+        return true;
+    }
+
+    static bool HandleChallengeEnableCommand(ChatHandler* handler, char const* args)
+    {
+        Player* targetPlayer = handler->getSelectedPlayerOrSelf();
+        if (!args || !*args)
+        {
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-12) to enable.");
+            return false;
+        }
+
+        int setting = atoi(args);
+        if (setting < 0 || setting > 12)
+        {
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 12.");
+            return false;
+        }
+
+        // Cast integer to ChallengeModeSettings and enable for the player
+        ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
+        targetPlayer->UpdatePlayerSetting("mod-challenge-modes", challengeSetting, 1);
+        handler->PSendSysMessage("Challenge mode %d enabled for %s.", setting, targetPlayer->GetName().c_str());
+        return true;
+    }
+
+    static bool HandleChallengeDisableCommand(ChatHandler* handler, char const* args)
+    {
+        Player* targetPlayer = handler->getSelectedPlayerOrSelf();
+        if (!args || !*args)
+        {
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-12) to disable.");
+            return false;
+        }
+
+        int setting = atoi(args);
+        if (setting < 0 || setting > 12)
+        {
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 12.");
+            return false;
+        }
+
+        // Cast integer to ChallengeModeSettings and disable for the player
+        ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
+        targetPlayer->UpdatePlayerSetting("mod-challenge-modes", challengeSetting, 0);
+        handler->PSendSysMessage("Challenge mode %d disabled for %s.", setting, targetPlayer->GetName().c_str());
+        return true;
+    }
+
+    static bool HandleChallengeTalentPointsCommand(ChatHandler* handler)
+    {
+        Player* targetPlayer = handler->getSelectedPlayerOrSelf();
+        uint32 totalTalentPoints = 0;
+        uint8  playerLevel = handler->getSelectedPlayerOrSelf()->GetLevel();
+
+        for (int setting = SETTING_HARDCORE; setting <= SETTING_CASHLESS; ++setting)
+        {
+            ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
+            if (const auto* talentMap = sChallengeModes->getTalentMapForChallenge(challengeSetting))
+            {
+                // Check each level and add points if player's level meets/exceeds it
+                for (const auto& [level, points] : *talentMap)
+                {
+                    if (playerLevel >= level && sChallengeModes->challengeEnabledForPlayer(challengeSetting, targetPlayer))
+                    {
+                        totalTalentPoints += points;
+                    }
+                }
+            }
+        }
+
+        handler->PSendSysMessage("Total bonus challenge talent points: %u", totalTalentPoints);
         return true;
     }
 };
