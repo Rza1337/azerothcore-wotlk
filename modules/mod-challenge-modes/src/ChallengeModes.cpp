@@ -512,9 +512,9 @@ public:
     {
         static ChatCommandTable challengeCommandTable = 
         {
-            { "status", HandleChallengeStatusCommand, SEC_PLAYER, Console::No }
-            { "enable", HandleChallengeEnableCommand, SEC_ADMINISTRATOR, Console::No }
-            { "disable", HandleChallengeDisableCommand, SEC_ADMINISTRATOR, Console::No }
+            { "status", HandleChallengeStatusCommand, SEC_PLAYER, Console::No },
+            { "enable", HandleChallengeEnableCommand, SEC_ADMINISTRATOR, Console::No },
+            { "disable", HandleChallengeDisableCommand, SEC_ADMINISTRATOR, Console::No },
             { "talents", HandleChallengeTalentPointsCommand, SEC_ADMINISTRATOR, Console::No }
         };
 
@@ -666,6 +666,7 @@ public:
         handler->PSendSysMessage("Total bonus challenge talent points: %u", totalTalentPoints);
         return true;
     }
+    
 };
 
 class ChallengeMode_Hardcore : public ChallengeMode
