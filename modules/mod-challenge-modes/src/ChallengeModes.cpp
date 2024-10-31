@@ -528,11 +528,11 @@ public:
 
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, targetPlayer))
         {
-            ChatHandler(targetPlayer->GetSession()).PSendSysMessage("Hardcore Mode is Enabled.");
+            handler->SendSysMessage("Hardcore Mode is Enabled.");
         }
         else
         {
-            ChatHandler(targetPlayer->GetSession()).PSendSysMessage("Hardcore Mode is Disabled.");
+            handler->SendSysMessage("Hardcore Mode is Disabled.");
         }
         return true;
     }
