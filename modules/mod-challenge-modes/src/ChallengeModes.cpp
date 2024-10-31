@@ -675,7 +675,7 @@ public:
         return true;
     }
     
-    std::string GetChallengeModeName(ChallengeModeSettings setting)
+    static std::string GetChallengeModeName(ChallengeModeSettings setting)
     {
         switch (setting)
         {
