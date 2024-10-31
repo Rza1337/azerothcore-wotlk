@@ -509,9 +509,9 @@ public:
 
     ChatCommandTable GetCommands() const override
     {
-        static ChatCommandTable challengeCommandTable =
+        static ChatCommandTable challengeCommandTable = 
         {
-            { "status", HandleChallengeStatusCommand, SEC_GAMEMASTER, Console::No },
+            { "status", HandleChallengeStatusCommand, SEC_GAMEMASTER, Console::No }
         };
 
         static ChatCommandTable commandTable =
@@ -526,10 +526,13 @@ public:
     {
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
 
-        if ( sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player) ) {
-            ChatHandler(player->GetSession()).PSendSysMessage("Hardcore Mode is Enabled.");
-        } else {
-            ChatHandler(player->GetSession()).PSendSysMessage("Hardcore Mode is Disabled.");
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, targetPlayer))
+        {
+            ChatHandler(targetPlayer->GetSession()).PSendSysMessage("Hardcore Mode is Enabled.");
+        }
+        else
+        {
+            ChatHandler(targetPlayer->GetSession()).PSendSysMessage("Hardcore Mode is Disabled.");
         }
         return true;
     }
