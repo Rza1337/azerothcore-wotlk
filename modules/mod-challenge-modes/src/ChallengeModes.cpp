@@ -615,7 +615,7 @@ public:
         ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
         targetPlayer->UpdatePlayerSetting("mod-challenge-modes", challengeSetting, 1);
 
-        std::string message = "Challenge mode " + std::to_string(setting) + " enabled for " + targetPlayer->GetName() + ".";
+        std::string message = "Challenge mode " + GetChallengeModeName(challengeSetting) + " enabled for " + targetPlayer->GetName() + ".";
         handler->PSendSysMessage(message.c_str());
 
         return true;
@@ -641,7 +641,7 @@ public:
         ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
         targetPlayer->UpdatePlayerSetting("mod-challenge-modes", challengeSetting, 0);
 
-        std::string message = "Challenge mode " + std::to_string(setting) + " disabled for " + targetPlayer->GetName() + ".";
+        std::string message = "Challenge mode " + GetChallengeModeName(challengeSetting) + " disabled for " + targetPlayer->GetName() + ".";
         handler->PSendSysMessage(message.c_str());
 
         return true;
@@ -675,6 +675,27 @@ public:
         return true;
     }
     
+    std::string GetChallengeModeName(ChallengeModeSettings setting)
+    {
+        switch (setting)
+        {
+            case SETTING_HARDCORE:           return "Hardcore Mode";
+            case SETTING_SEMI_HARDCORE:      return "Semi-Hardcore Mode";
+            case SETTING_SELF_CRAFTED:       return "Self-Crafted Mode";
+            case SETTING_ITEM_QUALITY_LEVEL: return "Low Quality Item Mode";
+            case SETTING_SLOW_XP_GAIN:       return "Slow XP Mode";
+            case SETTING_VERY_SLOW_XP_GAIN:  return "Very Slow XP Mode";
+            case SETTING_TURTLE_MODE:        return "Very Very Very Slow Mode";
+            case SETTING_QUEST_XP_ONLY:      return "Quest XP Only Mode";
+            case SETTING_IRON_MAN:           return "Iron Man Mode";
+            case HARDCORE_DEAD:              return "Hardcore Deadlock";
+            case SETTING_PACIFIST:           return "Pacifist Mode";
+            case SETTING_QUESTLESS:          return "Questless Mode";
+            case SETTING_CASHLESS:           return "Cashless Mode";
+            default:                         return "Unknown Mode";
+        }
+    }
+
 };
 
 class ChallengeMode_Hardcore : public ChallengeMode
