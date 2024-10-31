@@ -534,63 +534,63 @@ public:
 
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_IRON_MAN, targetPlayer))
         {
-            handler->PSendSysMessage("Iron Man Mode is Enabled.");
+            handler->PSendSysMessage("Iron Man Mode is ENABLED.");
         }
         else
         {
-            handler->PSendSysMessage("Iron Man Mode is Disabled.");
+            handler->PSendSysMessage("Iron Man Mode is disabled.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, targetPlayer))
         {
-            handler->PSendSysMessage("Hardcore Mode is Enabled.");
+            handler->PSendSysMessage("Hardcore Mode is ENABLED.");
         }
         else
         {
-            handler->PSendSysMessage("Hardcore Mode is Disabled.");
+            handler->PSendSysMessage("Hardcore Mode is disabled.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SEMI_HARDCORE, targetPlayer))
         {
-            handler->PSendSysMessage("Semi-Hardcore Mode is Enabled.");
+            handler->PSendSysMessage("Semi-Hardcore Mode is ENABLED.");
         }
         else
         {
-            handler->PSendSysMessage("Semi-Hardcore Mode is Disabled.");
+            handler->PSendSysMessage("Semi-Hardcore Mode is disabled.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_CASHLESS, targetPlayer))
         {
-            handler->PSendSysMessage("Cashless Mode is Enabled.");
+            handler->PSendSysMessage("Cashless Mode is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_ITEM_QUALITY_LEVEL, targetPlayer))
         {
-            handler->PSendSysMessage("Low Quality Items is Enabled.");
+            handler->PSendSysMessage("Low Quality Items is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, targetPlayer))
         {
-            handler->PSendSysMessage("Pacifist is Enabled.");
+            handler->PSendSysMessage("Pacifist is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_QUEST_XP_ONLY, targetPlayer))
         {
-            handler->PSendSysMessage("Quest XP Only is Enabled.");
+            handler->PSendSysMessage("Quest XP Only is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_QUESTLESS, targetPlayer))
         {
-            handler->PSendSysMessage("Questless mode is Enabled.");
+            handler->PSendSysMessage("Questless mode is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELF_CRAFTED, targetPlayer))
         {
-            handler->PSendSysMessage("Self Crafted is Enabled.");
+            handler->PSendSysMessage("Self Crafted is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SLOW_XP_GAIN, targetPlayer))
         {
-            handler->PSendSysMessage("Slow XP is Enabled.");
+            handler->PSendSysMessage("Slow XP is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_TURTLE_MODE, targetPlayer))
         {
-            handler->PSendSysMessage("Very Very Very Slow mode is Enabled.");
+            handler->PSendSysMessage("Very Very Very Slow mode is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_VERY_SLOW_XP_GAIN, targetPlayer))
         {
-            handler->PSendSysMessage("Very Slow mode is Enabled.");
+            handler->PSendSysMessage("Very Slow mode is ENABLED.");
         }
         return true;
     }
@@ -614,7 +614,10 @@ public:
         // Cast integer to ChallengeModeSettings and enable for the player
         ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
         targetPlayer->UpdatePlayerSetting("mod-challenge-modes", challengeSetting, 1);
-        handler->PSendSysMessage("Challenge mode %d enabled for %s.", setting, targetPlayer->GetName().c_str());
+
+        std::string message = "Challenge mode " + std::to_string(setting) + " enabled for " + targetPlayer->GetName() + ".";
+        handler->PSendSysMessage(message.c_str());
+
         return true;
     }
 
@@ -637,7 +640,10 @@ public:
         // Cast integer to ChallengeModeSettings and disable for the player
         ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
         targetPlayer->UpdatePlayerSetting("mod-challenge-modes", challengeSetting, 0);
-        handler->PSendSysMessage("Challenge mode %d disabled for %s.", setting, targetPlayer->GetName().c_str());
+
+        std::string message = "Challenge mode " + std::to_string(setting) + " disabled for " + targetPlayer->GetName() + ".";
+        handler->PSendSysMessage(message.c_str());
+
         return true;
     }
 
@@ -663,7 +669,9 @@ public:
             }
         }
 
-        handler->PSendSysMessage("Total bonus challenge talent points: %u", totalTalentPoints);
+        std::string message = "Total bonus challenge talent points: " + std::to_string(totalTalentPoints);
+        handler->PSendSysMessage(message.c_str());
+
         return true;
     }
     
