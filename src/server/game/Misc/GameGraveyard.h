@@ -18,6 +18,7 @@
 #ifndef _GAMEGRAVEYARD_H_
 #define _GAMEGRAVEYARD_H_
 
+#include "Common.h"
 #include "Player.h"
 #include "SharedDefines.h"
 #include <map>

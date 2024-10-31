@@ -18,9 +18,11 @@
 #ifndef ACORE_LOOTITEMSTORAGE_H
 #define ACORE_LOOTITEMSTORAGE_H
 
+#include "Common.h"
 #include "Item.h"
 #include "LootMgr.h"
 #include <list>
+#include <map>
 
 struct StoredLootItem
 {

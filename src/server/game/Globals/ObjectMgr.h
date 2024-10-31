@@ -20,6 +20,7 @@
 
 #include "Bag.h"
 #include "ConditionMgr.h"
+#include "Corpse.h"
 #include "Creature.h"
 #include "DatabaseEnv.h"
 #include "GameObject.h"
@@ -140,6 +141,21 @@ struct GameTele
 };
 
 typedef std::unordered_map<uint32, GameTele > GameTeleContainer;
+
+#define MAX_CREATURE_OUTFIT_DISPLAYS 11
+struct CreatureOutfit
+{
+    uint8 race;
+    uint8 gender;
+    uint8 face;
+    uint8 skin;
+    uint8 hair;
+    uint8 facialhair;
+    uint8 haircolor;
+    uint32 outfit[MAX_CREATURE_OUTFIT_DISPLAYS];
+};
+
+typedef std::unordered_map<uint32, CreatureOutfit > CreatureOutfitContainer;
 
 enum ScriptsType
 {
@@ -1086,6 +1102,8 @@ public:
 
     void LoadNPCSpellClickSpells();
 
+    void LoadCreatureOutfits();
+
     void LoadGameTele();
 
     void LoadGossipMenu();
@@ -1349,6 +1367,8 @@ public:
     bool AddGameTele(GameTele& data);
     bool DeleteGameTele(std::string_view name);
 
+    CreatureOutfitContainer const& GetCreatureOutfitMap() const { return _creatureOutfitStore; }
+
     [[nodiscard]] TrainerSpellData const* GetNpcTrainerSpells(uint32 entry) const
     {
         CacheTrainerSpellContainer::const_iterator  iter = _cacheTrainerSpellStore.find(entry);
@@ -1522,6 +1542,8 @@ private:
 
     PageTextContainer _pageTextStore;
     InstanceTemplateContainer _instanceTemplateStore;
+
+    CreatureOutfitContainer _creatureOutfitStore;
 
 private:
     void LoadScripts(ScriptsType type);

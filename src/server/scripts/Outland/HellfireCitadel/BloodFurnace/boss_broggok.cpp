@@ -22,7 +22,6 @@
 #include "SpellScript.h"
 #include "SpellScriptLoader.h"
 #include "blood_furnace.h"
-#include "SpellMgr.h"
 
 enum Say
 {

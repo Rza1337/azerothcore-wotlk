@@ -16,6 +16,7 @@
  */
 
 #include "GuardAI.h"
+#include "CreatureAIImpl.h"
 #include "Player.h"
 
 int32 GuardAI::Permissible(Creature const* creature)

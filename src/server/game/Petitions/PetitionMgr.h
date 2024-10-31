@@ -18,6 +18,7 @@
 #ifndef _PETITIONMGR_H
 #define _PETITIONMGR_H
 
+#include "Common.h"
 #include "ObjectGuid.h"
 
 #include <map>

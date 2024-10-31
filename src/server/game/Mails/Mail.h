@@ -22,6 +22,7 @@
 #include "DatabaseEnvFwd.h"
 #include "ObjectGuid.h"
 #include <map>
+#include <utility>
 
 struct AuctionEntry;
 struct CalendarEvent;

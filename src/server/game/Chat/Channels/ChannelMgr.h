@@ -19,6 +19,7 @@
 #define __ACORE_CHANNELMGR_H
 
 #include "Channel.h"
+#include "Common.h"
 #include "World.h"
 #include <map>
 #include <string>

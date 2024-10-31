@@ -20,7 +20,6 @@
 #include "SpellScript.h"
 #include "SpellScriptLoader.h"
 #include "sethekk_halls.h"
-#include "SpellMgr.h"
 
 enum Text
 {

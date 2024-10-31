@@ -26,7 +26,6 @@
 #include "Player.h"
 #include "ScriptedCreature.h"
 #include "SpellAuras.h"
-#include "SpellMgr.h"
 
 enum MageSpells
 {
@@ -175,6 +174,22 @@ struct npc_pet_mage_mirror_image : CasterAI
             if (!owner->IsInCombat() && !me->GetVictim())
                 EnterEvadeMode(EVADE_REASON_OTHER);
         }
+        //npcbot: allow mirror images to attack creature owner's target
+        else if (owner)
+        {
+            if (Unit* mytar = owner->GetVictim())
+            {
+                if (mytar != me->GetVictim() && me->IsValidAttackTarget(mytar) && CanAIAttack(mytar))
+                {
+                    me->GetThreatMgr().ResetAllThreat();
+                    me->AddThreat(mytar, 1000000.0f);
+                    AttackStart(mytar);
+                }
+            }
+            else
+                EnterEvadeMode(EVADE_REASON_NO_HOSTILES);
+        }
+        //end npcbot
     }
 
     void Reset() override

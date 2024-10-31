@@ -31,14 +31,18 @@
 #include "LFGMgr.h"
 #include "ObjectMgr.h"
 #include "PetDefines.h"
+#include "QuestDef.h"
 #include "SharedDefines.h"
 #include "Tuples.h"
+#include "Types.h"
 #include "Weather.h"
 #include "World.h"
 #include <atomic>
 
 // Add support old api modules
 #include "AllScriptsObjects.h"
+#define MOD_PRESENT_NPCBOTS 1
+
 
 class AuctionHouseObject;
 class AuraScript;

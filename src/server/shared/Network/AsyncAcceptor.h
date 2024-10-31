@@ -18,6 +18,7 @@
 #ifndef __ASYNCACCEPT_H_
 #define __ASYNCACCEPT_H_
 
+#include "IoContext.h"
 #include "IpAddress.h"
 #include "Log.h"
 #include <atomic>

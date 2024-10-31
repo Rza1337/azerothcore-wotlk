@@ -18,7 +18,6 @@
 #ifndef _LOG_H__
 #define _LOG_H__
 
-#include "IoContext.h"
 #include "Define.h"
 #include "LogCommon.h"
 #include "StringFormat.h"

@@ -569,10 +569,7 @@ struct boss_illidan_stormrage : public BossAI
             case PHASE_DEMON:
             {
                 scheduler.CancelAll();
-
-                ScheduleTimedEvent(30s, [&] {
-                    DoCastSelf(SPELL_SUMMON_SHADOW_DEMON, true);
-                }, 100s);
+                DoCastSelf(SPELL_SUMMON_SHADOW_DEMON, true);
 
                 ScheduleTimedEvent(1s, 2500ms, [&] {
                     DoCastVictim(SPELL_SHADOW_BLAST);

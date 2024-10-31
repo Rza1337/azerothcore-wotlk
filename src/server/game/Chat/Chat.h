@@ -22,6 +22,7 @@
 #include "Player.h"
 #include "SharedDefines.h"
 #include "WorldSession.h"
+#include <vector>
 
 class ChatHandler;
 class Creature;
