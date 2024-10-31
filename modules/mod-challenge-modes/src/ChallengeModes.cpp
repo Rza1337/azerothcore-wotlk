@@ -10,6 +10,7 @@
 #include "ScriptMgr.h"
 #include "SpellInfo.h"
 #include "WorldSession.h"
+#include "CommandScript.h"
 
 using namespace Acore::ChatCommands;
 
@@ -511,7 +512,7 @@ public:
     {
         static ChatCommandTable challengeCommandTable = 
         {
-            { "status", HandleChallengeStatusCommand, SEC_GAMEMASTER, Console::No }
+            { "status", HandleChallengeStatusCommand, SEC_ADMINISTRATOR, Console::No }
         };
 
         static ChatCommandTable commandTable =
@@ -522,17 +523,17 @@ public:
         return commandTable;
     }
 
-    static bool HandleChallengeStatusCommand(ChatHandler* handler, std::string args)
+    static bool HandleChallengeStatusCommand(ChatHandler* handler)
     {
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
 
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, targetPlayer))
         {
-            handler->SendSysMessage("Hardcore Mode is Enabled.");
+            handler->SendGlobalGMSysMessage("Hardcore Mode is Enabled.");
         }
         else
         {
-            handler->SendSysMessage("Hardcore Mode is Disabled.");
+            handler->SendGlobalGMSysMessage("Hardcore Mode is Disabled.");
         }
         return true;
     }
