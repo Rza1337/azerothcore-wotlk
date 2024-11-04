@@ -1176,16 +1176,19 @@ public:
 
         // Check if player is in a guild
         Guild* guild = player->GetGuild();
-        if (!guild || loot->loot_type != LOOT_CORPSE)
-            return;
+        if (guild && loot->loot_type == LOOT_CORPSE) {
+            // Calculate 10% of the loot amount as the guild contribution
+            int32 guildContribution = static_cast<int32>(loot->gold * 0.1f);
+            uint32 guildId = guild->GetId();
 
-        // Calculate 10% of the loot amount as the guild contribution
-        int32 guildContribution = static_cast<int32>(loot->gold * 0.1f);
+            // Build the SQL query string
+            std::ostringstream queryStream;
+            queryStream << "UPDATE guild SET BankMoney = BankMoney + " << guildContribution << " WHERE guildid = " << guildId;
+            std::string query = queryStream.str();
 
-        // Begin a transaction to safely add the money to the guild bank
-        CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
-        guild->_ModifyBankMoney(trans, guildContribution, true); // Add to guild bank
-        CharacterDatabase.CommitTransaction(trans);
+            // Execute the query
+            CharacterDatabase.DirectExecute(query.c_str());
+        }
 
         if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF ) 
         {
