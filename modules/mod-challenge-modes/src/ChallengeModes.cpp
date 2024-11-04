@@ -1176,7 +1176,7 @@ public:
 
         // Check if player is in a guild
         Guild* guild = player->GetGuild();
-        if (guild && loot->loot_type == LOOT_CORPSE) {
+        if (guild && loot->loot_type != LOOT_PICKPOCKETING) {
             // Calculate 10% of the loot amount as the guild contribution
             int32 guildContribution = static_cast<int32>(loot->gold * 0.1f);
             uint32 guildId = guild->GetId();
@@ -1190,9 +1190,9 @@ public:
             CharacterDatabase.DirectExecute(query.c_str());
         }
 
-        if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF ) 
+        if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60) 
         {
-            loot->gold = loot->gold * player->GetLevel() / 3;
+            loot->gold = loot->gold * 100;
         }
     }
 
