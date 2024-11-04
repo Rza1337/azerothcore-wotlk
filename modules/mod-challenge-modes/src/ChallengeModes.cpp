@@ -1168,9 +1168,27 @@ public:
 
     void OnBeforeLootMoney(Player* player, Loot* loot) override
     {
-        if( loot && loot->loot_type == LOOT_PICKPOCKETING  && player->getRace() == RACE_NIGHTELF) 
+
+        // Only process positive money gains (loot, rewards, etc.)
+        if (amount <= 0)
+            return;
+
+        // Check if player is in a guild
+        Guild* guild = player->GetGuild();
+        if (!guild || loot->loot_type != LOOT_CORPSE)
+            return;
+
+        // Calculate 10% of the loot amount as the guild contribution
+        int32 guildContribution = static_cast<int32>(amount * 0.1f);
+
+        // Begin a transaction to safely add the money to the guild bank
+        CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
+        guild->_ModifyBankMoney(trans, guildContribution, true); // Add to guild bank
+        CharacterDatabase.CommitTransaction(trans);
+
+        if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF ) 
         {
-            loot->gold = loot->gold * 10;
+            loot->gold = loot->gold * player->GetLevel() / 3;
         }
     }
 
