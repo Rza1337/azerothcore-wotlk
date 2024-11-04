@@ -1166,6 +1166,14 @@ public:
         }
     }
 
+    void OnBeforeLootMoney(Player* player, Loot* loot)
+    {
+        if( loot && loot->loot_type == LOOT_PICKPOCKETING LOOT) 
+        {
+            loot->gold = loot->gold * 10;
+        }
+    }
+
     void OnLevelChanged(Player* player, uint8 oldLevel) override
     {
         ChallengeMode::OnLevelChanged(player, oldLevel);
