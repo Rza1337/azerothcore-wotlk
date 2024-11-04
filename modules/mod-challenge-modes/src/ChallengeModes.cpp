@@ -1166,9 +1166,9 @@ public:
         }
     }
 
-    void OnBeforeLootMoney(Player* player, Loot* loot)
+    void OnBeforeLootMoney(Player* player, Loot* loot) override
     {
-        if( loot && loot->loot_type == LOOT_PICKPOCKETING ) 
+        if( loot && loot->loot_type == LOOT_PICKPOCKETING  && player->getRace == RACE_NIGHTELF) 
         {
             loot->gold = loot->gold * 10;
         }
