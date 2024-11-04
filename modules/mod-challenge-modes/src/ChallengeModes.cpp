@@ -3,6 +3,7 @@
  */
 
 #include "ChallengeModes.h"
+#include "Guild.h"
 #include "SpellMgr.h"
 #include "Player.h"
 #include "Chat.h"
