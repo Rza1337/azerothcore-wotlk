@@ -1168,7 +1168,7 @@ public:
 
     void OnBeforeLootMoney(Player* player, Loot* loot)
     {
-        if( loot && loot->loot_type == LOOT_PICKPOCKETING LOOT) 
+        if( loot && loot->loot_type == LOOT_PICKPOCKETING ) 
         {
             loot->gold = loot->gold * 10;
         }
