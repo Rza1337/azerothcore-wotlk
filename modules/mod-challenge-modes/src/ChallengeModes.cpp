@@ -1191,7 +1191,7 @@ public:
 
         if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60) 
         {
-            loot->gold = loot->gold * 100;
+            loot->gold = loot->gold * 1000;
         }
     }
 
