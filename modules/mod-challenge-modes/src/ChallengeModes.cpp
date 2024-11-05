@@ -1178,16 +1178,15 @@ public:
         Guild* guild = player->GetGuild();
         if (guild && loot->loot_type != LOOT_PICKPOCKETING) {
             // Calculate 10% of the loot amount as the guild contribution
-            int32 guildContribution = static_cast<int32>(loot->gold * 0.1f);
-            uint32 guildId = guild->GetId();
+            uint32 guildContribution = static_cast<uint32>(loot->gold * 0.1f);
 
-            // Build the SQL query string
-            std::ostringstream queryStream;
-            queryStream << "UPDATE guild SET BankMoney = BankMoney + " << guildContribution << " WHERE guildid = " << guildId;
-            std::string query = queryStream.str();
+            // Deposit the contribution to the guild bank
+            WorldSession* session = player->GetSession();
+            if (session) {
+                guild->HandleMemberDepositMoney(session, guildContribution);
+            }
 
-            // Execute the query
-            CharacterDatabase.DirectExecute(query.c_str());
+            loot->gold = loot->gold + guildContribution;
         }
 
         if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60) 
