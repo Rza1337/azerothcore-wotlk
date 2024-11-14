@@ -1137,14 +1137,12 @@ class SelfMadeGuildRestriction : public GuildScript
 public:
     SelfMadeGuildRestriction() : GuildScript("SelfMadeGuildRestriction") {}
 
-    bool OnAddMember(Guild* guild, Player* player, uint8& plRank) override
+    void OnAddMember(Guild* guild, Player* player, uint8& plRank) override
     {
-        // Return immediately if the "Self Made" challenge is not enabled
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            return true;
+            guild->DeleteMember(player);
         }
-        return false; // Allow interaction if the GameObject is not restricted
     }
 
 };
