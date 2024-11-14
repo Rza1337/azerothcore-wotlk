@@ -1327,11 +1327,11 @@ public:
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Cashless Mode", 0, SETTING_CASHLESS);
         }
-        if (sChallengeModes->challengeEnabled(SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY))
+        if (sChallengeModes->challengeEnabled(SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY))
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Questless Mode", 0, SETTING_QUESTLESS);
         }
-        if (sChallengeModes->challengeEnabled(SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS))
+        if (sChallengeModes->challengeEnabled(SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_BOAR_ONLY))
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Quest XP Only Mode", 0, SETTING_QUEST_XP_ONLY);
         }
