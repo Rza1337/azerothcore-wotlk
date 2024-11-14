@@ -65,6 +65,10 @@ bool ChallengeModes::challengeEnabled(ChallengeModeSettings setting) const
             return cashlessEnable;
         case SETTING_BOAR_ONLY:
             return boarEnable;
+        case SETTING_REPAIRLESS:
+            return repairEnable;
+        case SETTING_SELFMADE:
+            return selfmadeEnable;
         case HARDCORE_DEAD:
             break;
     }
@@ -101,6 +105,10 @@ uint32 ChallengeModes::getDisableLevel(ChallengeModeSettings setting) const
             return cashlessDisableLevel;
         case SETTING_BOAR_ONLY:
             return boarDisableLevel;
+        case SETTING_REPAIRLESS:
+            return repairDisableLevel;
+        case SETTING_SELFMADE:
+            return selfmadeDisableLevel;
         case HARDCORE_DEAD:
             break;
     }
@@ -137,6 +145,10 @@ float ChallengeModes::getXpBonusForChallenge(ChallengeModeSettings setting) cons
             return cashlessXpBonus;
         case SETTING_BOAR_ONLY:
             return boarXpBonus;
+        case SETTING_REPAIRLESS:
+            return repairXpBonus;
+        case SETTING_SELFMADE:
+            return selfmadeXpBonus;
         case HARDCORE_DEAD:
             break;
     }
@@ -173,6 +185,10 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTitleMapForChallenge
             return &cashlessTitleRewards;
         case SETTING_BOAR_ONLY:
             return &boarTitleRewards;
+        case SETTING_REPAIRLESS:
+            return &repairTitleRewards;
+        case SETTING_SELFMADE:
+            return &selfmadeTitleRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -209,6 +225,10 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTalentMapForChalleng
             return &cashlessTalentRewards;
         case SETTING_BOAR_ONLY:
             return &boarTalentRewards;
+        case SETTING_REPAIRLESS:
+            return &repairTalentRewards;
+        case SETTING_SELFMADE:
+            return &selfmadeTalentRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -245,6 +265,10 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getItemMapForChallenge(
             return &cashlessItemRewards;
         case SETTING_BOAR_ONLY:
             return &boarItemRewards;
+        case SETTING_REPAIRLESS:
+            return &repairItemRewards;
+        case SETTING_SELFMADE:
+            return &selfmadeItemRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -281,6 +305,10 @@ uint32 ChallengeModes::getItemRewardAmount(ChallengeModeSettings setting) const
             return cashlessItemRewardAmount;
         case SETTING_BOAR_ONLY:
             return boarItemRewardAmount;
+        case SETTING_REPAIRLESS:
+            return repairItemRewardAmount;
+        case SETTING_SELFMADE:
+            return selfmadeItemRewardAmount;
         case HARDCORE_DEAD:
             break;
     }
@@ -318,6 +346,10 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getAchievementMapForCha
             return &cashlessAchievementReward;
         case SETTING_BOAR_ONLY:
             return &boarAchievementReward;
+        case SETTING_REPAIRLESS:
+            return &repairAchievementReward;
+        case SETTING_SELFMADE:
+            return &selfmadeAchievementReward;
         case HARDCORE_DEAD:
             break;
     }
@@ -379,6 +411,8 @@ private:
             sChallengeModes->questlessEnable         = sConfigMgr->GetOption<bool>("Questless.Enable", true);
             sChallengeModes->cashlessEnable          = sConfigMgr->GetOption<bool>("Cashless.Enable", true);
             sChallengeModes->boarEnable              = sConfigMgr->GetOption<bool>("BoarOnly.Enable", true);
+            sChallengeModes->repairEnable            = sConfigMgr->GetOption<bool>("Repairless.Enable", true);
+            sChallengeModes->selfmadeEnable          = sConfigMgr->GetOption<bool>("SelfMade.Enable", true);
 
             sChallengeModes->hardcoreDisableLevel          = sConfigMgr->GetOption<uint32>("Hardcore.DisableLevel", 0);
             sChallengeModes->semiHardcoreDisableLevel      = sConfigMgr->GetOption<uint32>("SemiHardcore.DisableLevel", 0);
@@ -393,6 +427,8 @@ private:
             sChallengeModes->questlessDisableLevel         = sConfigMgr->GetOption<uint32>("Questless.DisableLevel", 0);
             sChallengeModes->cashlessDisableLevel          = sConfigMgr->GetOption<uint32>("Cashless.DisableLevel", 0);
             sChallengeModes->boarDisableLevel              = sConfigMgr->GetOption<uint32>("BoarOnly.DisableLevel", 60);
+            sChallengeModes->repairDisableLevel            = sConfigMgr->GetOption<uint32>("Repairless.DisableLevel", 0);
+            sChallengeModes->selfmadeDisableLevel          = sConfigMgr->GetOption<uint32>("SelfMade.DisableLevel", 0);
 
             sChallengeModes->hardcoreXpBonus         = sConfigMgr->GetOption<float>("Hardcore.XPMultiplier", 1.0f);
             sChallengeModes->semiHardcoreXpBonus     = sConfigMgr->GetOption<float>("SemiHardcore.XPMultiplier", 1.0f);
@@ -407,6 +443,8 @@ private:
             sChallengeModes->questlessXpBonus        = sConfigMgr->GetOption<float>("Questless.XPMultiplier", 1.0f);
             sChallengeModes->cashlessXpBonus         = sConfigMgr->GetOption<float>("Cashless.XPMultiplier", 1.0f);
             sChallengeModes->boarXpBonus             = sConfigMgr->GetOption<float>("BoarOnly.XPMultiplier", 1.0f);
+            sChallengeModes->repairXpBonus           = sConfigMgr->GetOption<float>("Repairless.XPMultiplier", 1.0f);
+            sChallengeModes->selfmadeXpBonus         = sConfigMgr->GetOption<float>("SelfMade.XPMultiplier", 1.0f);
 
             sChallengeModes->hardcoreItemRewardAmount         = sConfigMgr->GetOption<uint32>("Hardcore.ItemRewardAmount", 1);
             sChallengeModes->semiHardcoreItemRewardAmount     = sConfigMgr->GetOption<uint32>("SemiHardcore.ItemRewardAmount", 1);
@@ -421,6 +459,8 @@ private:
             sChallengeModes->questlessItemRewardAmount        = sConfigMgr->GetOption<uint32>("Questless.ItemRewardAmount", 1);
             sChallengeModes->cashlessItemRewardAmount         = sConfigMgr->GetOption<uint32>("Cashless.ItemRewardAmount", 1);
             sChallengeModes->boarItemRewardAmount             = sConfigMgr->GetOption<uint32>("BoarOnly.ItemRewardAmount", 1);
+            sChallengeModes->repairItemRewardAmount           = sConfigMgr->GetOption<uint32>("Repairless.ItemRewardAmount", 1);
+            sChallengeModes->selfmadeItemRewardAmount         = sConfigMgr->GetOption<uint32>("SelfMade.ItemRewardAmount", 1);
 
             LoadStringToMap(sChallengeModes->hardcoreAchievementReward, sConfigMgr->GetOption<std::string>("Hardcore.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->semiHardcoreAchievementReward, sConfigMgr->GetOption<std::string>("SemiHardcore.AchievementReward", ""));
@@ -435,6 +475,8 @@ private:
             LoadStringToMap(sChallengeModes->questlessAchievementReward, sConfigMgr->GetOption<std::string>("Questless.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->cashlessAchievementReward, sConfigMgr->GetOption<std::string>("Cashless.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->boarAchievementReward, sConfigMgr->GetOption<std::string>("BoarOnly.AchievementReward", ""));
+            LoadStringToMap(sChallengeModes->repairAchievementReward, sConfigMgr->GetOption<std::string>("Repairless.AchievementReward", ""));
+            LoadStringToMap(sChallengeModes->selfmadeAchievementReward, sConfigMgr->GetOption<std::string>("SelfMade.AchievementReward", ""));
 
         }
     }
@@ -602,17 +644,25 @@ public:
         {
             handler->PSendSysMessage("Self Crafted is ENABLED.");
         }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, targetPlayer))
+        {
+            handler->PSendSysMessage("Self Made is ENABLED.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_REPAIRLESS, targetPlayer))
+        {
+            handler->PSendSysMessage("Repairless is ENABLED.");
+        }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SLOW_XP_GAIN, targetPlayer))
         {
             handler->PSendSysMessage("Slow XP is ENABLED.");
         }
-        if (sChallengeModes->challengeEnabledForPlayer(SETTING_TURTLE_MODE, targetPlayer))
-        {
-            handler->PSendSysMessage("Very Very Very Slow mode is ENABLED.");
-        }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_VERY_SLOW_XP_GAIN, targetPlayer))
         {
             handler->PSendSysMessage("Very Slow mode is ENABLED.");
+        }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_TURTLE_MODE, targetPlayer))
+        {
+            handler->PSendSysMessage("Very Very Very Slow mode is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, targetPlayer))
         {
@@ -626,15 +676,51 @@ public:
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
         if (!args || !*args)
         {
-            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-12) to enable.");
-            return false;
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-13) to enable.");
+            handler->PSendSysMessage("Challenge Mode Settings:");
+            handler->PSendSysMessage("0: Hardcore Mode");
+            handler->PSendSysMessage("1: Semi-Hardcore Mode");
+            handler->PSendSysMessage("2: Self-Crafted Mode");
+            handler->PSendSysMessage("3: Low Quality Item Mode");
+            handler->PSendSysMessage("4: Slow XP Gain");
+            handler->PSendSysMessage("5: Very Slow XP Gain");
+            handler->PSendSysMessage("6: Quest XP Only");
+            handler->PSendSysMessage("7: Iron Man Mode");
+            handler->PSendSysMessage("8: Hardcore Deadlock");
+            handler->PSendSysMessage("9: Pacifist Mode");
+            handler->PSendSysMessage("10: Turtle Mode (Very Very Very Slow XP)");
+            handler->PSendSysMessage("11: Questless Mode");
+            handler->PSendSysMessage("12: Cashless Mode");
+            handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
+            handler->PSendSysMessage("14: Repairless Mode");
+            handler->PSendSysMessage("15: Self Made Mode");
+
+            return true;
         }
 
         int setting = atoi(args);
-        if (setting < 0 || setting > 12)
+        if (setting < 0 || setting > 13)
         {
-            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 12.");
-            return false;
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 13.");
+            handler->PSendSysMessage("Challenge Mode Settings:");
+            handler->PSendSysMessage("0: Hardcore Mode");
+            handler->PSendSysMessage("1: Semi-Hardcore Mode");
+            handler->PSendSysMessage("2: Self-Crafted Mode");
+            handler->PSendSysMessage("3: Low Quality Item Mode");
+            handler->PSendSysMessage("4: Slow XP Gain");
+            handler->PSendSysMessage("5: Very Slow XP Gain");
+            handler->PSendSysMessage("6: Quest XP Only");
+            handler->PSendSysMessage("7: Iron Man Mode");
+            handler->PSendSysMessage("8: Hardcore Deadlock");
+            handler->PSendSysMessage("9: Pacifist Mode");
+            handler->PSendSysMessage("10: Turtle Mode (Very Very Very Slow XP)");
+            handler->PSendSysMessage("11: Questless Mode");
+            handler->PSendSysMessage("12: Cashless Mode");
+            handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
+            handler->PSendSysMessage("14: Repairless Mode");
+            handler->PSendSysMessage("15: Self Made Mode");
+
+            return true;
         }
 
         // Cast integer to ChallengeModeSettings and enable for the player
@@ -652,15 +738,51 @@ public:
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
         if (!args || !*args)
         {
-            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-12) to disable.");
-            return false;
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-13) to disable.");
+            handler->PSendSysMessage("Challenge Mode Settings:");
+            handler->PSendSysMessage("0: Hardcore Mode");
+            handler->PSendSysMessage("1: Semi-Hardcore Mode");
+            handler->PSendSysMessage("2: Self-Crafted Mode");
+            handler->PSendSysMessage("3: Low Quality Item Mode");
+            handler->PSendSysMessage("4: Slow XP Gain");
+            handler->PSendSysMessage("5: Very Slow XP Gain");
+            handler->PSendSysMessage("6: Quest XP Only");
+            handler->PSendSysMessage("7: Iron Man Mode");
+            handler->PSendSysMessage("8: Hardcore Deadlock");
+            handler->PSendSysMessage("9: Pacifist Mode");
+            handler->PSendSysMessage("10: Turtle Mode (Very Very Very Slow XP)");
+            handler->PSendSysMessage("11: Questless Mode");
+            handler->PSendSysMessage("12: Cashless Mode");
+            handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
+            handler->PSendSysMessage("14: Repairless Mode");
+            handler->PSendSysMessage("15: Self Made Mode");
+
+            return true;
         }
 
         int setting = atoi(args);
-        if (setting < 0 || setting > 12)
+        if (setting < 0 || setting > 13)
         {
-            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 12.");
-            return false;
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 13.");
+            handler->PSendSysMessage("Challenge Mode Settings:");
+            handler->PSendSysMessage("0: Hardcore Mode");
+            handler->PSendSysMessage("1: Semi-Hardcore Mode");
+            handler->PSendSysMessage("2: Self-Crafted Mode");
+            handler->PSendSysMessage("3: Low Quality Item Mode");
+            handler->PSendSysMessage("4: Slow XP Gain");
+            handler->PSendSysMessage("5: Very Slow XP Gain");
+            handler->PSendSysMessage("6: Quest XP Only");
+            handler->PSendSysMessage("7: Iron Man Mode");
+            handler->PSendSysMessage("8: Hardcore Deadlock");
+            handler->PSendSysMessage("9: Pacifist Mode");
+            handler->PSendSysMessage("10: Turtle Mode (Very Very Very Slow XP)");
+            handler->PSendSysMessage("11: Questless Mode");
+            handler->PSendSysMessage("12: Cashless Mode");
+            handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
+            handler->PSendSysMessage("14: Repairless Mode");
+            handler->PSendSysMessage("15: Self Made Mode");
+
+            return true;
         }
 
         // Cast integer to ChallengeModeSettings and disable for the player
@@ -719,6 +841,8 @@ public:
             case SETTING_QUESTLESS:          return "Questless Mode";
             case SETTING_CASHLESS:           return "Cashless Mode";
             case SETTING_BOAR_ONLY:          return "Boar Only Mode";
+            case SETTING_REPAIRLESS:         return "Repairless Mode";
+            case SETTING_SELFMADE:           return "Self Made Mode";
             default:                         return "Unknown Mode";
         }
     }
@@ -895,6 +1019,171 @@ public:
     {
         ChallengeMode::OnLevelChanged(player, oldlevel);
     }
+};
+
+class ChallengeMode_Repairless : public ChallengeMode
+{
+public:
+    ChallengeMode_Repairless() : ChallengeMode("ChallengeMode_Repairless", SETTING_REPAIRLESS) {}
+
+    void OnBeforeItemRepair(Player* player, Item* item, bool& cancelRepair, bool /*cost*/)
+    {
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_REPAIRLESS, player))
+        {
+            // Prevent the repair
+            cancelRepair = true;
+            
+            // Notify the player that repairs are disabled
+            ChatHandler(player->GetSession()).PSendSysMessage("No Repair Challenge is active: You cannot repair your items.");
+        }
+    }
+
+    void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
+    {
+        ChallengeMode::OnGiveXP(player, amount, victim, xpSource);
+    }
+
+    void OnLevelChanged(Player* player, uint8 oldlevel) override
+    {
+        ChallengeMode::OnLevelChanged(player, oldlevel);
+    }
+
+};
+
+class ChallengeMode_Selfmade : public ChallengeMode
+{
+public:
+    ChallengeMode_Selfmade() : ChallengeMode("ChallengeMode_Selfmade", SETTING_SELFMADE) {}
+
+    bool CanInitTrade(Player* player, Player* target) override
+    {
+        // Check if the "Self Made" challenge is enabled for the player
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Trading with other players is disabled.");
+            return false;  // Prevent the trade from being initiated
+        }
+        return true;  // Allow trade if not in Self Made mode
+    }
+
+    bool CanSetTradeItem(Player* player, Item* tradedItem, uint8 tradeSlot) override
+    {
+        // Check if the "Self Made" challenge is enabled for the player
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Trading items with other players is disabled.");
+            return false;  // Prevent the item from being placed in the trade window
+        }
+        return true;  // Allow setting the item if not in Self Made mode
+    }
+
+    void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
+    {
+        ChallengeMode::OnGiveXP(player, amount, victim, xpSource);
+    }
+
+    void OnLevelChanged(Player* player, uint8 oldlevel) override
+    {
+        ChallengeMode::OnLevelChanged(player, oldlevel);
+    }
+
+};
+
+const std::unordered_set<uint32> restrictedMailboxIDs = {
+    193030, 182391, 32349, 140908, 142075, 142089, 142093, 142094, 142095,
+    142102, 142103, 142109, 142110, 142111, 142117, 142119, 143981, 143982,
+    143983, 143984, 143985, 143986, 143987, 143988, 143989, 143990, 144011,
+    144112, 144125, 144126, 144127, 144128, 144129, 144130, 144131, 144179,
+    144570, 153578, 153716, 157637, 163313, 163645, 164618, 164840, 171556,
+    171699, 171752, 173047, 173221, 175864, 176319, 176324, 176404, 177044,
+    178864, 179895, 179896, 180451, 181236, 181380, 181381, 181639, 181883,
+    181980, 182356, 182357, 182359, 182360, 182361, 182362, 182363, 182364,
+    182365, 182567, 182939, 182946, 182948, 182949, 182950, 182955, 183037,
+    183038, 183039, 183040, 183042, 183047, 183167, 183856, 183857, 183858,
+    184085, 184133, 184134, 184135, 184136, 184137, 184138, 184139, 184140,
+    184147, 184148, 184490, 184652, 184944, 185102, 185471, 185472, 185473,
+    185477, 185965, 186230, 186435, 186506, 186629, 186687, 187113, 187260,
+    187268, 187316, 187322, 188123, 188132, 188241, 188256, 188355, 188486,
+    188531, 188534, 188541, 188604, 188618, 188682, 188710, 189328, 189329,
+    189969, 190914, 190915, 191228, 191521, 191832, 191946, 191947, 191948,
+    191949, 191950, 191951, 191952, 191953, 191954, 191955, 191956, 191957,
+    192952, 193043, 193044, 193045, 193071, 193791, 193972, 194016, 194027,
+    194147, 194492, 194788, 195218, 195219, 195467, 195468, 195528, 195529,
+    195530, 195554, 195555, 195556, 195557, 195558, 195559, 195560, 195561,
+    195562, 195603, 195604, 195605, 195606, 195607, 195608, 195609, 195610,
+    195611, 195612, 195613, 195614, 195615, 195616, 195617, 195618, 195619,
+    195620, 195624, 195625, 195626, 195627, 195628, 195629, 191605, 140907
+};
+
+const std::unordered_set<uint32> restrictedGuildBankIDs = {
+    191319, 187289, 187290, 187291, 187292, 187293, 187294, 187295, 187296,
+    187299, 187329, 187332, 187334, 187336, 187337, 187365, 187390, 188126,
+    188127, 193086, 193087, 193088, 193089
+};
+
+class SelfMadeRestriction : public GameObjectScript
+{
+public:
+    SelfMadeRestriction() : GameObjectScript("SelfMadeRestriction") {}
+
+    bool OnGossipHello(Player* player, GameObject* go) override
+    {
+        // Return immediately if the "Self Made" challenge is not enabled
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELF_MADE, player))
+        {
+            return true;
+        }
+
+        // Check if the GameObject ID is in the list of restricted mailboxes
+        if (restrictedMailboxIDs.find(go->GetEntry()) != restrictedMailboxIDs.end())
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: You cannot use mailboxes.");
+            return false; // Block interaction with the mailbox
+        }
+
+        // Check if the GameObject ID is in the list of restricted guild banks
+        if (restrictedGuildBankIDs.find(go->GetEntry()) != restrictedGuildBankIDs.end())
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: You cannot access guild banks.");
+            return false; // Block interaction with the guild bank
+        }
+
+        return true; // Allow interaction if the GameObject is not restricted
+    }
+
+};
+
+const std::unordered_set<uint32> restrictedAuctioneerIDs = {
+    8661, 15680, 15519, 8671, 15682, 15679, 8670, 8721, 8719, 8723,
+    15677, 9856, 9857, 15518, 8722, 15659, 38900, 9858, 8672, 9859,
+    15683, 15681, 36359, 8720, 15686, 36235, 38906, 15678, 36360, 8674,
+    15675, 8673, 31430, 8669, 15684, 8724, 15676, 7938, 35594, 35607,
+    18761, 17629, 17627, 17628, 16628, 16627, 16629
+};
+
+// Class to restrict auctioneer NPCs
+class SelfMadeCreatureRestriction : public CreatureScript
+{
+public:
+    SelfMadeCreatureRestriction() : CreatureScript("SelfMadeCreatureRestriction") {}
+
+    bool OnGossipHello(Player* player, Creature* creature) override
+    {
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELF_MADE, player))
+        {
+            return true; // Allow interaction if the challenge is not active
+        }
+
+        // Check if the Creature ID is in the restricted auctioneer IDs
+        if (restrictedAuctioneerIDs.find(creature->GetOriginalEntry()) != restrictedAuctioneerIDs.end())
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: You cannot use the auction house.");
+            return false; // Block interaction with the auctioneer
+        }
+
+        return true; // Allow other interactions
+    }
+
 };
 
 class ChallengeMode_VerySlowXpGain : public ChallengeMode
@@ -1291,57 +1580,65 @@ public:
 
     bool OnGossipHello(Player* player, GameObject* go) override
     {
-        if (sChallengeModes->challengeEnabled(SETTING_IRON_MAN) && !playerSettingEnabled(player, SETTING_IRON_MAN) && !playerSettingEnabled(player, SETTING_SELF_CRAFTED)  && !playerSettingEnabled(player, SETTING_HARDCORE)  && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_ITEM_QUALITY_LEVEL))
+        if (sChallengeModes->challengeEnabled(SETTING_IRON_MAN) && !playerSettingEnabled(player, SETTING_IRON_MAN) && !playerSettingEnabled(player, SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_HARDCORE)  && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_ITEM_QUALITY_LEVEL))
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Iron Man Mode", 0, SETTING_IRON_MAN);
         }
         if (sChallengeModes->challengeEnabled(SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Hardcore Mode", 0, SETTING_HARDCORE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Hardcore Mode Hardcore [Character Death is Permanent]", 0, SETTING_HARDCORE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SEMI_HARDCORE) && !playerSettingEnabled(player, SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Semi-Hardcore Mode", 0, SETTING_SEMI_HARDCORE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Semi Hardcore [Equipped Gear & Gold is Lost on Death]", 0, SETTING_SEMI_HARDCORE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Crafted Mode", 0, SETTING_SELF_CRAFTED);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Crafted Mode [You can only equip self-crafted items.]", 0, SETTING_SELF_CRAFTED);
+        }
+        if (sChallengeModes->challengeEnabled(SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_IRON_MAN))
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode [You cannot trade.]", 0, SETTING_SELF_CRAFTED);
+        }
+        if (sChallengeModes->challengeEnabled(SETTING_REPAIRLESS) && !playerSettingEnabled(player, SETTING_REPAIRLESS))
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Repairless Mode [You cannot use repairs.]", 0, SETTING_SELF_CRAFTED);
         }
         if (sChallengeModes->challengeEnabled(SETTING_ITEM_QUALITY_LEVEL) && !playerSettingEnabled(player, SETTING_ITEM_QUALITY_LEVEL) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Low Quality Item Mode", 0, SETTING_ITEM_QUALITY_LEVEL);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Low Quality Item Mode [You can only equip grays and whites.]", 0, SETTING_ITEM_QUALITY_LEVEL);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_TURTLE_MODE))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Slow XP Mode", 0, SETTING_SLOW_XP_GAIN);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Slow XP Mode[You level at half speed.]", 0, SETTING_SLOW_XP_GAIN);
         }
         if (sChallengeModes->challengeEnabled(SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_TURTLE_MODE))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Slow XP Mode", 0, SETTING_VERY_SLOW_XP_GAIN);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Slow XP Mode[You level at a quarter speed.]", 0, SETTING_VERY_SLOW_XP_GAIN);
         }
         if (sChallengeModes->challengeEnabled(SETTING_TURTLE_MODE) && !playerSettingEnabled(player, SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_TURTLE_MODE))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Very Very Slow XP Mode", 0, SETTING_TURTLE_MODE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Very Very Slow XP Mode [You barely level at all.]", 0, SETTING_TURTLE_MODE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_CASHLESS) && !playerSettingEnabled(player, SETTING_CASHLESS))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Cashless Mode", 0, SETTING_CASHLESS);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Cashless Mode [Your money is locked at 0.]", 0, SETTING_CASHLESS);
         }
         if (sChallengeModes->challengeEnabled(SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Questless Mode", 0, SETTING_QUESTLESS);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Questless Mode You don't get XP from quests.]", 0, SETTING_QUESTLESS);
         }
         if (sChallengeModes->challengeEnabled(SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_BOAR_ONLY))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Quest XP Only Mode", 0, SETTING_QUEST_XP_ONLY);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Quest Only Mode [You don't get XP from kills.]", 0, SETTING_QUEST_XP_ONLY);
         }
         if (sChallengeModes->challengeEnabled(SETTING_PACIFIST) && !playerSettingEnabled(player, SETTING_PACIFIST))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Pacifist Mode", 0, SETTING_PACIFIST);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Pacifist Mode [You are unable to deal damage.]", 0, SETTING_PACIFIST);
         }
         if (sChallengeModes->challengeEnabled(SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Boar Only Mode", 0, SETTING_BOAR_ONLY);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Boar Only Mode [You can only gain XP from killing boars.]", 0, SETTING_BOAR_ONLY);
         }
         SendGossipMenuFor(player, 12669, go->GetGUID());
         return true;
@@ -1382,5 +1679,9 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_Questless();
     new ChallengeMode_Cashless();
     new ChallengeMode_BoarOnly();
+    new ChallengeMode_Repairless();
+    new ChallengeMode_Selfmade();
+    new SelfMadeRestriction();
+    new SelfMadeCreatureRestriction();
     new Challenge_CommandScript();
 }
