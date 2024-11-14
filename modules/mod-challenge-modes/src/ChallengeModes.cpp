@@ -1339,7 +1339,7 @@ public:
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Pacifist Mode", 0, SETTING_PACIFIST);
         }
-        if (sChallengeModes->challengeEnabled(SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY))
+        if (sChallengeModes->challengeEnabled(SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY))
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Boar Only Mode", 0, SETTING_BOAR_ONLY);
         }
