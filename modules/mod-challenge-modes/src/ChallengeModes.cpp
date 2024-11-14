@@ -69,6 +69,8 @@ bool ChallengeModes::challengeEnabled(ChallengeModeSettings setting) const
             return repairEnable;
         case SETTING_SELFMADE:
             return selfmadeEnable;
+        case SETTING_LONER:
+            return lonerEnable;
         case HARDCORE_DEAD:
             break;
     }
@@ -109,6 +111,8 @@ uint32 ChallengeModes::getDisableLevel(ChallengeModeSettings setting) const
             return repairDisableLevel;
         case SETTING_SELFMADE:
             return selfmadeDisableLevel;
+        case SETTING_LONER:
+            return lonerDisableLevel;
         case HARDCORE_DEAD:
             break;
     }
@@ -149,6 +153,8 @@ float ChallengeModes::getXpBonusForChallenge(ChallengeModeSettings setting) cons
             return repairXpBonus;
         case SETTING_SELFMADE:
             return selfmadeXpBonus;
+        case SETTING_LONER:
+            return lonerXpBonus;
         case HARDCORE_DEAD:
             break;
     }
@@ -189,6 +195,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTitleMapForChallenge
             return &repairTitleRewards;
         case SETTING_SELFMADE:
             return &selfmadeTitleRewards;
+        case SETTING_LONER:
+            return &lonerTitleRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -229,6 +237,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTalentMapForChalleng
             return &repairTalentRewards;
         case SETTING_SELFMADE:
             return &selfmadeTalentRewards;
+        case SETTING_LONER:
+            return &lonerTalentRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -269,6 +279,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getItemMapForChallenge(
             return &repairItemRewards;
         case SETTING_SELFMADE:
             return &selfmadeItemRewards;
+        case SETTING_LONER:
+            return &lonerItemRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -309,6 +321,8 @@ uint32 ChallengeModes::getItemRewardAmount(ChallengeModeSettings setting) const
             return repairItemRewardAmount;
         case SETTING_SELFMADE:
             return selfmadeItemRewardAmount;
+        case SETTING_LONER:
+            return lonerItemRewardAmount;
         case HARDCORE_DEAD:
             break;
     }
@@ -350,6 +364,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getAchievementMapForCha
             return &repairAchievementReward;
         case SETTING_SELFMADE:
             return &selfmadeAchievementReward;
+        case SETTING_LONER:
+            return &lonerAchievementReward;
         case HARDCORE_DEAD:
             break;
     }
@@ -414,6 +430,7 @@ private:
             sChallengeModes->boarEnable              = sConfigMgr->GetOption<bool>("BoarOnly.Enable", true);
             sChallengeModes->repairEnable            = sConfigMgr->GetOption<bool>("Repairless.Enable", true);
             sChallengeModes->selfmadeEnable          = sConfigMgr->GetOption<bool>("SelfMade.Enable", true);
+            sChallengeModes->lonerEnable             = sConfigMgr->GetOption<bool>("Loner.Enable", true);
 
             sChallengeModes->hardcoreDisableLevel          = sConfigMgr->GetOption<uint32>("Hardcore.DisableLevel", 0);
             sChallengeModes->semiHardcoreDisableLevel      = sConfigMgr->GetOption<uint32>("SemiHardcore.DisableLevel", 0);
@@ -430,6 +447,7 @@ private:
             sChallengeModes->boarDisableLevel              = sConfigMgr->GetOption<uint32>("BoarOnly.DisableLevel", 60);
             sChallengeModes->repairDisableLevel            = sConfigMgr->GetOption<uint32>("Repairless.DisableLevel", 0);
             sChallengeModes->selfmadeDisableLevel          = sConfigMgr->GetOption<uint32>("SelfMade.DisableLevel", 0);
+            sChallengeModes->lonerDisableLevel             = sConfigMgr->GetOption<uint32>("Loner.DisableLevel", 0);
 
             sChallengeModes->hardcoreXpBonus         = sConfigMgr->GetOption<float>("Hardcore.XPMultiplier", 1.0f);
             sChallengeModes->semiHardcoreXpBonus     = sConfigMgr->GetOption<float>("SemiHardcore.XPMultiplier", 1.0f);
@@ -446,6 +464,7 @@ private:
             sChallengeModes->boarXpBonus             = sConfigMgr->GetOption<float>("BoarOnly.XPMultiplier", 1.0f);
             sChallengeModes->repairXpBonus           = sConfigMgr->GetOption<float>("Repairless.XPMultiplier", 1.0f);
             sChallengeModes->selfmadeXpBonus         = sConfigMgr->GetOption<float>("SelfMade.XPMultiplier", 1.0f);
+            sChallengeModes->lonerXpBonus            = sConfigMgr->GetOption<float>("Loner.XPMultiplier", 1.0f);
 
             sChallengeModes->hardcoreItemRewardAmount         = sConfigMgr->GetOption<uint32>("Hardcore.ItemRewardAmount", 1);
             sChallengeModes->semiHardcoreItemRewardAmount     = sConfigMgr->GetOption<uint32>("SemiHardcore.ItemRewardAmount", 1);
@@ -462,6 +481,7 @@ private:
             sChallengeModes->boarItemRewardAmount             = sConfigMgr->GetOption<uint32>("BoarOnly.ItemRewardAmount", 1);
             sChallengeModes->repairItemRewardAmount           = sConfigMgr->GetOption<uint32>("Repairless.ItemRewardAmount", 1);
             sChallengeModes->selfmadeItemRewardAmount         = sConfigMgr->GetOption<uint32>("SelfMade.ItemRewardAmount", 1);
+            sChallengeModes->lonerItemRewardAmount            = sConfigMgr->GetOption<uint32>("Loner.ItemRewardAmount", 1);
 
             LoadStringToMap(sChallengeModes->hardcoreAchievementReward, sConfigMgr->GetOption<std::string>("Hardcore.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->semiHardcoreAchievementReward, sConfigMgr->GetOption<std::string>("SemiHardcore.AchievementReward", ""));
@@ -478,6 +498,7 @@ private:
             LoadStringToMap(sChallengeModes->boarAchievementReward, sConfigMgr->GetOption<std::string>("BoarOnly.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->repairAchievementReward, sConfigMgr->GetOption<std::string>("Repairless.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->selfmadeAchievementReward, sConfigMgr->GetOption<std::string>("SelfMade.AchievementReward", ""));
+            LoadStringToMap(sChallengeModes->lonerAchievementReward, sConfigMgr->GetOption<std::string>("Loner.AchievementReward", ""));
 
         }
     }
@@ -669,6 +690,10 @@ public:
         {
             handler->PSendSysMessage("Boar Only mode is ENABLED.");
         }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_LONER, targetPlayer))
+        {
+            handler->PSendSysMessage("Loner mode is ENABLED.");
+        }
         return true;
     }
 
@@ -677,7 +702,7 @@ public:
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
         if (!args || !*args)
         {
-            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-15) to enable.");
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-16) to enable.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -695,14 +720,15 @@ public:
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
             handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("16: Loner Mode");
 
             return true;
         }
 
         int setting = atoi(args);
-        if (setting < 0 || setting > 15)
+        if (setting < 0 || setting > 16)
         {
-            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 15.");
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 16.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -720,6 +746,7 @@ public:
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
             handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("16: Loner Mode");
 
             return true;
         }
@@ -739,7 +766,7 @@ public:
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
         if (!args || !*args)
         {
-            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-15) to disable.");
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-16) to disable.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -757,14 +784,15 @@ public:
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
             handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("16: Loner Mode");
 
             return true;
         }
 
         int setting = atoi(args);
-        if (setting < 0 || setting > 15)
+        if (setting < 0 || setting > 16)
         {
-            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 15.");
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 16.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -782,6 +810,7 @@ public:
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
             handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("16: Loner Mode");
 
             return true;
         }
@@ -844,6 +873,7 @@ public:
             case SETTING_BOAR_ONLY:          return "Boar Only Mode";
             case SETTING_REPAIRLESS:         return "Repairless Mode";
             case SETTING_SELFMADE:           return "Self Made Mode";
+            case SETTING_SELFMADE:           return "Loner Mode";
             default:                         return "Unknown Mode";
         }
     }
@@ -1180,6 +1210,58 @@ public:
     {
         ChallengeMode::OnLevelChanged(player, oldlevel);
     }
+};
+
+class ChallengeMode_LonerMode : public ChallengeMode
+{
+public:
+    ChallengeMode_LonerMode() : ChallengeMode("ChallengeMode_LonerMode", SETTING_LONER) {}
+
+    bool CanGroupInvite(Player* player, std::string& /*membername*/) override
+    {
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_LONER, player))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool CanGroupAccept(Player* player, Group* /*group*/) override
+    {
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_LONER, player))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
+    {
+        ChallengeMode::OnGiveXP(player, amount, victim, xpSource);
+    }
+
+    void OnLevelChanged(Player* player, uint8 oldlevel) override
+    {
+        ChallengeMode::OnLevelChanged(player, oldlevel);
+    }
+};
+
+class LonerGuildRestriction : public GuildScript
+{
+public:
+    LonerGuildRestriction() : GuildScript("LonerGuildRestriction") {}
+
+    void OnAddMember(Guild* guild, Player* player, uint8& plRank) override
+    {
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_LONER, player))
+        {
+            ObjectGuid playerGuid = player->GetGUID();
+        
+            // Delete the member by passing the stored GUID
+            guild->DeleteMember(playerGuid);
+        }
+    }
+
 };
 
 class ChallengeMode_QuestXpOnly : public ChallengeMode
@@ -1562,7 +1644,7 @@ public:
         }
         if (sChallengeModes->challengeEnabled(SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode\n [You cannot trade.]", 0, SETTING_SELFMADE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode\n [You cannot join trade, use the AH, or join guilds.]", 0, SETTING_SELFMADE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_REPAIRLESS) && !playerSettingEnabled(player, SETTING_REPAIRLESS))
         {
@@ -1603,6 +1685,10 @@ public:
         if (sChallengeModes->challengeEnabled(SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY))
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Boar Only Mode\n [You can only gain XP from killing boars.]", 0, SETTING_BOAR_ONLY);
+        }
+        if (sChallengeModes->challengeEnabled(SETTING_LONER) && !playerSettingEnabled(player, SETTING_LONER))
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Loner Mode\n [You cannot join groups or guilds.]", 0, SETTING_LONER);
         }
         SendGossipMenuFor(player, 12669, go->GetGUID());
         return true;
@@ -1647,5 +1733,7 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_Selfmade();
     new SelfMadeMailRestriction();
     new SelfMadeGuildRestriction();
+    new ChallengeMode_LonerMode();
+    new LonerGuildRestriction();
     new Challenge_CommandScript();
 }

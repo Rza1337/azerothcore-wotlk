@@ -178,3 +178,30 @@ BoarOnly.ItemRewards = ""
 BoarOnly.ItemRewardAmount = 1
 BoarOnly.DisableLevel = 0
 BoarOnly.AchievementReward = ""
+
+Repairless.Enable = 1
+Repairless.TitleRewards = ""
+Repairless.XPMultiplier = 1
+Repairless.TalentRewards = ""
+Repairless.ItemRewards = ""
+Repairless.ItemRewardAmount = 1
+Repairless.DisableLevel = 0
+Repairless.AchievementReward = ""
+
+SelfMade.Enable = 1
+SelfMade.TitleRewards = ""
+SelfMade.XPMultiplier = 1
+SelfMade.TalentRewards = ""
+SelfMade.ItemRewards = ""
+SelfMade.ItemRewardAmount = 1
+SelfMade.DisableLevel = 0
+SelfMade.AchievementReward = ""
+
+Loner.Enable = 1
+Loner.TitleRewards = ""
+Loner.XPMultiplier = 1
+Loner.TalentRewards = ""
+Loner.ItemRewards = ""
+Loner.ItemRewardAmount = 1
+Loner.DisableLevel = 0
+Loner.AchievementReward = ""
