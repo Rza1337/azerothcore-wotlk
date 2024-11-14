@@ -1027,16 +1027,17 @@ class ChallengeMode_Repairless : public ChallengeMode
 public:
     ChallengeMode_Repairless() : ChallengeMode("ChallengeMode_Repairless", SETTING_REPAIRLESS) {}
 
-    void OnBeforeItemRepair(Player* player, Item* item, bool& cancelRepair, bool /*cost*/) override
+    void OnBeforePlayerDurabilityRepair(Player* player, ObjectGuid npcGUID, ObjectGuid itemGUID, float& discountMod, uint8 guildBank) override
     {
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_REPAIRLESS, player))
         {
-            // Prevent the repair
-            cancelRepair = true;
-            
             // Notify the player that repairs are disabled
             ChatHandler(player->GetSession()).PSendSysMessage("No Repair Challenge is active: You cannot repair your items.");
+            
+            // Return early to prevent the repair from taking place
+            return;
         }
+
     }
 
     void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
