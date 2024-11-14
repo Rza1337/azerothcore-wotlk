@@ -353,7 +353,7 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getAchievementMapForCha
         case HARDCORE_DEAD:
             break;
     }
-    
+
     return {};
 }
 
@@ -677,7 +677,7 @@ public:
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
         if (!args || !*args)
         {
-            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-13) to enable.");
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-15) to enable.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -700,9 +700,9 @@ public:
         }
 
         int setting = atoi(args);
-        if (setting < 0 || setting > 13)
+        if (setting < 0 || setting > 15)
         {
-            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 13.");
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 15.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -739,7 +739,7 @@ public:
         Player* targetPlayer = handler->getSelectedPlayerOrSelf();
         if (!args || !*args)
         {
-            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-13) to disable.");
+            handler->PSendSysMessage("Please provide a valid challenge mode setting (0-15) to disable.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -762,9 +762,9 @@ public:
         }
 
         int setting = atoi(args);
-        if (setting < 0 || setting > 13)
+        if (setting < 0 || setting > 15)
         {
-            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 13.");
+            handler->PSendSysMessage("Invalid setting. Please enter a number between 0 and 15.");
             handler->PSendSysMessage("Challenge Mode Settings:");
             handler->PSendSysMessage("0: Hardcore Mode");
             handler->PSendSysMessage("1: Semi-Hardcore Mode");
@@ -1587,59 +1587,59 @@ public:
         }
         if (sChallengeModes->challengeEnabled(SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Hardcore Mode Hardcore [Character Death is Permanent]", 0, SETTING_HARDCORE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Hardcore Mode\n [Character Death is Permanent]", 0, SETTING_HARDCORE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SEMI_HARDCORE) && !playerSettingEnabled(player, SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Semi Hardcore [Equipped Gear & Gold is Lost on Death]", 0, SETTING_SEMI_HARDCORE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Semi Hardcore\n [Equipped Gear & Gold is Lost on Death]", 0, SETTING_SEMI_HARDCORE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Crafted Mode [You can only equip self-crafted items.]", 0, SETTING_SELF_CRAFTED);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Crafted Mode\n [You can only equip self-crafted items.]", 0, SETTING_SELF_CRAFTED);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode [You cannot trade.]", 0, SETTING_SELF_CRAFTED);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode\n [You cannot trade.]", 0, SETTING_SELFMADE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_REPAIRLESS) && !playerSettingEnabled(player, SETTING_REPAIRLESS))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Repairless Mode [You cannot use repairs.]", 0, SETTING_SELF_CRAFTED);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Repairless Mode\n [You cannot use repairs.]", 0, SETTING_REPAIRLESS);
         }
         if (sChallengeModes->challengeEnabled(SETTING_ITEM_QUALITY_LEVEL) && !playerSettingEnabled(player, SETTING_ITEM_QUALITY_LEVEL) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Low Quality Item Mode [You can only equip grays and whites.]", 0, SETTING_ITEM_QUALITY_LEVEL);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Low Quality Item Mode\n [You can only equip grays and whites.]", 0, SETTING_ITEM_QUALITY_LEVEL);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_TURTLE_MODE))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Slow XP Mode[You level at half speed.]", 0, SETTING_SLOW_XP_GAIN);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Slow XP Mode \n [You level at half speed.]", 0, SETTING_SLOW_XP_GAIN);
         }
         if (sChallengeModes->challengeEnabled(SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_TURTLE_MODE))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Slow XP Mode[You level at a quarter speed.]", 0, SETTING_VERY_SLOW_XP_GAIN);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Slow XP Mode\n [You level at a quarter speed.]", 0, SETTING_VERY_SLOW_XP_GAIN);
         }
         if (sChallengeModes->challengeEnabled(SETTING_TURTLE_MODE) && !playerSettingEnabled(player, SETTING_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_VERY_SLOW_XP_GAIN) && !playerSettingEnabled(player, SETTING_TURTLE_MODE))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Very Very Slow XP Mode [You barely level at all.]", 0, SETTING_TURTLE_MODE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Very Very Very Slow XP Mode\n [You barely level at all.]", 0, SETTING_TURTLE_MODE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_CASHLESS) && !playerSettingEnabled(player, SETTING_CASHLESS))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Cashless Mode [Your money is locked at 0.]", 0, SETTING_CASHLESS);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Cashless Mode\n [Your money is locked at 0.]", 0, SETTING_CASHLESS);
         }
         if (sChallengeModes->challengeEnabled(SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Questless Mode You don't get XP from quests.]", 0, SETTING_QUESTLESS);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Questless Mode\n [You don't get XP from quests.]", 0, SETTING_QUESTLESS);
         }
         if (sChallengeModes->challengeEnabled(SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_BOAR_ONLY))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Quest Only Mode [You don't get XP from kills.]", 0, SETTING_QUEST_XP_ONLY);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Quest Only Mode\n [You don't get XP from kills.]", 0, SETTING_QUEST_XP_ONLY);
         }
         if (sChallengeModes->challengeEnabled(SETTING_PACIFIST) && !playerSettingEnabled(player, SETTING_PACIFIST))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Pacifist Mode [You are unable to deal damage.]", 0, SETTING_PACIFIST);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Pacifist Mode\n [You are unable to deal damage.]", 0, SETTING_PACIFIST);
         }
         if (sChallengeModes->challengeEnabled(SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Boar Only Mode [You can only gain XP from killing boars.]", 0, SETTING_BOAR_ONLY);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Boar Only Mode\n [You can only gain XP from killing boars.]", 0, SETTING_BOAR_ONLY);
         }
         SendGossipMenuFor(player, 12669, go->GetGUID());
         return true;
