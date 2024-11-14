@@ -1027,7 +1027,7 @@ class ChallengeMode_Repairless : public ChallengeMode
 public:
     ChallengeMode_Repairless() : ChallengeMode("ChallengeMode_Repairless", SETTING_REPAIRLESS) {}
 
-    void OnBeforeItemRepair(Player* player, Item* item, bool& cancelRepair, bool /*cost*/)
+    void OnBeforeItemRepair(Player* player, Item* item, bool& cancelRepair, bool /*cost*/) override
     {
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_REPAIRLESS, player))
         {
