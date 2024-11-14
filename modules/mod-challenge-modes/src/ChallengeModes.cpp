@@ -1141,7 +1141,7 @@ public:
     {
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            guild->DeleteMember(player);
+            guild->DeleteMember(player->GetGUID);
         }
     }
 
