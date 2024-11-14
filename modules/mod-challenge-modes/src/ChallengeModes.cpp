@@ -873,7 +873,7 @@ public:
             case SETTING_BOAR_ONLY:          return "Boar Only Mode";
             case SETTING_REPAIRLESS:         return "Repairless Mode";
             case SETTING_SELFMADE:           return "Self Made Mode";
-            case SETTING_SELFMADE:           return "Loner Mode";
+            case SETTING_LONER:              return "Loner Mode";
             default:                         return "Unknown Mode";
         }
     }
