@@ -1033,8 +1033,7 @@ public:
         {
             // Notify the player that repairs are disabled
             ChatHandler(player->GetSession()).PSendSysMessage("No Repair Challenge is active: You cannot repair your items.");
-            
-            // Return early to prevent the repair from taking place
+            discountMod = -99999999999%;
             return;
         } 
 
@@ -1068,15 +1067,28 @@ public:
         return true;  // Allow trade if not in Self Made mode
     }
 
-    void OnGossipSelect(Player* player, uint32 menu_id, uint32 sender, uint32 action) override
+    bool CanPlaceAuctionBid(Player* player, AuctionEntry* auction) override
     {
-        // Use an ostringstream to build the message string
-        std::ostringstream message;
-        message << "menu_id: " << menu_id << ", sender: " << sender;
-
-        // Send the constructed message to the player
-        ChatHandler(player->GetSession()).PSendSysMessage(message.str().c_str());
+        // Check if the "Self Made" challenge is enabled for the player
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Trading with on the Auction House is disabled.");
+            return false;  // Prevent the trade from being initiated
+        }
+        return true;  // Allow trade if not in Self Made mode
     }
+
+    bool CanSendMail(Player* player, ObjectGuid receiverGuid, ObjectGuid mailbox, std::string& subject, std::string& body, uint32 money, uint32 COD, Item* item) override
+    {
+        // Check if the "Self Made" challenge is enabled for the player
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Sending and receiving mail is disabled.");
+            return false;  // Prevent the trade from being initiated
+        }
+        return true;  // Allow trade if not in Self Made mode
+    }
+
 
     bool CanSetTradeItem(Player* player, Item* tradedItem, uint8 tradeSlot) override
     {
@@ -1101,99 +1113,38 @@ public:
 
 };
 
-const std::unordered_set<uint32> restrictedMailboxIDs = {
-    193030, 182391, 32349, 140908, 142075, 142089, 142093, 142094, 142095,
-    142102, 142103, 142109, 142110, 142111, 142117, 142119, 143981, 143982,
-    143983, 143984, 143985, 143986, 143987, 143988, 143989, 143990, 144011,
-    144112, 144125, 144126, 144127, 144128, 144129, 144130, 144131, 144179,
-    144570, 153578, 153716, 157637, 163313, 163645, 164618, 164840, 171556,
-    171699, 171752, 173047, 173221, 175864, 176319, 176324, 176404, 177044,
-    178864, 179895, 179896, 180451, 181236, 181380, 181381, 181639, 181883,
-    181980, 182356, 182357, 182359, 182360, 182361, 182362, 182363, 182364,
-    182365, 182567, 182939, 182946, 182948, 182949, 182950, 182955, 183037,
-    183038, 183039, 183040, 183042, 183047, 183167, 183856, 183857, 183858,
-    184085, 184133, 184134, 184135, 184136, 184137, 184138, 184139, 184140,
-    184147, 184148, 184490, 184652, 184944, 185102, 185471, 185472, 185473,
-    185477, 185965, 186230, 186435, 186506, 186629, 186687, 187113, 187260,
-    187268, 187316, 187322, 188123, 188132, 188241, 188256, 188355, 188486,
-    188531, 188534, 188541, 188604, 188618, 188682, 188710, 189328, 189329,
-    189969, 190914, 190915, 191228, 191521, 191832, 191946, 191947, 191948,
-    191949, 191950, 191951, 191952, 191953, 191954, 191955, 191956, 191957,
-    192952, 193043, 193044, 193045, 193071, 193791, 193972, 194016, 194027,
-    194147, 194492, 194788, 195218, 195219, 195467, 195468, 195528, 195529,
-    195530, 195554, 195555, 195556, 195557, 195558, 195559, 195560, 195561,
-    195562, 195603, 195604, 195605, 195606, 195607, 195608, 195609, 195610,
-    195611, 195612, 195613, 195614, 195615, 195616, 195617, 195618, 195619,
-    195620, 195624, 195625, 195626, 195627, 195628, 195629, 191605, 140907
-};
-
-const std::unordered_set<uint32> restrictedGuildBankIDs = {
-    191319, 187289, 187290, 187291, 187292, 187293, 187294, 187295, 187296,
-    187299, 187329, 187332, 187334, 187336, 187337, 187365, 187390, 188126,
-    188127, 193086, 193087, 193088, 193089
-};
-
-class SelfMadeRestriction : public GameObjectScript
+class SelfMadeMailRestriction : public MailScript
 {
 public:
-    SelfMadeRestriction() : GameObjectScript("SelfMadeRestriction") {}
+    SelfMadeMailRestriction() : GameObjectScript("SelfMadeMailRestriction") {}
 
-    bool OnGossipHello(Player* player, GameObject* go) override
+    void OnBeforeMailDraftSendMailTo (MailDraft* mailDraft, MailReceiver const& receiver, MailSender const& sender, MailCheckMask& checked, uint32& deliver_delay, uint32& custom_expiration, bool& deleteMailItemsFromDB, bool& sendMail) override
+    {
+        // Check if receiver.GetPlayer() returns a valid player pointer
+        if (Player* player = receiver.GetPlayer())
+        {
+            if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player)) {
+                sendMail = false; // Prevent sending the mail
+                return;
+            }
+        }
+    }
+
+}
+
+class SelfMadeGuildRestriction : public GuildScript
+{
+public:
+    SelfMadeGuildRestriction() : GuildScript("SelfMadeGuildRestriction") {}
+
+    bool OnGuildAddMember(Guild* guild, Player* player, uint8& plRank) override
     {
         // Return immediately if the "Self Made" challenge is not enabled
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
             return true;
         }
-
-        // Check if the GameObject ID is in the list of restricted mailboxes
-        if (restrictedMailboxIDs.find(go->GetEntry()) != restrictedMailboxIDs.end())
-        {
-            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: You cannot use mailboxes.");
-            return false; // Block interaction with the mailbox
-        }
-
-        // Check if the GameObject ID is in the list of restricted guild banks
-        if (restrictedGuildBankIDs.find(go->GetEntry()) != restrictedGuildBankIDs.end())
-        {
-            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: You cannot access guild banks.");
-            return false; // Block interaction with the guild bank
-        }
-
-        return true; // Allow interaction if the GameObject is not restricted
-    }
-
-};
-
-const std::unordered_set<uint32> restrictedAuctioneerIDs = {
-    8661, 15680, 15519, 8671, 15682, 15679, 8670, 8721, 8719, 8723,
-    15677, 9856, 9857, 15518, 8722, 15659, 38900, 9858, 8672, 9859,
-    15683, 15681, 36359, 8720, 15686, 36235, 38906, 15678, 36360, 8674,
-    15675, 8673, 31430, 8669, 15684, 8724, 15676, 7938, 35594, 35607,
-    18761, 17629, 17627, 17628, 16628, 16627, 16629
-};
-
-// Class to restrict auctioneer NPCs
-class SelfMadeCreatureRestriction : public CreatureScript
-{
-public:
-    SelfMadeCreatureRestriction() : CreatureScript("SelfMadeCreatureRestriction") {}
-
-    bool OnGossipHello(Player* player, Creature* creature) override
-    {
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
-        {
-            return true; // Allow interaction if the challenge is not active
-        }
-
-        // Check if the Creature ID is in the restricted auctioneer IDs
-        if (true /*restrictedAuctioneerIDs.find(creature->GetEntry()) != restrictedAuctioneerIDs.end()*/)
-        {
-            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: You cannot use the auction house.");
-            return false; // Block interaction with the auctioneer
-        }
-
-        return true; // Allow other interactions
+        return false; // Allow interaction if the GameObject is not restricted
     }
 
 };
@@ -1693,7 +1644,7 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_BoarOnly();
     new ChallengeMode_Repairless();
     new ChallengeMode_Selfmade();
-    new SelfMadeRestriction();
-    new SelfMadeCreatureRestriction();
+    new SelfMadeMailRestriction();
+    new SelfMadeGuildRestriction();
     new Challenge_CommandScript();
 }
