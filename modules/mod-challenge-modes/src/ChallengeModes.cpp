@@ -1130,14 +1130,14 @@ public:
         }
     }
 
-}
+};
 
 class SelfMadeGuildRestriction : public GuildScript
 {
 public:
     SelfMadeGuildRestriction() : GuildScript("SelfMadeGuildRestriction") {}
 
-    bool OnGuildAddMember(Guild* guild, Player* player, uint8& plRank) override
+    bool OnAddMember(Guild* guild, Player* player, uint8& plRank) override
     {
         // Return immediately if the "Self Made" challenge is not enabled
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
