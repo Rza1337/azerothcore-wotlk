@@ -1129,7 +1129,7 @@ public:
     bool OnGossipHello(Player* player, GameObject* go) override
     {
         // Return immediately if the "Self Made" challenge is not enabled
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELF_MADE, player))
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
             return true;
         }
@@ -1169,7 +1169,7 @@ public:
 
     bool OnGossipHello(Player* player, Creature* creature) override
     {
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELF_MADE, player))
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
             return true; // Allow interaction if the challenge is not active
         }
