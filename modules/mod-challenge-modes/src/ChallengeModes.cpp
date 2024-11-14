@@ -1033,7 +1033,7 @@ public:
         {
             // Notify the player that repairs are disabled
             ChatHandler(player->GetSession()).PSendSysMessage("No Repair Challenge is active: You cannot repair your items.");
-            discountMod = -99999999999%;
+            discountMod = -999999999.0f;
             return;
         } 
 
@@ -1116,7 +1116,7 @@ public:
 class SelfMadeMailRestriction : public MailScript
 {
 public:
-    SelfMadeMailRestriction() : GameObjectScript("SelfMadeMailRestriction") {}
+    SelfMadeMailRestriction() : MailScript("SelfMadeMailRestriction") {}
 
     void OnBeforeMailDraftSendMailTo (MailDraft* mailDraft, MailReceiver const& receiver, MailSender const& sender, MailCheckMask& checked, uint32& deliver_delay, uint32& custom_expiration, bool& deleteMailItemsFromDB, bool& sendMail) override
     {
