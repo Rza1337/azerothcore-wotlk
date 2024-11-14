@@ -1176,7 +1176,7 @@ public:
         }
 
         // Check if the Creature ID is in the restricted auctioneer IDs
-        if (restrictedAuctioneerIDs.find(creature->GetOriginalEntry()) != restrictedAuctioneerIDs.end())
+        if (restrictedAuctioneerIDs.find(creature->GetEntry()) != restrictedAuctioneerIDs.end())
         {
             ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: You cannot use the auction house.");
             return false; // Block interaction with the auctioneer
