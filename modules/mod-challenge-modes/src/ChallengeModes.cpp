@@ -353,6 +353,7 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getAchievementMapForCha
         case HARDCORE_DEAD:
             break;
     }
+    
     return {};
 }
 
