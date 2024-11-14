@@ -1067,6 +1067,18 @@ public:
         return true;  // Allow trade if not in Self Made mode
     }
 
+    void OnGossipSelect(Player* player, uint32 menu_id, uint32 sender, uint32 action) override
+    {
+        // Use an ostringstream to build the message string
+        std::ostringstream message;
+        message << "menu_id: " << menu_id << ", sender: " << sender;
+
+        // Send the constructed message to the player
+        ChatHandler(player->GetSession()).PSendSysMessage(message.str().c_str());
+
+        CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_GOSSIP_SELECT, script->OnGossipSelect(player, menu_id, sender, action));
+    }
+
     bool CanSetTradeItem(Player* player, Item* tradedItem, uint8 tradeSlot) override
     {
         // Check if the "Self Made" challenge is enabled for the player
