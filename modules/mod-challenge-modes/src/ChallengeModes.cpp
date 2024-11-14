@@ -1141,7 +1141,10 @@ public:
     {
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            guild->DeleteMember(player->GetGUID);
+            ObjectGuid playerGuid = player->GetGUID();
+        
+            // Delete the member by passing the stored GUID
+            guild->DeleteMember(playerGuid);
         }
     }
 
