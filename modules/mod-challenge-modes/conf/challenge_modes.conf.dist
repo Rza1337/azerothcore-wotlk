@@ -169,3 +169,12 @@ Cashless.ItemRewards = ""
 Cashless.ItemRewardAmount = 1
 Cashless.DisableLevel = 0
 Cashless.AchievementReward = ""
+
+BoarOnly.Enable = 1
+BoarOnly.TitleRewards = ""
+BoarOnly.XPMultiplier = 1
+BoarOnly.TalentRewards = ""
+BoarOnly.ItemRewards = ""
+BoarOnly.ItemRewardAmount = 1
+BoarOnly.DisableLevel = 0
+BoarOnly.AchievementReward = ""

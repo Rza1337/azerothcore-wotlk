@@ -63,6 +63,8 @@ bool ChallengeModes::challengeEnabled(ChallengeModeSettings setting) const
             return questlessEnable;
         case SETTING_CASHLESS:
             return cashlessEnable;
+        case SETTING_BOAR_ONLY:
+            return boarEnable;
         case HARDCORE_DEAD:
             break;
     }
@@ -97,6 +99,8 @@ uint32 ChallengeModes::getDisableLevel(ChallengeModeSettings setting) const
             return questlessDisableLevel;
         case SETTING_CASHLESS:
             return cashlessDisableLevel;
+        case SETTING_BOAR_ONLY:
+            return boarDisableLevel;
         case HARDCORE_DEAD:
             break;
     }
@@ -131,6 +135,8 @@ float ChallengeModes::getXpBonusForChallenge(ChallengeModeSettings setting) cons
             return questlessXpBonus;
         case SETTING_CASHLESS:
             return cashlessXpBonus;
+        case SETTING_BOAR_ONLY:
+            return boarXpBonus;
         case HARDCORE_DEAD:
             break;
     }
@@ -165,6 +171,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTitleMapForChallenge
             return &questlessTitleRewards;
         case SETTING_CASHLESS:
             return &cashlessTitleRewards;
+        case SETTING_BOAR_ONLY:
+            return &boarTitleRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -199,6 +207,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getTalentMapForChalleng
             return &questlessTalentRewards;
         case SETTING_CASHLESS:
             return &cashlessTalentRewards;
+        case SETTING_BOAR_ONLY:
+            return &boarTalentRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -233,6 +243,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getItemMapForChallenge(
             return &questlessItemRewards;
         case SETTING_CASHLESS:
             return &cashlessItemRewards;
+        case SETTING_BOAR_ONLY:
+            return &boarItemRewards;
         case HARDCORE_DEAD:
             break;
     }
@@ -267,6 +279,8 @@ uint32 ChallengeModes::getItemRewardAmount(ChallengeModeSettings setting) const
             return questlessItemRewardAmount;
         case SETTING_CASHLESS:
             return cashlessItemRewardAmount;
+        case SETTING_BOAR_ONLY:
+            return boarItemRewardAmount;
         case HARDCORE_DEAD:
             break;
     }
@@ -302,6 +316,8 @@ const std::unordered_map<uint8, uint32> *ChallengeModes::getAchievementMapForCha
             return &questlessAchievementReward;
         case SETTING_CASHLESS:
             return &cashlessAchievementReward;
+        case SETTING_BOAR_ONLY:
+            return &boarAchievementReward;
         case HARDCORE_DEAD:
             break;
     }
@@ -362,6 +378,7 @@ private:
             sChallengeModes->pacifistEnable          = sConfigMgr->GetOption<bool>("Pacifist.Enable", true);
             sChallengeModes->questlessEnable         = sConfigMgr->GetOption<bool>("Questless.Enable", true);
             sChallengeModes->cashlessEnable          = sConfigMgr->GetOption<bool>("Cashless.Enable", true);
+            sChallengeModes->boarEnable              = sConfigMgr->GetOption<bool>("BoarOnly.Enable", true);
 
             sChallengeModes->hardcoreDisableLevel          = sConfigMgr->GetOption<uint32>("Hardcore.DisableLevel", 0);
             sChallengeModes->semiHardcoreDisableLevel      = sConfigMgr->GetOption<uint32>("SemiHardcore.DisableLevel", 0);
@@ -369,12 +386,13 @@ private:
             sChallengeModes->itemQualityLevelDisableLevel  = sConfigMgr->GetOption<uint32>("ItemQualityLevel.DisableLevel", 0);
             sChallengeModes->slowXpGainDisableLevel        = sConfigMgr->GetOption<uint32>("SlowXpGain.DisableLevel", 0);
             sChallengeModes->verySlowXpGainDisableLevel    = sConfigMgr->GetOption<uint32>("VerySlowXpGain.DisableLevel", 0);
-            sChallengeModes->turtleModeDisableLevel        = sConfigMgr->GetOption<uint32>("TurtleModeXpGain.DisableLevel", 0);
+            sChallengeModes->turtleModeDisableLevel        = sConfigMgr->GetOption<uint32>("TurtleMode.DisableLevel", 0);
             sChallengeModes->questXpOnlyDisableLevel       = sConfigMgr->GetOption<uint32>("QuestXpOnly.DisableLevel", 0);
             sChallengeModes->ironManDisableLevel           = sConfigMgr->GetOption<uint32>("IronMan.DisableLevel", 0);
             sChallengeModes->pacifistDisableLevel          = sConfigMgr->GetOption<uint32>("Pacifist.DisableLevel", 0);
             sChallengeModes->questlessDisableLevel         = sConfigMgr->GetOption<uint32>("Questless.DisableLevel", 0);
             sChallengeModes->cashlessDisableLevel          = sConfigMgr->GetOption<uint32>("Cashless.DisableLevel", 0);
+            sChallengeModes->boarDisableLevel              = sConfigMgr->GetOption<uint32>("BoarOnly.DisableLevel", 60);
 
             sChallengeModes->hardcoreXpBonus         = sConfigMgr->GetOption<float>("Hardcore.XPMultiplier", 1.0f);
             sChallengeModes->semiHardcoreXpBonus     = sConfigMgr->GetOption<float>("SemiHardcore.XPMultiplier", 1.0f);
@@ -383,11 +401,12 @@ private:
             sChallengeModes->questXpOnlyXpBonus      = sConfigMgr->GetOption<float>("QuestXpOnly.XPMultiplier", 1.0f);
             sChallengeModes->slowXpGainBonus         = sConfigMgr->GetOption<float>("SlowXpGain.XPMultiplier", 0.50f);
             sChallengeModes->verySlowXpGainBonus     = sConfigMgr->GetOption<float>("VerySlowXpGain.XPMultiplier", 0.25f);
-            sChallengeModes->turtleModeXpGainBonus   = sConfigMgr->GetOption<float>("TurtleModeXpGain.XPMultiplier", 0.10f);
+            sChallengeModes->turtleModeXpGainBonus   = sConfigMgr->GetOption<float>("TurtleMode.XPMultiplier", 0.10f);
             sChallengeModes->ironManXpBonus          = sConfigMgr->GetOption<float>("IronMan.XPMultiplier", 1.0f);
             sChallengeModes->pacifistXpBonus         = sConfigMgr->GetOption<float>("Pacifist.XPMultiplier", 1.0f);
             sChallengeModes->questlessXpBonus        = sConfigMgr->GetOption<float>("Questless.XPMultiplier", 1.0f);
             sChallengeModes->cashlessXpBonus         = sConfigMgr->GetOption<float>("Cashless.XPMultiplier", 1.0f);
+            sChallengeModes->boarXpBonus             = sConfigMgr->GetOption<float>("BoarOnly.XPMultiplier", 1.0f);
 
             sChallengeModes->hardcoreItemRewardAmount         = sConfigMgr->GetOption<uint32>("Hardcore.ItemRewardAmount", 1);
             sChallengeModes->semiHardcoreItemRewardAmount     = sConfigMgr->GetOption<uint32>("SemiHardcore.ItemRewardAmount", 1);
@@ -395,12 +414,13 @@ private:
             sChallengeModes->itemQualityLevelItemRewardAmount = sConfigMgr->GetOption<uint32>("ItemQualityLevel.ItemRewardAmount", 1);
             sChallengeModes->slowXpGainItemRewardAmount       = sConfigMgr->GetOption<uint32>("SlowXpGain.ItemRewardAmount", 1);
             sChallengeModes->verySlowXpGainItemRewardAmount   = sConfigMgr->GetOption<uint32>("VerySlowXpGain.ItemRewardAmount", 1);
-            sChallengeModes->turtleModeXpGainItemRewardAmount = sConfigMgr->GetOption<uint32>("TurtleModeXpGain.ItemRewardAmount", 1);
+            sChallengeModes->turtleModeXpGainItemRewardAmount = sConfigMgr->GetOption<uint32>("TurtleMode.ItemRewardAmount", 1);
             sChallengeModes->questXpOnlyItemRewardAmount      = sConfigMgr->GetOption<uint32>("QuestXpOnly.ItemRewardAmount", 1);
             sChallengeModes->ironManItemRewardAmount          = sConfigMgr->GetOption<uint32>("IronMan.ItemRewardAmount", 1);
             sChallengeModes->pacifistItemRewardAmount         = sConfigMgr->GetOption<uint32>("Pacifist.ItemRewardAmount", 1);
             sChallengeModes->questlessItemRewardAmount        = sConfigMgr->GetOption<uint32>("Questless.ItemRewardAmount", 1);
             sChallengeModes->cashlessItemRewardAmount         = sConfigMgr->GetOption<uint32>("Cashless.ItemRewardAmount", 1);
+            sChallengeModes->boarItemRewardAmount             = sConfigMgr->GetOption<uint32>("BoarOnly.ItemRewardAmount", 1);
 
             LoadStringToMap(sChallengeModes->hardcoreAchievementReward, sConfigMgr->GetOption<std::string>("Hardcore.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->semiHardcoreAchievementReward, sConfigMgr->GetOption<std::string>("SemiHardcore.AchievementReward", ""));
@@ -408,12 +428,13 @@ private:
             LoadStringToMap(sChallengeModes->itemQualityLevelAchievementReward, sConfigMgr->GetOption<std::string>("ItemQualityLevel.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->slowXpGainAchievementReward, sConfigMgr->GetOption<std::string>("SlowXpGain.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->verySlowXpGainAchievementReward, sConfigMgr->GetOption<std::string>("VerySlowXpGain.AchievementReward", ""));
-            LoadStringToMap(sChallengeModes->turtleModeXpGainAchievementReward, sConfigMgr->GetOption<std::string>("TurtleModeXpGain.AchievementReward", ""));
+            LoadStringToMap(sChallengeModes->turtleModeXpGainAchievementReward, sConfigMgr->GetOption<std::string>("TurtleMode.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->questXpOnlyAchievementReward, sConfigMgr->GetOption<std::string>("QuestXpOnly.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->ironManAchievementReward, sConfigMgr->GetOption<std::string>("IronMan.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->pacifistAchievementReward, sConfigMgr->GetOption<std::string>("Pacifist.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->questlessAchievementReward, sConfigMgr->GetOption<std::string>("Questless.AchievementReward", ""));
             LoadStringToMap(sChallengeModes->cashlessAchievementReward, sConfigMgr->GetOption<std::string>("Cashless.AchievementReward", ""));
+            LoadStringToMap(sChallengeModes->boarAchievementReward, sConfigMgr->GetOption<std::string>("BoarOnly.AchievementReward", ""));
 
         }
     }
@@ -593,6 +614,10 @@ public:
         {
             handler->PSendSysMessage("Very Slow mode is ENABLED.");
         }
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, targetPlayer))
+        {
+            handler->PSendSysMessage("Boar Only mode is ENABLED.");
+        }
         return true;
     }
 
@@ -693,6 +718,7 @@ public:
             case SETTING_PACIFIST:           return "Pacifist Mode";
             case SETTING_QUESTLESS:          return "Questless Mode";
             case SETTING_CASHLESS:           return "Cashless Mode";
+            case SETTING_BOAR_ONLY:          return "Boar Only Mode";
             default:                         return "Unknown Mode";
         }
     }
@@ -937,6 +963,42 @@ public:
     {
         ChallengeMode::OnLevelChanged(player, oldlevel);
     }
+};
+
+const std::unordered_set<uint32> allowedBoarIDs = { 
+    3098, 1984, 1985, 708, 2966, 2952, 2954, 1125, 113, 3099, 1126, 3111, 1127, 524, 3100, 1689, 
+    3225, 1190, 1191, 1192, 4535, 6021, 7333, 7334, 5992, 5437, 5993, 15935, 16879, 16863, 19031, 
+    16880, 19024, 21195, 21878, 23692, 17706, 26238, 26207, 22180, 30568, 2809, 21034, 26020, 16117,
+    10685, 25600, 25362, 3259, 3263, 3258, 3232, 3262, 3261, 3260, 5863, 5864, 3111, 3112, 3113,
+    3114, 3268, 3267, 3265, 3266, 3269, 3271, 3456, 3457, 3458, 3459, 5824, 3270, 5826, 5859, 
+    3438, 330, 8303, 29996, 4512, 4514, 4511, 345, 547, 157, 454, 119, 390, 7873, 7874, 4532, 
+    4525, 4438, 4531, 4442, 4522, 4523, 6035, 4440, 4520, 4530, 4436, 4437, 4435, 6132, 4420, 
+    6168, 4421, 4424, 4623, 7354, 4427, 7329, 7328, 7332, 7327
+};
+class ChallengeMode_BoarOnly : public ChallengeMode
+{
+public:
+    ChallengeMode_BoarOnly() : ChallengeMode("ChallengeMode_BoarOnly", SETTING_BOAR_ONLY) {}
+
+    void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
+    {
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player))
+        {
+            return;
+        }
+        if (victim && victim->ToCreature() && allowedBoarIDs.find(victim->ToCreature()->GetOriginalEntry()) == allowedBoarIDs.end())
+        {
+            amount = 0;  // Nullify XP if not a boar
+            return;
+        }
+        ChallengeMode::OnGiveXP(player, amount, victim, xpSource);
+    }
+
+    void OnLevelChanged(Player* player, uint8 oldlevel) override
+    {
+        ChallengeMode::OnLevelChanged(player, oldlevel);
+    }
+    
 };
 
 class ChallengeMode_IronMan : public ChallengeMode
@@ -1277,6 +1339,10 @@ public:
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Pacifist Mode", 0, SETTING_PACIFIST);
         }
+        if (sChallengeModes->challengeEnabled(SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_BOAR_ONLY) && !playerSettingEnabled(player, SETTING_QUESTLESS) && && !playerSettingEnabled(player, SETTING_QUEST_XP_ONLY))
+        {
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Boar Only Mode", 0, SETTING_BOAR_ONLY);
+        }
         SendGossipMenuFor(player, 12669, go->GetGUID());
         return true;
     }
@@ -1315,5 +1381,6 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_Pacifist_Rewards();
     new ChallengeMode_Questless();
     new ChallengeMode_Cashless();
+    new ChallengeMode_BoarOnly();
     new Challenge_CommandScript();
 }

@@ -28,7 +28,8 @@ enum ChallengeModeSettings
     SETTING_PACIFIST           = 9,
     SETTING_TURTLE_MODE        = 10,
     SETTING_QUESTLESS          = 11,
-    SETTING_CASHLESS           = 12
+    SETTING_CASHLESS           = 12,
+    SETTING_BOAR_ONLY          = 13
 };
 
 enum AllowedProfessions
@@ -45,15 +46,15 @@ public:
     ChallengeModes();
     void InitializeAdditionalSpells();
 
-    bool challengesEnabled, hardcoreEnable, semiHardcoreEnable, selfCraftedEnable, itemQualityLevelEnable, slowXpGainEnable, verySlowXpGainEnable, turtleModeEnable, questXpOnlyEnable, ironManEnable, pacifistEnable, questlessEnable, cashlessEnable;
-    uint32 hardcoreDisableLevel, semiHardcoreDisableLevel, selfCraftedDisableLevel, itemQualityLevelDisableLevel, slowXpGainDisableLevel, verySlowXpGainDisableLevel, turtleModeDisableLevel, questXpOnlyDisableLevel, ironManDisableLevel, pacifistDisableLevel, questlessDisableLevel, cashlessDisableLevel;
-    uint32 hardcoreItemRewardAmount, semiHardcoreItemRewardAmount, selfCraftedItemRewardAmount, itemQualityLevelItemRewardAmount, slowXpGainItemRewardAmount, verySlowXpGainItemRewardAmount, turtleModeXpGainItemRewardAmount, questXpOnlyItemRewardAmount, ironManItemRewardAmount, pacifistItemRewardAmount, questlessItemRewardAmount, cashlessItemRewardAmount;
-    float hardcoreXpBonus, semiHardcoreXpBonus, selfCraftedXpBonus, itemQualityLevelXpBonus, questXpOnlyXpBonus, slowXpGainBonus, verySlowXpGainBonus, turtleModeXpGainBonus, ironManXpBonus, pacifistXpBonus, questlessXpBonus, cashlessXpBonus;
+    bool challengesEnabled, hardcoreEnable, semiHardcoreEnable, selfCraftedEnable, itemQualityLevelEnable, slowXpGainEnable, verySlowXpGainEnable, turtleModeEnable, questXpOnlyEnable, ironManEnable, pacifistEnable, questlessEnable, cashlessEnable, boarEnable;
+    uint32 hardcoreDisableLevel, semiHardcoreDisableLevel, selfCraftedDisableLevel, itemQualityLevelDisableLevel, slowXpGainDisableLevel, verySlowXpGainDisableLevel, turtleModeDisableLevel, questXpOnlyDisableLevel, ironManDisableLevel, pacifistDisableLevel, questlessDisableLevel, cashlessDisableLevel, boarDisableLevel;
+    uint32 hardcoreItemRewardAmount, semiHardcoreItemRewardAmount, selfCraftedItemRewardAmount, itemQualityLevelItemRewardAmount, slowXpGainItemRewardAmount, verySlowXpGainItemRewardAmount, turtleModeXpGainItemRewardAmount, questXpOnlyItemRewardAmount, ironManItemRewardAmount, pacifistItemRewardAmount, questlessItemRewardAmount, cashlessItemRewardAmount, boarItemRewardAmount;
+    float hardcoreXpBonus, semiHardcoreXpBonus, selfCraftedXpBonus, itemQualityLevelXpBonus, questXpOnlyXpBonus, slowXpGainBonus, verySlowXpGainBonus, turtleModeXpGainBonus, ironManXpBonus, pacifistXpBonus, questlessXpBonus, cashlessXpBonus, boarXpBonus;
 
-    std::unordered_map<uint8, uint32> hardcoreTitleRewards, semiHardcoreTitleRewards, selfCraftedTitleRewards, itemQualityLevelTitleRewards, slowXpGainTitleRewards, verySlowXpGainTitleRewards, turtleModeXpGainTitleRewards, questXpOnlyTitleRewards, ironManTitleRewards, pacifistTitleRewards, questlessTitleRewards, cashlessTitleRewards;
-    std::unordered_map<uint8, uint32> hardcoreItemRewards, semiHardcoreItemRewards, selfCraftedItemRewards, itemQualityLevelItemRewards, slowXpGainItemRewards, verySlowXpGainItemRewards, turtleModeXpGainItemRewards, questXpOnlyItemRewards, ironManItemRewards, pacifistItemRewards, questlessItemRewards, cashlessItemRewards;
-    std::unordered_map<uint8, uint32> hardcoreTalentRewards, semiHardcoreTalentRewards, selfCraftedTalentRewards, itemQualityLevelTalentRewards, slowXpGainTalentRewards, verySlowXpGainTalentRewards, turtleModeXpGainTalentRewards, questXpOnlyTalentRewards, ironManTalentRewards, pacifistTalentRewards, questlessTalentRewards, cashlessTalentRewards;
-    std::unordered_map<uint8, uint32> hardcoreAchievementReward, semiHardcoreAchievementReward, selfCraftedAchievementReward, itemQualityLevelAchievementReward, slowXpGainAchievementReward, verySlowXpGainAchievementReward, turtleModeXpGainAchievementReward, questXpOnlyAchievementReward, ironManAchievementReward, pacifistAchievementReward, questlessAchievementReward, cashlessAchievementReward;
+    std::unordered_map<uint8, uint32> hardcoreTitleRewards, semiHardcoreTitleRewards, selfCraftedTitleRewards, itemQualityLevelTitleRewards, slowXpGainTitleRewards, verySlowXpGainTitleRewards, turtleModeXpGainTitleRewards, questXpOnlyTitleRewards, ironManTitleRewards, pacifistTitleRewards, questlessTitleRewards, cashlessTitleRewards, boarTitleRewards;
+    std::unordered_map<uint8, uint32> hardcoreItemRewards, semiHardcoreItemRewards, selfCraftedItemRewards, itemQualityLevelItemRewards, slowXpGainItemRewards, verySlowXpGainItemRewards, turtleModeXpGainItemRewards, questXpOnlyItemRewards, ironManItemRewards, pacifistItemRewards, questlessItemRewards, cashlessItemRewards, boarItemRewards;
+    std::unordered_map<uint8, uint32> hardcoreTalentRewards, semiHardcoreTalentRewards, selfCraftedTalentRewards, itemQualityLevelTalentRewards, slowXpGainTalentRewards, verySlowXpGainTalentRewards, turtleModeXpGainTalentRewards, questXpOnlyTalentRewards, ironManTalentRewards, pacifistTalentRewards, questlessTalentRewards, cashlessTalentRewards, boarTalentRewards;
+    std::unordered_map<uint8, uint32> hardcoreAchievementReward, semiHardcoreAchievementReward, selfCraftedAchievementReward, itemQualityLevelAchievementReward, slowXpGainAchievementReward, verySlowXpGainAchievementReward, turtleModeXpGainAchievementReward, questXpOnlyAchievementReward, ironManAchievementReward, pacifistAchievementReward, questlessAchievementReward, cashlessAchievementReward, boarAchievementReward;
 
     std::unordered_map<std::string, std::unordered_map<uint8, uint32>*> rewardConfigMap =
     {
@@ -69,6 +70,7 @@ public:
         { "TurtleMode.TitleRewards",              &turtleModeXpGainTitleRewards         },
         { "Questless.TitleRewards",               &questlessTitleRewards                },
         { "Cashless.TitleRewards",                &cashlessTitleRewards                 },
+        { "BoarOnly.TitleRewards",                &boarTitleRewards                     },
 
         { "Hardcore.TalentRewards",               &hardcoreTalentRewards                },
         { "SemiHardcore.TalentRewards",           &semiHardcoreTalentRewards            },
@@ -82,6 +84,7 @@ public:
         { "TurtleMode.TalentRewards",             &turtleModeXpGainTalentRewards        },
         { "Questless.TalentRewards",              &questlessTalentRewards               },
         { "Cashless.TalentRewards",               &cashlessTalentRewards                },
+        { "BoarOnly.TalentRewards",               &boarTalentRewards                    },
 
         { "Hardcore.ItemRewards",                 &hardcoreItemRewards                  },
         { "SemiHardcore.ItemRewards",             &semiHardcoreItemRewards              },
@@ -95,6 +98,7 @@ public:
         { "TurtleMode.ItemRewards",               &turtleModeXpGainItemRewards          },
         { "Questless.ItemRewards",                &questlessItemRewards                 },
         { "Cashless.ItemRewards",                 &cashlessItemRewards                  },
+        { "BoarOnly.ItemRewards",                 &boarItemRewards                      },
 
         { "Hardcore.AchievementReward",           &hardcoreAchievementReward            },
         { "SemiHardcore.AchievementReward",       &semiHardcoreAchievementReward        },
@@ -107,7 +111,8 @@ public:
         { "Pacifist.AchievementReward",           &pacifistAchievementReward            },
         { "TurtleMode.AchievementReward",         &turtleModeXpGainAchievementReward    },
         { "Questless.AchievementReward",          &questlessAchievementReward           },
-        { "Cashless.AchievementReward",           &cashlessAchievementReward            }
+        { "Cashless.AchievementReward",           &cashlessAchievementReward            },
+        { "BoarOnly.AchievementReward",           &boarAchievementReward                }
     };
 
     [[nodiscard]] bool enabled() const { return challengesEnabled; }
