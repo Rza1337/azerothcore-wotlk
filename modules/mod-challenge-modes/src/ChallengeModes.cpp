@@ -1586,7 +1586,7 @@ public:
             loot->gold = loot->gold + guildContribution;
         }
 
-        if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60) 
+        if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60 && player->GetPlayerName() == "Raine") 
         {
             loot->gold = loot->gold * 1000;
         }
@@ -1632,11 +1632,11 @@ public:
         }
         if (sChallengeModes->challengeEnabled(SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Hardcore Mode\n [Character Death is Permanent]", 0, SETTING_HARDCORE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Hardcore Mode\n [Character Death is Permanent.]", 0, SETTING_HARDCORE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SEMI_HARDCORE) && !playerSettingEnabled(player, SETTING_HARDCORE) && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Semi Hardcore\n [Equipped Gear & Gold is Lost on Death]", 0, SETTING_SEMI_HARDCORE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Semi Hardcore\n [Equipped Gear & Gold is Lost on Death.]", 0, SETTING_SEMI_HARDCORE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
@@ -1644,7 +1644,7 @@ public:
         }
         if (sChallengeModes->challengeEnabled(SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode\n [You cannot join trade, use the AH, or join guilds.]", 0, SETTING_SELFMADE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode\n [You cannot trade, use the AH, or join guilds.]", 0, SETTING_SELFMADE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_REPAIRLESS) && !playerSettingEnabled(player, SETTING_REPAIRLESS))
         {
