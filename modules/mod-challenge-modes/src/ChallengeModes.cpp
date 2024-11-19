@@ -1586,7 +1586,7 @@ public:
             loot->gold = loot->gold + guildContribution;
         }
 
-        if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60 && player->GetPlayerName() == "Raine") 
+        if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60 && player->GetName() == "Raine") 
         {
             loot->gold = loot->gold * 1000;
         }
