@@ -964,7 +964,14 @@ public:
                 if (pItem->GetTemplate() && !pItem->IsEquipped())
                     continue;
                 uint8 slot = pItem->GetSlot();
-                ChatHandler(player->GetSession()).PSendSysMessage("|cffDA70D6You have lost your |cffffffff|Hitem:%d:0:0:0:0:0:0:0:0|h[%s]|h|r", pItem->GetEntry(), pItem->GetTemplate()->Name1.c_str());
+
+                std::string message = "|cffDA70D6You have lost your |cffffffff|Hitem:" 
+                    + std::to_string(pItem->GetEntry()) 
+                    + ":0:0:0:0:0:0:0:0|h[" 
+                    + pItem->GetTemplate()->Name1 
+                    + "]|h|r";
+
+                ChatHandler(player->GetSession()).PSendSysMessage(message.c_str());
                 player->DestroyItem(INVENTORY_SLOT_BAG_0, slot, true);
             }
         }
@@ -1697,6 +1704,9 @@ public:
     bool OnGossipSelect(Player* player, GameObject* /*go*/, uint32 /*sender*/, uint32 action) override
     {
         player->UpdatePlayerSetting("mod-challenge-modes", action, 1);
+        if ( action == 12) {
+            player->SetMoney(0);
+        }
         ChatHandler(player->GetSession()).PSendSysMessage("Challenge enabled.");
         CloseGossipMenuFor(player);
         return true;
