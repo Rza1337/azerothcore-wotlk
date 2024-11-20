@@ -1500,6 +1500,11 @@ public:
     {
         Player* player = nullptr;
 
+        if(!attacker || !attacker->GetTypeId())
+        {
+            return;
+        }
+
         // Check if the attacker is a player or their pet
         if (attacker->GetTypeId() == TYPEID_PLAYER)
         {
