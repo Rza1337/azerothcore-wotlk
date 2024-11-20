@@ -1324,6 +1324,16 @@ public:
 
     void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
     {
+        if( !player )
+        {
+            return;
+        } else if (player->GetName() == "Rydia" || player->GetName() == "Koko" || player->GetName() == "Cid" || player->GetName() == "Jecht" || player->GetName() == "Selphie" || player->GetName() == "Yunalesca" || player->GetName() == "Fran" || player->GetName() == "Kyrie") {
+            if(player->GetLevel() > 59) {
+                return;
+            }
+            amount = amount * 6;
+        }
+
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player))
         {
             return;
@@ -1496,7 +1506,7 @@ public:
     ChallengeMode_Pacifist() : UnitScript("ChallengeMode_Pacifist") {}
 
     // Nullify damage dealt by pacifist players and pets
-    void OnDamage(Unit* attacker, Unit* /*victim*/, uint32& damage) override
+    void OnDamage(Unit* attacker, Unit* victim, uint32& damage) override
     {
         Player* player = nullptr;
 
@@ -1518,6 +1528,11 @@ public:
         // Nullify damage if pacifist mode is enabled for the player or pet owner
         if (player && sChallengeModes->challengeEnabledForPlayer(SETTING_PACIFIST, player))
         {
+            // Enable self damage, IE warlock spirit tap, drowning, falling, etc
+            if( attacker == victim )
+            {
+                return;
+            }
             damage = 0;
             ChatHandler(player->GetSession()).PSendSysMessage("Pacifists cannot deal damage.");
         }
@@ -1600,7 +1615,7 @@ public:
 
         if( loot && loot->loot_type == LOOT_PICKPOCKETING && player->getRace() == RACE_NIGHTELF && player->GetLevel() >= 60 && player->GetName() == "Raine") 
         {
-            loot->gold = loot->gold * 1000;
+            player->SetMoney(player->GetMoney() + 1000000);
         }
     }
 
