@@ -831,7 +831,7 @@ public:
         uint32 totalTalentPoints = 0;
         uint8  playerLevel = handler->getSelectedPlayerOrSelf()->GetLevel();
 
-        for (int setting = SETTING_HARDCORE; setting <= SETTING_CASHLESS; ++setting)
+        for (int setting = SETTING_HARDCORE; setting <= 16; ++setting)
         {
             ChallengeModeSettings challengeSetting = static_cast<ChallengeModeSettings>(setting);
             if (const auto* talentMap = sChallengeModes->getTalentMapForChallenge(challengeSetting))
