@@ -526,64 +526,64 @@ public:
         amount *= sChallengeModes->getXpBonusForChallenge(settingName);
     }
 
-void OnLevelChanged(Player* player, uint8 /*oldlevel*/) override
-{
-    if (!sChallengeModes->challengeEnabledForPlayer(settingName, player))
+    void OnLevelChanged(Player* player, uint8 /*oldlevel*/) override
     {
-        return;
-    }
-
-    const std::unordered_map<uint8, uint32>* titleRewardMap = sChallengeModes->getTitleMapForChallenge(settingName);
-    const std::unordered_map<uint8, uint32>* talentRewardMap = sChallengeModes->getTalentMapForChallenge(settingName);
-    const std::unordered_map<uint8, uint32>* itemRewardMap = sChallengeModes->getItemMapForChallenge(settingName);
-    const std::unordered_map<uint8, uint32>* achievementRewardMap = sChallengeModes->getAchievementMapForChallenge(settingName);
-    uint8 level = player->GetLevel();
-
-    if (mapContainsKey(titleRewardMap, level))
-    {
-        CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(titleRewardMap->at(level));
-        if (!titleInfo)
+        if (!sChallengeModes->challengeEnabledForPlayer(settingName, player))
         {
-            LOG_ERROR("mod-challenge-modes", "Invalid title ID {}!", titleRewardMap->at(level));
-            return;
-        }
-        ChatHandler handler(player->GetSession());
-        std::string tNameLink = handler.GetNameLink(player);
-        std::string titleNameStr = Acore::StringFormat(player->getGender() == GENDER_MALE ? titleInfo->nameMale[handler.GetSessionDbcLocale()] : titleInfo->nameFemale[handler.GetSessionDbcLocale()], player->GetName());
-        player->SetTitle(titleInfo);
-    }
-
-    if (mapContainsKey(talentRewardMap, level))
-    {
-        player->RewardExtraBonusTalentPoints(talentRewardMap->at(level));
-    }
-
-    if (mapContainsKey(achievementRewardMap, level))
-    {
-        AchievementEntry const* achievementInfo = sAchievementStore.LookupEntry(achievementRewardMap->at(level));
-        if (!achievementInfo)
-        {
-            LOG_ERROR("mod-challenge-modes", "Invalid Achievement ID {}!", achievementRewardMap->at(level));
             return;
         }
 
-        ChatHandler handler(player->GetSession());
-        std::string tNameLink = handler.GetNameLink(player);
-        player->CompletedAchievement(achievementInfo);
-    }
+        const std::unordered_map<uint8, uint32>* titleRewardMap = sChallengeModes->getTitleMapForChallenge(settingName);
+        const std::unordered_map<uint8, uint32>* talentRewardMap = sChallengeModes->getTalentMapForChallenge(settingName);
+        const std::unordered_map<uint8, uint32>* itemRewardMap = sChallengeModes->getItemMapForChallenge(settingName);
+        const std::unordered_map<uint8, uint32>* achievementRewardMap = sChallengeModes->getAchievementMapForChallenge(settingName);
+        uint8 level = player->GetLevel();
 
-    if (mapContainsKey(itemRewardMap, level))
-    {
-        uint32 itemEntry = itemRewardMap->at(level);
-        uint32 itemAmount = sChallengeModes->getItemRewardAmount(settingName); // Fetch item amount from config
-        player->SendItemRetrievalMail({ { itemEntry, itemAmount } });
-    }
+        if (mapContainsKey(titleRewardMap, level))
+        {
+            CharTitlesEntry const* titleInfo = sCharTitlesStore.LookupEntry(titleRewardMap->at(level));
+            if (!titleInfo)
+            {
+                LOG_ERROR("mod-challenge-modes", "Invalid title ID {}!", titleRewardMap->at(level));
+                return;
+            }
+            ChatHandler handler(player->GetSession());
+            std::string tNameLink = handler.GetNameLink(player);
+            std::string titleNameStr = Acore::StringFormat(player->getGender() == GENDER_MALE ? titleInfo->nameMale[handler.GetSessionDbcLocale()] : titleInfo->nameFemale[handler.GetSessionDbcLocale()], player->GetName());
+            player->SetTitle(titleInfo);
+        }
 
-    if (sChallengeModes->getDisableLevel(settingName) && sChallengeModes->getDisableLevel(settingName) <= level)
-    {
-        player->UpdatePlayerSetting("mod-challenge-modes", settingName, 0);
+        if (mapContainsKey(talentRewardMap, level))
+        {
+            player->RewardExtraBonusTalentPoints(talentRewardMap->at(level));
+        }
+
+        if (mapContainsKey(achievementRewardMap, level))
+        {
+            AchievementEntry const* achievementInfo = sAchievementStore.LookupEntry(achievementRewardMap->at(level));
+            if (!achievementInfo)
+            {
+                LOG_ERROR("mod-challenge-modes", "Invalid Achievement ID {}!", achievementRewardMap->at(level));
+                return;
+            }
+
+            ChatHandler handler(player->GetSession());
+            std::string tNameLink = handler.GetNameLink(player);
+            player->CompletedAchievement(achievementInfo);
+        }
+
+        if (mapContainsKey(itemRewardMap, level))
+        {
+            uint32 itemEntry = itemRewardMap->at(level);
+            uint32 itemAmount = sChallengeModes->getItemRewardAmount(settingName); // Fetch item amount from config
+            player->SendItemRetrievalMail({ { itemEntry, itemAmount } });
+        }
+
+        if (sChallengeModes->getDisableLevel(settingName) && sChallengeModes->getDisableLevel(settingName) <= level)
+        {
+            player->UpdatePlayerSetting("mod-challenge-modes", settingName, 0);
+        }
     }
-}
 
 private:
     ChallengeModeSettings settingName;
@@ -1724,13 +1724,113 @@ public:
     bool OnGossipSelect(Player* player, GameObject* /*go*/, uint32 /*sender*/, uint32 action) override
     {
         player->UpdatePlayerSetting("mod-challenge-modes", action, 1);
-        if ( action == 12) {
+        if ( action == SETTING_CASHLESS ) {
             player->SetMoney(0);
+        }
+        if ( action == SETTING_SELFMADE ) {
+            DeleteAllItemsForPlayer(player);
+            DeleteHighQualityItems(player);
+            player->SetMoney(0);
+            Guild guild = player->GetGuild();
+            if(guild) {
+                guild.DeleteMember(player->GetGUID());
+            }
         }
         ChatHandler(player->GetSession()).PSendSysMessage("Challenge enabled.");
         CloseGossipMenuFor(player);
         return true;
     }
+
+    void DeleteAllItemsForPlayer(Player* player)
+    {
+        if (!player)
+        {
+            LOG_ERROR("module", "Player is null. Cannot delete items.");
+            return;
+        }
+
+        // Get the character ID of the player
+        uint32 characterId = player->GetGUID().GetCounter();
+
+        // Query the database to check if there are any items for the player
+        std::string query = "SELECT COUNT(*) FROM custom_reagent_bank WHERE character_id = " + std::to_string(characterId);
+        QueryResult result = CharacterDatabase.Query(query);
+
+        if (result)
+        {
+            uint32 itemCount = (*result)[0].Get<uint32>();
+
+            if (itemCount > 0)
+            {
+                // Delete all items for the player
+                CharacterDatabase.Execute("DELETE FROM custom_reagent_bank WHERE character_id = {}", characterId);
+            }
+        }
+    }
+
+    void DeleteHighQualityItems(Player* player)
+    {
+        if (!player)
+            return;
+
+        // Define the minimum quality threshold (ITEM_QUALITY_UNCOMMON corresponds to green)
+        constexpr uint32 MIN_QUALITY = ITEM_QUALITY_UNCOMMON;
+
+        // Iterate through player's inventory
+        for (uint8 slot = EQUIPMENT_SLOT_START; slot < INVENTORY_SLOT_BAG_END; ++slot)
+        {
+            Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+            if (item && item->GetTemplate()->Quality >= MIN_QUALITY)
+            {
+                player->DestroyItem(INVENTORY_SLOT_BAG_0, slot, true);
+            }
+        }
+
+        // Check player's bags
+        for (uint8 bag = INVENTORY_SLOT_BAG_START; bag < INVENTORY_SLOT_BAG_END; ++bag)
+        {
+            Bag* bagItem = player->GetBagByPos(bag);
+            if (!bagItem)
+                continue;
+
+            for (uint32 slot = 0; slot < bagItem->GetBagSize(); ++slot)
+            {
+                Item* item = bagItem->GetItemByPos(slot);
+                if (item && item->GetTemplate()->Quality >= MIN_QUALITY)
+                {
+                    bagItem->RemoveItem(slot, true);
+                }
+            }
+        }
+
+        // Iterate through player's bank
+        for (uint8 slot = BANK_SLOT_ITEM_START; slot < BANK_SLOT_BAG_END; ++slot)
+        {
+            Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+            if (item && item->GetTemplate()->Quality >= MIN_QUALITY)
+            {
+                player->DestroyItem(INVENTORY_SLOT_BAG_0, slot, true);
+            }
+        }
+
+        // Check player's bank bags
+        for (uint8 bag = BANK_SLOT_BAG_START; bag < BANK_SLOT_BAG_END; ++bag)
+        {
+            Bag* bagItem = player->GetBagByPos(bag);
+            if (!bagItem)
+                continue;
+
+            for (uint32 slot = 0; slot < bagItem->GetBagSize(); ++slot)
+            {
+                Item* item = bagItem->GetItemByPos(slot);
+                if (item && item->GetTemplate()->Quality >= MIN_QUALITY)
+                {
+                    bagItem->RemoveItem(slot, true);
+                }
+            }
+        }
+    }
+
 
     GameObjectAI* GetAI(GameObject* object) const override
     {
