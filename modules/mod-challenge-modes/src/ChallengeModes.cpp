@@ -1776,6 +1776,16 @@ public:
         // Define the minimum quality threshold (ITEM_QUALITY_UNCOMMON corresponds to green)
         constexpr uint32 MIN_QUALITY = ITEM_QUALITY_UNCOMMON;
 
+        // Iterate through the player's "main" permanent bag (backpack)
+        for (uint8 slot = INVENTORY_SLOT_ITEM_START; slot < INVENTORY_SLOT_ITEM_END; ++slot)
+        {
+            Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+            if (item && item->GetTemplate()->Quality >= MIN_QUALITY)
+            {
+                player->DestroyItem(INVENTORY_SLOT_BAG_0, slot, true);
+            }
+        }
+
         // Iterate through player's inventory
         for (uint8 slot = EQUIPMENT_SLOT_START; slot < INVENTORY_SLOT_BAG_END; ++slot)
         {
