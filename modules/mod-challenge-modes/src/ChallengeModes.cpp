@@ -1731,9 +1731,9 @@ public:
             DeleteAllItemsForPlayer(player);
             DeleteHighQualityItems(player);
             player->SetMoney(0);
-            Guild guild = player->GetGuild();
+            Guild* guild = player->GetGuild();
             if(guild) {
-                guild.DeleteMember(player->GetGUID());
+                guild->DeleteMember(player->GetGUID());
             }
         }
         ChatHandler(player->GetSession()).PSendSysMessage("Challenge enabled.");
