@@ -12,6 +12,7 @@
 #include "SpellInfo.h"
 #include "WorldSession.h"
 #include "CommandScript.h"
+#include "Creature.h"
 
 using namespace Acore::ChatCommands;
 
@@ -668,7 +669,7 @@ public:
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, targetPlayer))
         {
-            handler->PSendSysMessage("Self Made is ENABLED.");
+            handler->PSendSysMessage("Self Found is ENABLED.");
         }
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_REPAIRLESS, targetPlayer))
         {
@@ -719,7 +720,7 @@ public:
             handler->PSendSysMessage("12: Cashless Mode");
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
-            handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("15: Self Found Mode");
             handler->PSendSysMessage("16: Loner Mode");
 
             return true;
@@ -745,7 +746,7 @@ public:
             handler->PSendSysMessage("12: Cashless Mode");
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
-            handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("15: Self Found Mode");
             handler->PSendSysMessage("16: Loner Mode");
 
             return true;
@@ -783,7 +784,7 @@ public:
             handler->PSendSysMessage("12: Cashless Mode");
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
-            handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("15: Self Found Mode");
             handler->PSendSysMessage("16: Loner Mode");
 
             return true;
@@ -809,7 +810,7 @@ public:
             handler->PSendSysMessage("12: Cashless Mode");
             handler->PSendSysMessage("13: Boar Only Mode (XP only from boars)");
             handler->PSendSysMessage("14: Repairless Mode");
-            handler->PSendSysMessage("15: Self Made Mode");
+            handler->PSendSysMessage("15: Self Found Mode");
             handler->PSendSysMessage("16: Loner Mode");
 
             return true;
@@ -872,7 +873,7 @@ public:
             case SETTING_CASHLESS:           return "Cashless Mode";
             case SETTING_BOAR_ONLY:          return "Boar Only Mode";
             case SETTING_REPAIRLESS:         return "Repairless Mode";
-            case SETTING_SELFMADE:           return "Self Made Mode";
+            case SETTING_SELFMADE:           return "Self Found Mode";
             case SETTING_LONER:              return "Loner Mode";
             default:                         return "Unknown Mode";
         }
@@ -1098,7 +1099,11 @@ public:
         // Check if the "Self Made" challenge is enabled for the player
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Trading with other players is disabled.");
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Found Challenge is active: Trading with other players is disabled.");
+            return false;  // Prevent the trade from being initiated
+        } else if (target && sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, target))
+        {
+            ChatHandler(player->GetSession()).PSendSysMessage("Your target has the self found challenge active, you cannot trade with them.");
             return false;  // Prevent the trade from being initiated
         }
         return true;  // Allow trade if not in Self Made mode
@@ -1109,7 +1114,7 @@ public:
         // Check if the "Self Made" challenge is enabled for the player
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Trading with on the Auction House is disabled.");
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Found Challenge is active: Trading with on the Auction House is disabled.");
             return false;  // Prevent the trade from being initiated
         }
         return true;  // Allow trade if not in Self Made mode
@@ -1120,7 +1125,7 @@ public:
         // Check if the "Self Made" challenge is enabled for the player
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Sending and receiving mail is disabled.");
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Found Challenge is active: Sending and receiving mail is disabled.");
             return false;  // Prevent the trade from being initiated
         }
         return true;  // Allow trade if not in Self Made mode
@@ -1132,7 +1137,7 @@ public:
         // Check if the "Self Made" challenge is enabled for the player
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            ChatHandler(player->GetSession()).PSendSysMessage("Self Made Challenge is active: Trading items with other players is disabled.");
+            ChatHandler(player->GetSession()).PSendSysMessage("Self Found Challenge is active: Trading items with other players is disabled.");
             return false;  // Prevent the item from being placed in the trade window
         }
         return true;  // Allow setting the item if not in Self Made mode
@@ -1148,6 +1153,27 @@ public:
         ChallengeMode::OnLevelChanged(player, oldlevel);
     }
 
+};
+
+class SelfMadePreventAuctionInteraction : public MiscScript
+{
+public:
+    PreventAuctionInteraction() : MiscScript("PreventAuctionInteraction") {}
+
+    bool CanSendAuctionHello(WorldSession const* session, ObjectGuid guid, Creature* creature) override
+    {
+        if (!session || !creature)
+            return false;
+
+        Player* player = session->GetPlayer();
+        if (!player || !sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
+            return false;
+
+        // Example condition: Block all players from accessing Auctioneers
+        ChatHandler(player->GetSession()).SendSysMessage("You are not allowed to access the Auction House.");
+        return false; // Prevent interaction with the Auctioneer
+    }
+    
 };
 
 class SelfMadeMailRestriction : public MailScript
@@ -1287,7 +1313,7 @@ public:
             // Still award XP to pets - they won't be able to pass the player's level
             Pet* pet = player->GetPet();
             if (pet && xpSource == XPSOURCE_KILL) {
-                 pet->GivePetXP(player->GetGroup() ? amount / 2 : amount);
+                pet->GivePetXP(player->GetGroup() ? amount / 2 : amount);
             }
             amount = 0;
         }
@@ -1328,10 +1354,12 @@ public:
         {
             return;
         } else if (player->GetName() == "Rydia" || player->GetName() == "Koko" || player->GetName() == "Cid" || player->GetName() == "Jecht" || player->GetName() == "Selphie" || player->GetName() == "Yunalesca" || player->GetName() == "Fran" || player->GetName() == "Kyrie") {
-            if(player->GetLevel() > 59) {
-                return;
+            if(player->GetLevel() < 59) {
+                amount = amount * 15;
+                for (uint32 i = 0; i < 15; ++i) {
+                    player->KilledMonsterCredit(victim->ToCreature()->GetOriginalEntry());
+                }
             }
-            amount = amount * 6;
         }
 
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player))
@@ -1340,8 +1368,9 @@ public:
         }
         if (victim && victim->ToCreature() && allowedBoarIDs.find(victim->ToCreature()->GetOriginalEntry()) == allowedBoarIDs.end())
         {
-            amount = 0;  // Nullify XP if not a boar
             return;
+        } else {
+            amount = 0;  // Nullify XP if not a boar
         }
         ChallengeMode::OnGiveXP(player, amount, victim, xpSource);
     }
@@ -1671,7 +1700,7 @@ public:
         }
         if (sChallengeModes->challengeEnabled(SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_IRON_MAN))
         {
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Made Mode\n [You cannot trade, use the AH, or join guilds.]", 0, SETTING_SELFMADE);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Self-Found Mode\n [You cannot trade, use the AH, or join guilds.]", 0, SETTING_SELFMADE);
         }
         if (sChallengeModes->challengeEnabled(SETTING_REPAIRLESS) && !playerSettingEnabled(player, SETTING_REPAIRLESS))
         {
@@ -1871,6 +1900,7 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_BoarOnly();
     new ChallengeMode_Repairless();
     new ChallengeMode_Selfmade();
+    new SelfMadePreventAuctionInteraction();
     new SelfMadeMailRestriction();
     new SelfMadeGuildRestriction();
     new ChallengeMode_LonerMode();
