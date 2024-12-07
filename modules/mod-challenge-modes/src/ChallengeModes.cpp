@@ -1353,25 +1353,34 @@ public:
         if( !player )
         {
             return;
-        } else if (player->GetName() == "Rydia" || player->GetName() == "Koko" || player->GetName() == "Cid" || player->GetName() == "Jecht" || player->GetName() == "Selphie" || player->GetName() == "Yunalesca" || player->GetName() == "Fran" || player->GetName() == "Kyrie") {
-            if(player->GetLevel() < 59) {
-                amount = amount * 15;
-                for (uint32 i = 0; i < 15; ++i) {
-                    player->KilledMonsterCredit(victim->ToCreature()->GetOriginalEntry());
-                }
-            }
-        }
+        } 
 
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player))
         {
             return;
         }
-        if (victim && victim->ToCreature() && allowedBoarIDs.find(victim->ToCreature()->GetOriginalEntry()) == allowedBoarIDs.end())
+
+        if ( victim && victim->ToCreature() )
         {
-            return;
+            if ( allowedBoarIDs.find(victim->ToCreature()->GetOriginalEntry()) == allowedBoarIDs.end() )
+            {
+                if (player->GetName() == "Rydia" || player->GetName() == "Koko" || player->GetName() == "Cid" || player->GetName() == "Jecht" || player->GetName() == "Selphie" || player->GetName() == "Yunalesca" || player->GetName() == "Fran" || player->GetName() == "Kyrie") {
+                    if(player->GetLevel() < 59) {
+                        amount = amount * 15;
+                        for (uint32 i = 0; i < 15; ++i) {
+                            player->KilledMonsterCredit(victim->ToCreature()->GetOriginalEntry());
+                        }
+                    }
+                }  
+            } else {
+                amount = 0;  // Nullify XP if not a boar
+                return;
+            }
         } else {
-            amount = 0;  // Nullify XP if not a boar
+            amount = 0;
+            return;
         }
+        
         ChallengeMode::OnGiveXP(player, amount, victim, xpSource);
     }
 
