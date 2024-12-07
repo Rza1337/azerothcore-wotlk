@@ -1350,37 +1350,52 @@ public:
 
     void OnGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
     {
-        if( !player )
+        if (!player)
         {
-            return;
-        } 
+            return; // Exit if player is null
+        }
 
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player))
+        // List of characters eligible for XP bonus
+        static const std::unordered_set<std::string> bonusCharacters = {
+            "Rydia", "Koko", "Cid", "Jecht", "Selphie", "Yunalesca", "Fran", "Kyrie"
+        };
+
+        bool isBonusCharacter = bonusCharacters.find(player->GetName()) != bonusCharacters.end();
+
+        if (!(isBonusCharacter || sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player)))
         {
             return;
         }
 
-        if ( victim && victim->ToCreature() )
+        if (victim && victim->ToCreature())
         {
-            if ( allowedBoarIDs.find(victim->ToCreature()->GetOriginalEntry()) == allowedBoarIDs.end() )
+            const uint32 victimEntry = victim->ToCreature()->GetOriginalEntry();
+
+            // Check if the victim's entry is in the allowed list
+            if (allowedBoarIDs.find(victimEntry) != allowedBoarIDs.end())
             {
-                if (player->GetName() == "Rydia" || player->GetName() == "Koko" || player->GetName() == "Cid" || player->GetName() == "Jecht" || player->GetName() == "Selphie" || player->GetName() == "Yunalesca" || player->GetName() == "Fran" || player->GetName() == "Kyrie") {
-                    if(player->GetLevel() < 59) {
-                        amount = amount * 15;
-                        for (uint32 i = 0; i < 15; ++i) {
-                            player->KilledMonsterCredit(victim->ToCreature()->GetOriginalEntry());
-                        }
+                // Apply bonus for specific characters
+                if (isBonusCharacter && player->GetLevel() < 59)
+                {
+                    amount *= 15; // Apply XP bonus
+                    for (uint32 i = 0; i < 15; ++i)
+                    {
+                        player->KilledMonsterCredit(victimEntry);
                     }
-                }  
-            } else {
-                amount = 0;  // Nullify XP if not a boar
+                }
+            }
+            else
+            {
+                amount = 0; // Nullify XP if victim is not an allowed boar
                 return;
             }
-        } else {
-            amount = 0;
+        }
+        else
+        {
+            amount = 0; // Nullify XP if no valid victim
             return;
         }
-        
+
         ChallengeMode::OnGiveXP(player, amount, victim, xpSource);
     }
 
