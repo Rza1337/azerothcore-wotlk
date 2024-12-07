@@ -1158,7 +1158,7 @@ public:
 class SelfMadePreventAuctionInteraction : public MiscScript
 {
 public:
-    PreventAuctionInteraction() : MiscScript("PreventAuctionInteraction") {}
+    SelfMadePreventAuctionInteraction() : MiscScript("SelfMadePreventAuctionInteraction") {}
 
     bool CanSendAuctionHello(WorldSession const* session, ObjectGuid guid, Creature* creature) override
     {
