@@ -1,6 +1,6 @@
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
-#include "Player.h"
+#include "InstanceScript.h"
 
 enum Spells
 {
@@ -10,6 +10,16 @@ enum Spells
     SPELL_CRUSHING_MAW = 33661,      // Crush Armor
     SPELL_TIDAL_SURGE = 37405,       // Watery Grave
     SPELL_BERSERK = 27680            // Berserk (Enrage)
+};
+
+enum Events
+{
+    EVENT_TENTACLE_SLAM = 1,
+    EVENT_INK_CLOUD,
+    EVENT_CALL_OF_THE_ABYSS,
+    EVENT_CRUSHING_MAW,
+    EVENT_TIDAL_SURGE,
+    EVENT_BERSERK
 };
 
 enum Texts
@@ -23,82 +33,85 @@ class boss_nzhal : public CreatureScript
 public:
     boss_nzhal() : CreatureScript("boss_nzhal") { }
 
-    struct boss_nzhalAI : public ScriptedAI
+    struct boss_nzhalAI : public BossAI
     {
-        boss_nzhalAI(Creature* creature) : ScriptedAI(creature) { }
+        boss_nzhalAI(Creature* creature) : BossAI(creature, DATA_GENERAL_DRAKKISATH) { }
 
         void Reset() override
         {
+            _Reset();
             me->SetDisableGravity(true);
             me->SetCanFly(true);
             me->SetReactState(REACT_AGGRESSIVE);
         }
 
-        void JustEngagedWith(Unit* who) override
+        void JustEngagedWith(Unit* /*who*/) override
         {
+            _JustEngagedWith();
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(1, 10000); // Tentacle Slam
-            events.ScheduleEvent(2, 15000); // Tidal Surge
-            events.ScheduleEvent(3, 600000); // Berserk (10-minute enrage)
+            events.ScheduleEvent(EVENT_TENTACLE_SLAM, 10000);
+            events.ScheduleEvent(EVENT_TIDAL_SURGE, 15000);
+            events.ScheduleEvent(EVENT_BERSERK, 600000); // 10 minutes
         }
 
         void JustDied(Unit* /*killer*/) override
         {
+            _JustDied();
             Talk(SAY_DEATH);
         }
 
-    void UpdateAI(uint32 diff) override
-    {
-        if (!UpdateVictim())
-            return;
-
-        events.Update(diff);
-
-        if (me->HasUnitState(UNIT_STATE_CASTING))
-            return;
-
-        while (uint32 eventId = events.ExecuteEvent())
+        void UpdateAI(uint32 diff) override
         {
-            switch (eventId)
+            if (!UpdateVictim())
+                return;
+
+            events.Update(diff);
+
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            while (uint32 eventId = events.ExecuteEvent())
             {
-                case 1: // Tentacle Slam
-                    DoCastAOE(SPELL_TENTACLE_SLAM);
-                    events.ScheduleEvent(1, 12000);
-                    break;
-
-                case 2: // Tidal Surge
+                switch (eventId)
                 {
-                    std::list<Unit*> targetList;
-                    SelectTargetList(targetList, 10, SELECT_TARGET_NEAREST, 100.0f); // Get up to 10 targets
-                    if (!targetList.empty())
+                    case EVENT_TENTACLE_SLAM:
+                        DoCastAOE(SPELL_TENTACLE_SLAM);
+                        events.ScheduleEvent(EVENT_TENTACLE_SLAM, 12000);
+                        break;
+
+                    case EVENT_TIDAL_SURGE:
                     {
-                        auto itr = targetList.begin();
-                        std::advance(itr, urand(0, targetList.size() - 1)); // Pick a random target
-                        Unit* target = *itr;
-                        if (target)
+                        std::list<Unit*> targetList;
+                        SelectTargetList(targetList, 5, SELECT_TARGET_NEAREST, 100.0f);
+                        if (!targetList.empty())
                         {
-                            DoCast(target, SPELL_TIDAL_SURGE);
+                            auto itr = targetList.begin();
+                            std::advance(itr, urand(0, targetList.size() - 1)); // Pick random target
+                            Unit* target = *itr;
+                            if (target)
+                            {
+                                DoCast(target, SPELL_TIDAL_SURGE);
+                            }
                         }
+                        events.ScheduleEvent(EVENT_TIDAL_SURGE, 20000);
+                        break;
                     }
-                    events.ScheduleEvent(2, 20000);
-                    break;
+
+                    case EVENT_BERSERK:
+                        DoCast(me, SPELL_BERSERK);
+                        break;
                 }
-
-                case 3: // Berserk
-                    DoCast(me, SPELL_BERSERK);
-                    break;
             }
-        }
 
-        DoMeleeAttackIfReady();
-    }
+            DoMeleeAttackIfReady();
+        }
+    };
 
     CreatureAI* GetAI(Creature* creature) const override
     {
         return new boss_nzhalAI(creature);
     }
 };
-
 
 void AddSC_boss_nzhal()
 {
