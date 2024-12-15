@@ -1,14 +1,15 @@
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
+#include "Player.h"
 
 enum Spells
 {
-    SPELL_TENTACLE_SLAM = 6524,
-    SPELL_INK_CLOUD = 44198,
-    SPELL_CALL_OF_THE_ABYSS = 59414,
-    SPELL_CRUSHING_MAW = 33661,
-    SPELL_TIDAL_SURGE = 37405,
-    SPELL_BERSERK = 27680
+    SPELL_TENTACLE_SLAM = 6524,      // Earthquake (Amateur)
+    SPELL_INK_CLOUD = 44198,         // Smoke Bomb
+    SPELL_CALL_OF_THE_ABYSS = 59414, // Dark Surge
+    SPELL_CRUSHING_MAW = 33661,      // Crush Armor
+    SPELL_TIDAL_SURGE = 37405,       // Watery Grave
+    SPELL_BERSERK = 27680            // Berserk (Enrage)
 };
 
 enum Texts
@@ -33,10 +34,12 @@ public:
             me->SetReactState(REACT_AGGRESSIVE);
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
             Talk(SAY_AGGRO);
-            events.ScheduleEvent(1, 10000); // Example event scheduling
+            events.ScheduleEvent(1, 10000); // Tentacle Slam
+            events.ScheduleEvent(2, 15000); // Tidal Surge
+            events.ScheduleEvent(3, 600000); // Berserk (10-minute enrage)
         }
 
         void JustDied(Unit* /*killer*/) override
@@ -44,33 +47,60 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void UpdateAI(uint32 diff) override
+    void UpdateAI(uint32 diff) override
+    {
+        if (!UpdateVictim())
+            return;
+
+        events.Update(diff);
+
+        if (me->HasUnitState(UNIT_STATE_CASTING))
+            return;
+
+        while (uint32 eventId = events.ExecuteEvent())
         {
-            if (!UpdateVictim())
-                return;
-
-            events.Update(diff);
-
-            if (uint32 eventId = events.ExecuteEvent())
+            switch (eventId)
             {
-                switch (eventId)
-                {
-                    case 1:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        {
-                            DoCast(target, SPELL_TENTACLE_SLAM);
-                        }
-                        events.ScheduleEvent(1, 15000);
-                        break;
-                }
-            }
+                case 1: // Tentacle Slam
+                    DoCastAOE(SPELL_TENTACLE_SLAM);
+                    events.ScheduleEvent(1, 12000);
+                    break;
 
-            DoMeleeAttackIfReady();
+                case 2: // Tidal Surge
+                {
+                    std::list<Unit*> targetList;
+                    SelectTargetList(targetList, 10, SELECT_TARGET_NEAREST, 100.0f); // Get up to 10 targets
+                    if (!targetList.empty())
+                    {
+                        auto itr = targetList.begin();
+                        std::advance(itr, urand(0, targetList.size() - 1)); // Pick a random target
+                        Unit* target = *itr;
+                        if (target)
+                        {
+                            DoCast(target, SPELL_TIDAL_SURGE);
+                        }
+                    }
+                    events.ScheduleEvent(2, 20000);
+                    break;
+                }
+
+                case 3: // Berserk
+                    DoCast(me, SPELL_BERSERK);
+                    break;
+            }
         }
-    };
+
+        DoMeleeAttackIfReady();
+    }
 
     CreatureAI* GetAI(Creature* creature) const override
     {
         return new boss_nzhalAI(creature);
     }
 };
+
+
+void AddSC_boss_nzhal()
+{
+    new boss_nzhal();
+}
