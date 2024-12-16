@@ -22,11 +22,6 @@ enum Events
     EVENT_BERSERK
 };
 
-enum Texts
-{
-    SAY_AGGRO = 0,
-    SAY_DEATH = 1
-};
 
 class boss_nzhal : public CreatureScript
 {
@@ -35,7 +30,7 @@ public:
 
     struct boss_nzhalAI : public BossAI
     {
-        boss_nzhalAI(Creature* creature) : BossAI(creature, DATA_GENERAL_DRAKKISATH) { }
+        boss_nzhalAI(Creature* creature) : BossAI(creature, 1) { }
 
         void Reset() override
         {
@@ -48,7 +43,6 @@ public:
         void JustEngagedWith(Unit* /*who*/) override
         {
             _JustEngagedWith();
-            Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_TENTACLE_SLAM, 10000);
             events.ScheduleEvent(EVENT_TIDAL_SURGE, 15000);
             events.ScheduleEvent(EVENT_BERSERK, 600000); // 10 minutes
@@ -57,7 +51,6 @@ public:
         void JustDied(Unit* /*killer*/) override
         {
             _JustDied();
-            Talk(SAY_DEATH);
         }
 
         void UpdateAI(uint32 diff) override
@@ -82,7 +75,7 @@ public:
                     case EVENT_TIDAL_SURGE:
                     {
                         std::list<Unit*> targetList;
-                        SelectTargetList(targetList, 5, SELECT_TARGET_NEAREST, 100.0f);
+                        SelectTargetList(targetList, 5, SELECT_TARGET_ANY_ENEMY, 100.0f);
                         if (!targetList.empty())
                         {
                             auto itr = targetList.begin();
