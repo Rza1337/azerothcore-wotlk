@@ -13,8 +13,12 @@
 #include "WorldSession.h"
 #include "CommandScript.h"
 #include "Creature.h"
+#include "DatabaseEnv.h"
+#include "GossipDef.h"
+#include "AchievementMgr.h"
+#include "Spell.h"
 
-#define ADMIN_ITEM_ID 159 
+#define ITEM_TRIGGER_ID 159 
 #define BOAR_NPC_ID 113
 
 using namespace Acore::ChatCommands;
@@ -1311,24 +1315,39 @@ public:
         if (item->GetEntry() != ITEM_TRIGGER_ID)
             return false;
 
-        // Check if player is an allowed account
-        std::string accountName = player->GetSession()->GetAuthenticatedUsername();
-        if (accountName != "Ryan" && accountName != "Ryan2")
+        uint32 accountId = player->GetSession()->GetAccountId(); 
+
+        // Query the database to retrieve the account name
+        QueryResult result = LoginDatabase.Query("SELECT username FROM account WHERE id = {}", accountId);
+        if (!result)
         {
-            player->GetSession()->SendAreaTriggerMessage("You are not permitted to use this item.");
-            return false;
+            return true;
         }
 
-        // Open the menu
+        // Extract account name from query result
+        std::string accountName = (*result)[0].GetString();
+
+        // Restrict access to Ryan or Ryan2
+        if (accountName != "Ryan" && accountName != "Ryan2")
+        {
+            return true;
+        }
+
+        // 🎯 **Ensure Gossip Menu is Initialized**
         player->PlayerTalkClass->ClearMenus();
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
-        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID(), item->GetGUID());
+        player->PlayerTalkClass->GetGossipMenu().ClearMenu(); // ✅ This makes `AddGossipItemFor()` work!
+
+        // 🎯 **Now `AddGossipItemFor()` will work like in GameObjectScript**
+        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
+        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
+        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
+        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
+        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
+        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
+        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
+
+        // 🎯 **Start Gossip Menu**
+        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
 
         return true;
     }
