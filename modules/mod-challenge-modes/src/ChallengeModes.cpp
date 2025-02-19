@@ -1348,7 +1348,7 @@ public:
         return true;
     }
 
-    void OnGossipSelect(Player* player, Item* item, uint32 sender, uint32 action) override
+    void OnGossipSelect(Player* player, Creaure* creaure, uint32 sender, uint32 action) override
     {
         if (sender != GOSSIP_SENDER_MAIN)
             return;
@@ -1407,12 +1407,12 @@ public:
 
             case 999: // Close Menu
                 CloseGossipMenuFor(player);
-                return true;
+                return;
         }
-
-        return OnGossipHello(player, creature);
+        OnGossipHello(player, creature);
+        return;
     }
-    }
+    
     
 };
 
