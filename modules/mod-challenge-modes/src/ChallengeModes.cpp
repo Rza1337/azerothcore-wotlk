@@ -18,7 +18,7 @@
 #include "AchievementMgr.h"
 #include "Spell.h"
 
-#define ITEM_TRIGGER_ID 159 
+#define ITEM_TRIGGER_ID 118 
 #define BOAR_NPC_ID 113
 
 using namespace Acore::ChatCommands;
@@ -1314,7 +1314,6 @@ public:
         // 🔍 DEBUG: Ensure OnUse is called
         ChatHandler(player->GetSession()).SendSysMessage("DEBUG: OnUse triggered.");
 
-        // Ensure we're using the correct item (Refreshing Spring Water)
         if (item->GetEntry() != ITEM_TRIGGER_ID)
         {
             ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Incorrect item used.");
