@@ -1309,11 +1309,17 @@ class MenuItem : public ItemScript
 public:
     MenuItem() : ItemScript("MenuItem") {}
 
-        bool OnUse(Player* player, Item* item, SpellCastTargets const& /*targets*/) override
-    {
+    bool OnUse(Player* player, Item* item, SpellCastTargets const& /*targets*/) override
+    {   
+        // 🔍 DEBUG: Ensure OnUse is called
+        ChatHandler(player->GetSession()).SendSysMessage("DEBUG: OnUse triggered.");
+
         // Ensure we're using the correct item (Refreshing Spring Water)
         if (item->GetEntry() != ITEM_TRIGGER_ID)
+        {
+            ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Incorrect item used.");
             return false;
+        }
 
         // Get account ID
         uint32 accountId = player->GetSession()->GetAccountId();
@@ -1330,11 +1336,17 @@ public:
         // Restrict access to Ryan or Ryan2
         if (accountName != "Ryan" && accountName != "Ryan2")
         {
+            ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Access denied.");
             return true;
         }
 
+        // 🔍 DEBUG: Reached menu creation
+        ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Creating gossip menu.");
+
+        // Initialize Gossip Menu
         player->PlayerTalkClass->ClearMenus();
 
+        // ✅ FIXED: Ensure menu is correctly structured
         player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1, "", 0);
         player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2, "", 0);
         player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3, "", 0);
@@ -1343,6 +1355,8 @@ public:
         player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6, "", 0);
         player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999, "", 0);
 
+        // 🔍 DEBUG: Ensure menu is being sent
+        ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Sending Gossip Menu.");
         player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
 
         return true;
