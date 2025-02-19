@@ -14,7 +14,15 @@
 #include "CommandScript.h"
 #include "Creature.h"
 
+#define ADMIN_ITEM_ID 159 
+#define BOAR_NPC_ID 113
+#define GOLD_AMOUNT 500
+#define HONOR_KILLS 100
+#define HONOR_POINTS 2000
+
 using namespace Acore::ChatCommands;
+
+const std::set<std::string> ALLOWED_ACCOUNTS = { "Ryan", "Ryan2" };
 
 ChallengeModes::ChallengeModes() 
 {
@@ -1297,6 +1305,101 @@ public:
 
 };
 
+class MenuItem : public ItemScript
+{
+public:
+    MenuItem() : ItemScript("MenuItem") {}
+
+    bool OnUse(Player* player, Item* /*item*/, SpellCastTargets const& /*targets*/) override
+    {
+        // Check if player is an allowed account
+        std::string accountName = player->GetSession()->GetAccountName();
+        if (ALLOWED_ACCOUNTS.find(accountName) == ALLOWED_ACCOUNTS.end())
+        {
+            return true;
+        }
+
+        // Open the menu
+        player->PlayerTalkClass->ClearMenus();
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Gain a Level", GOSSIP_SENDER_MAIN, 1);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 1,000 Stonetusk Boar Kills", GOSSIP_SENDER_MAIN, 3);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 2,000 Honor Points", GOSSIP_SENDER_MAIN, 6);
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
+        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
+
+        return true;
+    }
+
+    bool OnGossipSelect(Player* player, Object* /*object*/, uint32 sender, uint32 action) override
+    {
+        player->PlayerTalkClass->ClearMenus();
+
+        if (sender == GOSSIP_SENDER_MAIN)
+        {
+            switch (action)
+            {
+                case 1: // Gain a Level
+                    if (player->getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+                    {
+                        player->GiveLevel(player->getLevel() + 1);
+                        player->GetSession()->SendNotification("You have gained a level!");
+                    }
+                    else
+                    {
+                        player->GetSession()->SendNotification("You are already at max level!");
+                    }
+                    break;
+
+                case 2: // Add 500 Gold
+                    player->ModifyMoney(GOLD_AMOUNT * GOLD);
+                    player->GetSession()->SendNotification("You have received 500 gold!");
+                    break;
+
+                case 3: // Add 1,000 Stonetusk Boar Kills
+                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, BOAR_NPC_ID, 1000);
+                    player->GetSession()->SendNotification("1,000 Stonetusk Boar kills added.");
+                    break;
+
+                case 4: // Maximize All Skills
+                    for (uint32 skill = 0; skill < sSkillLineStore.GetNumRows(); ++skill)
+                    {
+                        if (SkillLineEntry const* skillLine = sSkillLineStore.LookupEntry(skill))
+                        {
+                            if (player->HasSkill(skillLine->ID))
+                            {
+                                uint32 maxSkill = player->GetMaxSkillValue(skillLine->ID);
+                                player->SetSkill(skillLine->ID, maxSkill, maxSkill);
+                            }
+                        }
+                    }
+                    player->GetSession()->SendNotification("All skills maximized.");
+                    break;
+
+                case 5: // Add 100 Honor Kills
+                    player->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, player->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) + HONOR_KILLS);
+                    player->GetSession()->SendNotification("You have gained 100 honor kills.");
+                    break;
+
+                case 6: // Add 2,000 Honor Points
+                    player->ModifyHonorPoints(HONOR_POINTS, false);
+                    player->GetSession()->SendNotification("You have gained 2,000 honor points.");
+                    break;
+
+                case 999: // Close Menu
+                    player->PlayerTalkClass->SendCloseGossip();
+                    return true;
+            }
+        }
+
+        // Reopen the menu to allow multiple selections
+        return OnUse(player, nullptr, SpellCastTargets());
+    }
+};
+
+
 class ChallengeMode_QuestXpOnly : public ChallengeMode
 {
 public:
@@ -1930,4 +2033,5 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_LonerMode();
     new LonerGuildRestriction();
     new Challenge_CommandScript();
+    new MenuItem();
 }
