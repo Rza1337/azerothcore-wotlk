@@ -1324,7 +1324,7 @@ public:
         if (result)
         {
             Field* fields = result->Fetch();
-            accountName = fields[0].Get<std::string>(); // ✅ FIXED: Use `Get<std::string>()` instead of `GetString()`
+            accountName = fields[0].Get<std::string>();
         }
 
         // Restrict access to Ryan or Ryan2
@@ -1333,20 +1333,17 @@ public:
             return true;
         }
 
-        // 🎯 **Ensure Gossip Menu is Initialized**
         player->PlayerTalkClass->ClearMenus();
 
-        // ✅ FIXED: Use `AddGossipItem()` instead of `AddGossipItemFor()`
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999, "", 0);
 
-        // ✅ FIXED: Use the correct `SendGossipMenu()` function
-        player->PlayerTalkClass->SendGossipMenu(1, player);
+        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
 
         return true;
     }
@@ -1355,8 +1352,6 @@ public:
     {
         if (sender != GOSSIP_SENDER_MAIN)
             return;
-
-        player->PlayerTalkClass->ClearMenus();
 
         switch (action)
         {
@@ -1415,14 +1410,16 @@ public:
 
         // Reopen the menu for multiple selections
         player->PlayerTalkClass->ClearMenus();
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
-        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
-        player->PlayerTalkClass->SendGossipMenu(1, player);
+
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6, "", 0);
+        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999, "", 0);
+
+        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
     }
     
 };
