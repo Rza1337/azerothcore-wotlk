@@ -16,13 +16,8 @@
 
 #define ADMIN_ITEM_ID 159 
 #define BOAR_NPC_ID 113
-#define GOLD_AMOUNT 500
-#define HONOR_KILLS 100
-#define HONOR_POINTS 2000
 
 using namespace Acore::ChatCommands;
-
-const std::set<std::string> ALLOWED_ACCOUNTS = { "Ryan", "Ryan2" };
 
 ChallengeModes::ChallengeModes() 
 {
@@ -1310,93 +1305,108 @@ class MenuItem : public ItemScript
 public:
     MenuItem() : ItemScript("MenuItem") {}
 
-    bool OnUse(Player* player, Item* /*item*/, SpellCastTargets const& /*targets*/) override
+        bool OnUse(Player* player, Item* item, SpellCastTargets const& /*targets*/) override
     {
+        // Ensure we're using the correct item (Refreshing Spring Water)
+        if (item->GetEntry() != ITEM_TRIGGER_ID)
+            return false;
+
         // Check if player is an allowed account
-        std::string accountName = player->GetSession()->GetAccountName();
-        if (ALLOWED_ACCOUNTS.find(accountName) == ALLOWED_ACCOUNTS.end())
+        std::string accountName = player->GetSession()->GetAuthenticatedUsername();
+        if (accountName != "Ryan" && accountName != "Ryan2")
         {
-            return true;
+            player->GetSession()->SendAreaTriggerMessage("You are not permitted to use this item.");
+            return false;
         }
 
         // Open the menu
         player->PlayerTalkClass->ClearMenus();
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Gain a Level", GOSSIP_SENDER_MAIN, 1);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 1,000 Stonetusk Boar Kills", GOSSIP_SENDER_MAIN, 3);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Add 2,000 Honor Points", GOSSIP_SENDER_MAIN, 6);
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
-        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
+        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID(), item->GetGUID());
 
         return true;
     }
 
-    bool OnGossipSelect(Player* player, Object* /*object*/, uint32 sender, uint32 action) override
+    void OnGossipSelect(Player* player, Item* item, uint32 sender, uint32 action) override
     {
+        if (sender != GOSSIP_SENDER_MAIN)
+            return;
+
         player->PlayerTalkClass->ClearMenus();
 
-        if (sender == GOSSIP_SENDER_MAIN)
+        switch (action)
         {
-            switch (action)
-            {
-                case 1: // Gain a Level
-                    if (player->getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
-                    {
-                        player->GiveLevel(player->getLevel() + 1);
-                        player->GetSession()->SendNotification("You have gained a level!");
-                    }
-                    else
-                    {
-                        player->GetSession()->SendNotification("You are already at max level!");
-                    }
-                    break;
+            case 1: // Gain a Level
+                if (player->GetLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+                {
+                    player->GiveLevel(player->GetLevel() + 1);
+                    player->GetSession()->SendAreaTriggerMessage("You have gained a level!");
+                }
+                else
+                {
+                    player->GetSession()->SendAreaTriggerMessage("You are already at max level!");
+                }
+                break;
 
-                case 2: // Add 500 Gold
-                    player->ModifyMoney(GOLD_AMOUNT * GOLD);
-                    player->GetSession()->SendNotification("You have received 500 gold!");
-                    break;
+            case 2: // Add 500 Gold
+                player->ModifyMoney(500 * GOLD);
+                player->GetSession()->SendAreaTriggerMessage("You have received 500 gold!");
+                break;
 
-                case 3: // Add 1,000 Stonetusk Boar Kills
-                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, BOAR_NPC_ID, 1000);
-                    player->GetSession()->SendNotification("1,000 Stonetusk Boar kills added.");
-                    break;
+            case 3: // Add 1,000 Stonetusk Boar Kills
+                player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, BOAR_NPC_ID, 1000);
+                player->GetSession()->SendAreaTriggerMessage("1,000 Stonetusk Boar kills added.");
+                break;
 
-                case 4: // Maximize All Skills
-                    for (uint32 skill = 0; skill < sSkillLineStore.GetNumRows(); ++skill)
+            case 4: // Maximize All Skills
+                for (uint32 skill = 0; skill < sSkillLineStore.GetNumRows(); ++skill)
+                {
+                    if (SkillLineEntry const* skillLine = sSkillLineStore.LookupEntry(skill))
                     {
-                        if (SkillLineEntry const* skillLine = sSkillLineStore.LookupEntry(skill))
+                        if (player->HasSkill(skillLine->id)) // FIX: Use `id` instead of `ID`
                         {
-                            if (player->HasSkill(skillLine->ID))
-                            {
-                                uint32 maxSkill = player->GetMaxSkillValue(skillLine->ID);
-                                player->SetSkill(skillLine->ID, maxSkill, maxSkill);
-                            }
+                            uint32 maxSkill = player->GetMaxSkillValue(skillLine->id);
+                            player->SetSkill(skillLine->id, maxSkill);
                         }
                     }
-                    player->GetSession()->SendNotification("All skills maximized.");
-                    break;
+                }
+                player->GetSession()->SendAreaTriggerMessage("All skills maximized.");
+                break;
 
-                case 5: // Add 100 Honor Kills
-                    player->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, player->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) + HONOR_KILLS);
-                    player->GetSession()->SendNotification("You have gained 100 honor kills.");
-                    break;
+            case 5: // Add 100 Honor Kills
+                player->SetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS, 
+                    player->GetUInt32Value(PLAYER_FIELD_LIFETIME_HONORABLE_KILLS) + 100);
+                player->GetSession()->SendAreaTriggerMessage("You have gained 100 honor kills.");
+                break;
 
-                case 6: // Add 2,000 Honor Points
-                    player->ModifyHonorPoints(HONOR_POINTS, false);
-                    player->GetSession()->SendNotification("You have gained 2,000 honor points.");
-                    break;
+            case 6: // Add 2,000 Honor Points
+                player->ModifyHonorPoints(2000);  // FIX: Removed second argument
+                player->GetSession()->SendAreaTriggerMessage("You have gained 2,000 honor points.");
+                break;
 
-                case 999: // Close Menu
-                    player->PlayerTalkClass->SendCloseGossip();
-                    return true;
-            }
+            case 999: // Close Menu
+                player->PlayerTalkClass->SendCloseGossip();
+                return;
         }
 
-        // Reopen the menu to allow multiple selections
-        return OnUse(player, nullptr, SpellCastTargets());
+        // Reopen the menu for multiple selections
+        player->PlayerTalkClass->ClearMenus();
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
+        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID(), item->GetGUID());
     }
+    
 };
 
 
