@@ -1385,7 +1385,7 @@ public:
                         if (player->HasSkill(skillLine->id))
                         {
                             uint32 maxSkill = player->GetMaxSkillValue(skillLine->id);
-                            player->SetSkill(skillLine->id, maxSkill, maxSkill);
+                            player->SetSkill(skillLine->id, 1, maxSkill, maxSkill);
                         }
                     }
                 }
