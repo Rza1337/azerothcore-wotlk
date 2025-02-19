@@ -18,8 +18,8 @@
 #include "AchievementMgr.h"
 #include "Spell.h"
 
-#define ITEM_TRIGGER_ID 118 
-#define BOAR_NPC_ID 113
+#define ALLIANCE_NPC_ID 2879
+#define HORDE_NPC_ID 10088
 
 using namespace Acore::ChatCommands;
 
@@ -1304,21 +1304,16 @@ public:
 
 };
 
-class MenuItem : public ItemScript
+class MenuItem : public CreatureScript
 {
 public:
-    MenuItem() : ItemScript("MenuItem") {}
+    MenuItem() : CreatureScript("MenuItem") {}
 
-    bool OnUse(Player* player, Item* item, SpellCastTargets const& /*targets*/) override
+    bool OnGossipHello(Player* player, Creature* creature) override
     {   
-        // 🔍 DEBUG: Ensure OnUse is called
-        ChatHandler(player->GetSession()).SendSysMessage("DEBUG: OnUse triggered.");
 
-        if (item->GetEntry() != ITEM_TRIGGER_ID)
-        {
-            ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Incorrect item used.");
-            return false;
-        }
+        if (creature->GetEntry() != ALLIANCE_NPC_ID && creature->GetEntry() != HORDE_NPC_ID)
+            return true;
 
         // Get account ID
         uint32 accountId = player->GetSession()->GetAccountId();
@@ -1339,25 +1334,17 @@ public:
             return true;
         }
 
-        // 🔍 DEBUG: Reached menu creation
-        ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Creating gossip menu.");
+        ClearGossipMenuFor(player);
 
-        // Initialize Gossip Menu
-        player->PlayerTalkClass->ClearMenus();
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
 
-        // ✅ FIXED: Ensure menu is correctly structured
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999, "", 0);
-
-        // 🔍 DEBUG: Ensure menu is being sent
-        ChatHandler(player->GetSession()).SendSysMessage("DEBUG: Sending Gossip Menu.");
-        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
-
+        SendGossipMenuFor(player, 1, creature->GetGUID());
         return true;
     }
 
@@ -1365,6 +1352,8 @@ public:
     {
         if (sender != GOSSIP_SENDER_MAIN)
             return;
+
+        ClearGossipMenuFor(player);
 
         switch (action)
         {
@@ -1386,7 +1375,7 @@ public:
                 break;
 
             case 3: // Add 1,000 Stonetusk Boar Kills
-                player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, BOAR_NPC_ID, 1000);
+                player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, 113, 1000);
                 player->GetSession()->SendAreaTriggerMessage("1,000 Stonetusk Boar kills added.");
                 break;
 
@@ -1417,22 +1406,12 @@ public:
                 break;
 
             case 999: // Close Menu
-                player->PlayerTalkClass->SendCloseGossip();
-                return;
+                CloseGossipMenuFor(player);
+                return true;
         }
 
-        // Reopen the menu for multiple selections
-        player->PlayerTalkClass->ClearMenus();
-
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6, "", 0);
-        player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999, "", 0);
-
-        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
+        return OnGossipHello(player, creature);
+    }
     }
     
 };
