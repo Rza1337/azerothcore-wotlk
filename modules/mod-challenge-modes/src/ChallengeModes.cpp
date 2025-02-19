@@ -1304,10 +1304,10 @@ public:
 
 };
 
-class MenuItem : public CreatureScript
+class AdminMenuItem : public CreatureScript
 {
 public:
-    MenuItem() : CreatureScript("MenuItem") {}
+    AdminMenuItem() : CreatureScript("AdminMenuItem") {}
 
     bool OnGossipHello(Player* player, Creature* creature) override
     {   
@@ -1348,10 +1348,10 @@ public:
         return true;
     }
 
-    void OnGossipSelect(Player* player, Creaure* creaure, uint32 sender, uint32 action) override
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 sender, uint32 action) override
     {
         if (sender != GOSSIP_SENDER_MAIN)
-            return;
+            return true;
 
         ClearGossipMenuFor(player);
 
@@ -1407,12 +1407,10 @@ public:
 
             case 999: // Close Menu
                 CloseGossipMenuFor(player);
-                return;
+                return true;
         }
-        OnGossipHello(player, creature);
-        return;
+        return OnGossipHello(player, creature);
     }
-    
     
 };
 
@@ -2050,5 +2048,5 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_LonerMode();
     new LonerGuildRestriction();
     new Challenge_CommandScript();
-    new MenuItem();
+    new AdminMenuItem();
 }
