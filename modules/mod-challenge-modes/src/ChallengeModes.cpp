@@ -1315,17 +1315,17 @@ public:
         if (item->GetEntry() != ITEM_TRIGGER_ID)
             return false;
 
-        uint32 accountId = player->GetSession()->GetAccountId(); 
+        // Get account ID
+        uint32 accountId = player->GetSession()->GetAccountId();
+        std::string accountName = "";
 
-        // Query the database to retrieve the account name
+        // Query account name from the database
         QueryResult result = LoginDatabase.Query("SELECT username FROM account WHERE id = {}", accountId);
-        if (!result)
+        if (result)
         {
-            return true;
+            Field* fields = result->Fetch();
+            accountName = fields[0].Get<std::string>(); // ✅ FIXED: Use `Get<std::string>()` instead of `GetString()`
         }
-
-        // Extract account name from query result
-        std::string accountName = (*result)[0].GetString();
 
         // Restrict access to Ryan or Ryan2
         if (accountName != "Ryan" && accountName != "Ryan2")
@@ -1335,19 +1335,18 @@ public:
 
         // 🎯 **Ensure Gossip Menu is Initialized**
         player->PlayerTalkClass->ClearMenus();
-        player->PlayerTalkClass->GetGossipMenu().ClearMenu(); // ✅ This makes `AddGossipItemFor()` work!
 
-        // 🎯 **Now `AddGossipItemFor()` will work like in GameObjectScript**
-        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
-        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
-        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
-        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
-        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
-        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
-        player->PlayerTalkClass->AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
+        // ✅ FIXED: Use `AddGossipItem()` instead of `AddGossipItemFor()`
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1 Level", GOSSIP_SENDER_MAIN, 1);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 500 Gold", GOSSIP_SENDER_MAIN, 2);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 1000 Boar Kills", GOSSIP_SENDER_MAIN, 3);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Maximize All Skills", GOSSIP_SENDER_MAIN, 4);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
+        player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
 
-        // 🎯 **Start Gossip Menu**
-        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID());
+        // ✅ FIXED: Use the correct `SendGossipMenu()` function
+        player->PlayerTalkClass->SendGossipMenu(1, player);
 
         return true;
     }
@@ -1388,10 +1387,10 @@ public:
                 {
                     if (SkillLineEntry const* skillLine = sSkillLineStore.LookupEntry(skill))
                     {
-                        if (player->HasSkill(skillLine->id)) // FIX: Use `id` instead of `ID`
+                        if (player->HasSkill(skillLine->id))
                         {
                             uint32 maxSkill = player->GetMaxSkillValue(skillLine->id);
-                            player->SetSkill(skillLine->id, maxSkill);
+                            player->SetSkill(skillLine->id, maxSkill, maxSkill);
                         }
                     }
                 }
@@ -1405,7 +1404,7 @@ public:
                 break;
 
             case 6: // Add 2,000 Honor Points
-                player->ModifyHonorPoints(2000);  // FIX: Removed second argument
+                player->ModifyHonorPoints(2000);
                 player->GetSession()->SendAreaTriggerMessage("You have gained 2,000 honor points.");
                 break;
 
@@ -1423,7 +1422,7 @@ public:
         player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 100 Honor Kills", GOSSIP_SENDER_MAIN, 5);
         player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Add 2000 Honor Points", GOSSIP_SENDER_MAIN, 6);
         player->PlayerTalkClass->AddGossipItem(GOSSIP_ICON_CHAT, "Close Menu", GOSSIP_SENDER_MAIN, 999);
-        player->PlayerTalkClass->SendGossipMenu(1, player->GetGUID(), item->GetGUID());
+        player->PlayerTalkClass->SendGossipMenu(1, player);
     }
     
 };
