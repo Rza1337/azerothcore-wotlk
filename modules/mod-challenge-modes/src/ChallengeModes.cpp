@@ -1385,10 +1385,7 @@ public:
                 if (isBonusCharacter && player->GetLevel() < 59)
                 {
                     amount *= 15; // Apply XP bonus
-                    for (uint32 i = 0; i < 15; ++i)
-                    {
-                        player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, victimEntry, 1, victim);
-                    }
+                    player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, victimEntry, 15, victim);
                 }
             }
             else
