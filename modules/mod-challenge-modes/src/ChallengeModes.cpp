@@ -18,9 +18,6 @@
 #include "AchievementMgr.h"
 #include "Spell.h"
 
-#define ALLIANCE_NPC_ID 2879
-#define HORDE_NPC_ID 10088
-
 using namespace Acore::ChatCommands;
 
 ChallengeModes::ChallengeModes() 
@@ -1170,11 +1167,11 @@ public:
     bool CanSendAuctionHello(WorldSession const* session, ObjectGuid guid, Creature* creature) override
     {
         if (!session || !creature)
-            return false;
+            return true;
 
         Player* player = session->GetPlayer();
         if (!player || !sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
-            return false;
+            return true;
 
         // Example condition: Block all players from accessing Auctioneers
         ChatHandler(player->GetSession()).SendSysMessage("You are not allowed to access the Auction House.");
