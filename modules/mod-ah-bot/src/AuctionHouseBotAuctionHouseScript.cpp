@@ -201,8 +201,6 @@ void AHBot_AuctionHouseScript::OnAuctionRemove(AuctionHouseObject* /*ah*/, Aucti
     // Decrements
     //
 
-    ItemTemplate const* prototype = sObjectMgr->GetItemTemplate(auction->item_template);
-
     if (config->DebugOut)
     {
         LOG_INFO("module", "AHBot: ah={}, item={}, count={}", auction->GetHouseId(), auction->item_template, config->GetItemCounts(prototype->Quality));
