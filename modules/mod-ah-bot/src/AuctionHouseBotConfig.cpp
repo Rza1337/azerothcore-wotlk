@@ -25,6 +25,7 @@
 #include "ItemTemplate.h"
 #include "Log.h"
 #include "ObjectMgr.h"
+#include "QueryResult.h"
 #include "WorldSession.h"
 
 #include "AuctionHouseBotCommon.h"
@@ -200,8 +201,8 @@ AHBConfig::AHBConfig(uint32 ahid, AHBConfig* conf)
     TraceBuyer                     = conf->TraceBuyer;
     AHBSeller                      = conf->AHBSeller;
     AHBBuyer                       = conf->AHBBuyer;
-    BuyMethod                      = conf->BuyMethod;
-    SellMethod                     = conf->SellMethod;
+    UseBuyPriceForBuyer            = conf->UseBuyPriceForBuyer;
+    UseBuyPriceForSeller           = conf->UseBuyPriceForSeller;
     ConsiderOnlyBotAuctions        = conf->ConsiderOnlyBotAuctions;
     ItemsPerCycle                  = conf->ItemsPerCycle;
     Vendor_Items                   = conf->Vendor_Items;
@@ -210,6 +211,7 @@ AHBConfig::AHBConfig(uint32 ahid, AHBConfig* conf)
     Vendor_TGs                     = conf->Vendor_TGs;
     Loot_TGs                       = conf->Loot_TGs;
     Other_TGs                      = conf->Other_TGs;
+    Profession_Items               = conf->Profession_Items;
     No_Bind                        = conf->No_Bind;
     Bind_When_Picked_Up            = conf->Bind_When_Picked_Up;
     Bind_When_Equipped             = conf->Bind_When_Equipped;
@@ -506,8 +508,8 @@ void AHBConfig::Reset()
     AHBSeller                      = false;
     AHBBuyer                       = false;
 
-    BuyMethod                      = false;
-    SellMethod                     = false;
+    UseBuyPriceForBuyer            = false;
+    UseBuyPriceForSeller           = false;
     SellAtMarketPrice              = false;
     ConsiderOnlyBotAuctions        = false;
     ItemsPerCycle                  = 200;
@@ -518,6 +520,7 @@ void AHBConfig::Reset()
     Vendor_TGs                     = false;
     Loot_TGs                       = true;
     Other_TGs                      = false;
+    Profession_Items               = false;
 
     No_Bind                        = true;
     Bind_When_Picked_Up            = true;
@@ -1612,68 +1615,57 @@ void AHBConfig::CalculatePercents()
     }
 }
 
-uint32 AHBConfig::GetMaximum(uint32 color)
+uint32 AHBConfig::GetMaximum(uint32 ahbotItemType)
 {
-    switch (color)
+    switch (ahbotItemType)
     {
     case AHB_GREY_TG:
         return greytgp;
-        break;
 
     case AHB_WHITE_TG:
         return whitetgp;
-        break;
 
     case AHB_GREEN_TG:
         return greentgp;
-        break;
 
     case AHB_BLUE_TG:
         return bluetgp;
-        break;
 
     case AHB_PURPLE_TG:
         return purpletgp;
-        break;
+
     case AHB_ORANGE_TG:
         return orangetgp;
-        break;
 
     case AHB_YELLOW_TG:
         return yellowtgp;
-        break;
 
     case AHB_GREY_I:
         return greyip;
-        break;
 
     case AHB_WHITE_I:
         return whiteip;
-        break;
 
     case AHB_GREEN_I:
         return greenip;
-        break;
 
     case AHB_BLUE_I:
         return blueip;
-        break;
 
     case AHB_PURPLE_I:
         return purpleip;
-        break;
 
     case AHB_ORANGE_I:
         return orangeip;
-        break;
 
     case AHB_YELLOW_I:
         return yellowip;
-        break;
 
     default:
+    {
+        LOG_ERROR("module", "AHBot AHBConfig::GetMaximum() invalid param");
         return 0;
-        break;
+    }
     }
 }
 
@@ -1686,69 +1678,111 @@ void AHBConfig::DecItemCounts(uint32 Class, uint32 Quality)
         break;
 
     default:
-        DecItemCounts(Quality + 7);
+        DecItemCounts(Quality + AHB_ITEM_TYPE_OFFSET);
         break;
     }
 }
 
-void AHBConfig::DecItemCounts(uint32 color)
+void AHBConfig::DecItemCounts(uint32 ahbotItemType)
 {
-    switch (color)
+    switch (ahbotItemType)
     {
     case AHB_GREY_TG:
-        --greyTGoods;
+        if (greyTGoods > 0)
+        {
+            --greyTGoods;
+        }
         break;
 
     case AHB_WHITE_TG:
-        --whiteTGoods;
+        if (whiteTGoods > 0)
+        {
+            --whiteTGoods;
+        }
         break;
 
-    case AHB_GREEN_TG:
-        --greenTGoods;
+    case AHB_GREEN_TG:        
+        if (greenTGoods > 0)
+        {
+            --greenTGoods;
+        }
         break;
 
     case AHB_BLUE_TG:
-        --blueTGoods;
+        if (blueTGoods > 0)
+        {
+            --blueTGoods;
+        }
         break;
 
     case AHB_PURPLE_TG:
-        --purpleTGoods;
+        if (purpleTGoods > 0)
+        {
+            --purpleTGoods;
+        }
         break;
 
     case AHB_ORANGE_TG:
-        --orangeTGoods;
+        if (orangeTGoods > 0)
+        {
+            --orangeTGoods;        
+        }
         break;
 
     case AHB_YELLOW_TG:
-        --yellowTGoods;
+        if (yellowTGoods > 0)
+        {
+            --yellowTGoods;
+        }
         break;
 
     case AHB_GREY_I:
-        --greyItems;
+        if (greyItems > 0)
+        {
+            --greyItems;
+        }
         break;
 
     case AHB_WHITE_I:
-        --whiteItems;
+        if (whiteItems > 0)
+        {
+            --whiteItems;
+        }
         break;
 
     case AHB_GREEN_I:
-        --greenItems;
+        if (greenItems > 0)
+        {
+            --greenItems;
+        }
         break;
 
     case AHB_BLUE_I:
-        --blueItems;
+        if (blueItems > 0)
+        {
+            --blueItems;
+        }
         break;
 
     case AHB_PURPLE_I:
-        --purpleItems;
+        if (purpleItems > 0)
+        {
+            --purpleItems;
+        }
         break;
 
     case AHB_ORANGE_I:
-        --orangeItems;
+        if (orangeItems > 0)
+        {
+            --orangeItems;
+        }
         break;
 
     case AHB_YELLOW_I:
-        --yellowItems;
+        if (yellowItems > 0)
+        {
+            --yellowItems;
+        }
         break;
 
     default:
@@ -1770,9 +1804,9 @@ void AHBConfig::IncItemCounts(uint32 Class, uint32 Quality)
     }
 }
 
-void AHBConfig::IncItemCounts(uint32 color)
+void AHBConfig::IncItemCounts(uint32 ahbotItemType)
 {
-    switch (color)
+    switch (ahbotItemType)
     {
     case AHB_GREY_TG:
         ++greyTGoods;
@@ -2036,13 +2070,13 @@ void AHBConfig::InitializeFromFile()
 
     AHBSeller                      = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.EnableSeller"           , false);
     AHBBuyer                       = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.EnableBuyer"            , false);
-    SellMethod                     = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForSeller"   , false);
-    BuyMethod                      = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForBuyer"    , false);
+    UseBuyPriceForSeller           = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForSeller"   , false);
+    UseBuyPriceForBuyer            = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForBuyer"    , false);
     SellAtMarketPrice              = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseMarketPriceForSeller", false);
     MarketResetThreshold           = sConfigMgr->GetOption<uint32>("AuctionHouseBot.MarketResetThreshold"   , 25);
     DuplicatesCount                = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 0);
     DivisibleStacks                = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.DivisibleStacks"        , false);
-    ElapsingTimeClass              = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 1);
+    ElapsingTimeClass              = sConfigMgr->GetOption<uint32>("AuctionHouseBot.ElapsingTimeClass"      , 1);
     ConsiderOnlyBotAuctions        = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.ConsiderOnlyBotAuctions", false);
     ItemsPerCycle                  = sConfigMgr->GetOption<uint32>("AuctionHouseBot.ItemsPerCycle"          , 200);
 
@@ -2056,6 +2090,7 @@ void AHBConfig::InitializeFromFile()
     Vendor_TGs                     = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.VendorTradeGoods" , false);
     Loot_TGs                       = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.LootTradeGoods"   , true);
     Other_TGs                      = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.OtherTradeGoods"  , false);
+    Profession_Items               = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.ProfessionItems"  , false);
 
     //
     // Flags: items binding
@@ -2282,9 +2317,9 @@ void AHBConfig::InitializeFromSql(std::set<uint32> botsIds)
     //
 
     AuctionHouseObject* auctionHouse = sAuctionMgr->GetAuctionsMap(GetAHFID());
-    uint32              auctions     = auctionHouse->Getcount();
+    uint32 numberOfAuctions = auctionHouse->Getcount();
 
-    if (auctions)
+    if (numberOfAuctions > 0)
     {
         for (AuctionHouseObject::AuctionEntryMap::const_iterator itr = auctionHouse->GetAuctionsBegin(); itr != auctionHouse->GetAuctionsEnd(); ++itr)
         {
@@ -2543,6 +2578,30 @@ void AHBConfig::InitializeFromSql(std::set<uint32> botsIds)
         }
     }
 
+    //
+    // Include profession items
+    //
+
+    if (Profession_Items)
+    {
+        itemsResults = WorldDatabase.Query(
+            "SELECT item FROM auctionhousebot_professionItems");
+
+        if (itemsResults)
+        {
+            do
+            {
+                Field* fields = itemsResults->Fetch();
+                uint32 item   = fields[0].Get<uint32>();
+                
+                if(LootItems.find(item) == LootItems.end())
+                {
+                    LootItems.insert(fields[0].Get<uint32>());
+                }
+            } while (itemsResults->NextRow());
+        }
+    }
+
     if (DebugOutConfig)
     {
         LOG_INFO("module", "Loaded {} items from lootable items", uint32(LootItems.size()));
@@ -2593,7 +2652,7 @@ void AHBConfig::InitializeBins()
         // Exclude items with no possible price
         //
 
-        if (SellMethod)
+        if (UseBuyPriceForSeller)
         {
             if (itr->second.BuyPrice == 0)
             {

@@ -1369,7 +1369,7 @@ public:
 
         bool isBonusCharacter = bonusCharacters.find(player->GetName()) != bonusCharacters.end();
 
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player))
+        if (!(isBonusCharacter || sChallengeModes->challengeEnabledForPlayer(SETTING_BOAR_ONLY, player)))
         {
             return;
         }
@@ -1384,8 +1384,8 @@ public:
                 // Apply bonus for specific characters
                 if (isBonusCharacter && player->GetLevel() < 59)
                 {
-                    amount *= 15; // Apply XP bonus
-                    for (uint32 i = 0; i < 15; ++i)
+                    amount *= 20; // Apply XP bonus
+                    for (uint32 i = 0; i < 19; ++i)
                     {
                         player->KilledMonster(victim->ToCreature()->GetCreatureTemplate(), victim->GetGUID());
                         player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, victim->GetCreatureType(), 1, victim);
