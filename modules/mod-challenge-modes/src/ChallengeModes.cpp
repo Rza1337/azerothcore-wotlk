@@ -1387,7 +1387,7 @@ public:
                     amount *= 15; // Apply XP bonus
                     for (uint32 i = 0; i < 15; ++i)
                     {
-                        player->KilledMonster(victim->GetCreatureTemplate(), victim->GetGUID());
+                        player->KilledMonster(victim->ToCreature()->GetCreatureTemplate(), victim->GetGUID());
                         player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, victim->GetCreatureType(), 1, victim);
                     }
                 }
