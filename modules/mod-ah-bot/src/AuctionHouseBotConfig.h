@@ -156,9 +156,6 @@ private:
 
     std::set<uint32> getCommaSeparatedIntegers(std::string text);
 
-    void DecItemCounts(uint32 ahbotItemType);
-    void IncItemCounts(uint32 ahbotItemType);
-
 public:
     //
     // Debugging
@@ -183,8 +180,8 @@ public:
 
     bool   AHBSeller;
     bool   AHBBuyer;
-    bool   UseBuyPriceForBuyer;
-    bool   UseBuyPriceForSeller;
+    bool   BuyMethod;
+    bool   SellMethod;
     bool   SellAtMarketPrice;
     uint32 MarketResetThreshold;
     bool   ConsiderOnlyBotAuctions;
@@ -200,7 +197,6 @@ public:
     bool   Vendor_TGs;
     bool   Loot_TGs;
     bool   Other_TGs;
-    bool   Profession_Items;
 
     bool   No_Bind;
     bool   Bind_When_Picked_Up;
@@ -346,13 +342,13 @@ public:
     uint32 GetBidsPerInterval();
 
     void   CalculatePercents ();
-    // max number of items of type in AH based on maxItems
-    uint32 GetMaximum        (uint32 ahbotItemType);
-    
+    uint32 GetMaximum        (uint32 color);
+
     void   DecItemCounts     (uint32 Class, uint32 Quality);
+    void   DecItemCounts     (uint32 color);
 
     void   IncItemCounts     (uint32 Class, uint32 Quality);
-
+    void   IncItemCounts     (uint32 color);
 
     void   ResetItemCounts   ();
     uint32 TotalItemCounts   ();

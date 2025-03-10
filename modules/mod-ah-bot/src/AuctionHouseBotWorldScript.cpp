@@ -13,10 +13,7 @@
 // Initialization of the bot during the world startup
 // =============================================================================
 
-AHBot_WorldScript::AHBot_WorldScript() : WorldScript("AHBot_WorldScript", {
-    WORLDHOOK_ON_BEFORE_CONFIG_LOAD,
-    WORLDHOOK_ON_STARTUP
-})
+AHBot_WorldScript::AHBot_WorldScript() : WorldScript("AHBot_WorldScript")
 {
 
 }
