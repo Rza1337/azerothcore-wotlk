@@ -1180,7 +1180,7 @@ public:
     
 };
 
-class SelfMadeMailboxBlocker : public GameObjectScript("SelfMadeMailboxBlocker")
+class SelfMadeMailboxBlocker : public GameObjectScript
 {
 public:
     SelfMadeMailboxBlocker() : GameObjectScript("SelfMadeMailboxBlocker") {}
@@ -1189,7 +1189,7 @@ public:
     {
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            player->GetSession()->SendNotification("You cannot use the mailbox while in Self Made mode.");
+            ChatHandler(player->GetSession()).SendSysMessage("You cannot use the mailbox while in Self Made mode.");
             return false; // Prevent interaction with the mailbox
         }
         return true; // Allow interaction if not in Self Made mode
