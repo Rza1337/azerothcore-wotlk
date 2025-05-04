@@ -1180,21 +1180,34 @@ public:
     
 };
 
-class SelfMadeMailboxBlocker : public GameObjectScript
+class SelfMadePhaseRemover : public PlayerScript
 {
 public:
-    SelfMadeMailboxBlocker() : GameObjectScript("SelfMadeMailboxBlocker") {}
+    SelfMadePhaseRemover() : PlayerScript("SelfMadePhaseRemover") {}
 
-    bool OnGossipHello(Player* player, GameObject* go) override
+    void OnLogin(Player* player) override
+    {
+        ApplyPhaseRestrictions(player);
+    }
+
+    void OnMapChanged(Player* player) override
+    {
+        ApplyPhaseRestrictions(player);
+    }
+
+    void ApplyPhaseRestrictions(Player* player)
     {
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            ChatHandler(player->GetSession()).SendSysMessage("You cannot use the mailbox while in Self Made mode.");
-            return false; // Prevent interaction with the mailbox
+            // Remove phase 9200 so they can't see mailboxes
+            player->RemovePhase(9200);
         }
-        return true; // Allow interaction if not in Self Made mode
+        else
+        {
+            // Ensure regular players have phase 9200
+            player->AddPhase(9200);
+        }
     }
-
 };
 
 class SelfMadeGuildRestriction : public GuildScript
@@ -1928,7 +1941,7 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_Repairless();
     new ChallengeMode_Selfmade();
     new SelfMadePreventAuctionInteraction();
-    new SelfMadeMailboxBlocker();
+    new SelfMadePhaseRemover();
     new SelfMadeGuildRestriction();
     new ChallengeMode_LonerMode();
     new LonerGuildRestriction();
