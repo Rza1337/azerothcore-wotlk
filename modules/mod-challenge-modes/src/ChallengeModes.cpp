@@ -1180,21 +1180,19 @@ public:
     
 };
 
-class SelfMadeMailRestriction : public MailScript
+class SelfMadeMailboxBlocker : public GameObjectScript("SelfMadeMailboxBlocker")
 {
 public:
-    SelfMadeMailRestriction() : MailScript("SelfMadeMailRestriction") {}
+    SelfMadeMailboxBlocker() : GameObjectScript("SelfMadeMailboxBlocker") {}
 
-    void OnBeforeMailDraftSendMailTo (MailDraft* mailDraft, MailReceiver const& receiver, MailSender const& sender, MailCheckMask& checked, uint32& deliver_delay, uint32& custom_expiration, bool& deleteMailItemsFromDB, bool& sendMail) override
+    bool OnGossipHello(Player* player, GameObject* go) override
     {
-        // Check if receiver.GetPlayer() returns a valid player pointer
-        if (Player* player = receiver.GetPlayer())
+        if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player)) {
-                sendMail = false; // Prevent sending the mail
-                return;
-            }
+            player->GetSession()->SendNotification("You cannot use the mailbox while in Self Made mode.");
+            return false; // Prevent interaction with the mailbox
         }
+        return true; // Allow interaction if not in Self Made mode
     }
 
 };
@@ -1930,7 +1928,7 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_Repairless();
     new ChallengeMode_Selfmade();
     new SelfMadePreventAuctionInteraction();
-    new SelfMadeMailRestriction();
+    new SelfMadeMailboxBlocker();
     new SelfMadeGuildRestriction();
     new ChallengeMode_LonerMode();
     new LonerGuildRestriction();

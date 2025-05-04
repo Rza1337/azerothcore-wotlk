@@ -30,7 +30,17 @@ public:
 
         auto leechAmount = sConfigMgr->GetOption<float>("Leech.Amount", 0.05f);
         auto bp1 = static_cast<int32>(leechAmount * float(damage));
-        player->CastCustomSpell(attacker, SPELL_HEAL, &bp1, nullptr, nullptr, true);
+
+        if (isPet) {
+            uint32 hp = player->GetHealth();
+
+            if(hp + bp1 > player->GetMaxHealth())
+                bp1 = player->GetMaxHealth() - hp;
+                
+            player->SetHealth(player->GetHealth() + bp1);
+        } else {
+            player->CastCustomSpell(attacker, SPELL_HEAL, &bp1, nullptr, nullptr, true);
+        }
     }
 };
 
