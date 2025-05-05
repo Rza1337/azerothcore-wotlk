@@ -1610,6 +1610,7 @@ public:
                 return;
             }
             damage = 0;
+            player.setlevel
             ChatHandler(player->GetSession()).PSendSysMessage("Pacifists cannot deal damage.");
         }
     }
@@ -1702,6 +1703,21 @@ public:
 
 };
 
+class BoostTracker : public PlayerScript
+{
+public:
+    BoostTracker() : PlayerScript("BoostTracker") { }
+
+    void OnPlayerDelete(ObjectGuid guid, uint32 accountId) override
+    {
+        CharacterDatabase.PExecute(
+            "DELETE FROM boosted_characters WHERE guid = %u AND account_id = %u",
+            guid.GetCounter(), accountId
+        );
+    }
+};
+
+
 class gobject_challenge_modes : public GameObjectScript
 {
 private:
@@ -1729,6 +1745,7 @@ public:
 
     bool OnGossipHello(Player* player, GameObject* go) override
     {
+        AddGossipItemFor(player, GOSSIP_ICON_INTERACT_1, "Use my one-time boost to level 58.", 0, 9000);
         if (sChallengeModes->challengeEnabled(SETTING_IRON_MAN) && !playerSettingEnabled(player, SETTING_IRON_MAN) && !playerSettingEnabled(player, SETTING_SELF_CRAFTED) && !playerSettingEnabled(player, SETTING_SELFMADE) && !playerSettingEnabled(player, SETTING_HARDCORE)  && !playerSettingEnabled(player, SETTING_SEMI_HARDCORE)  && !playerSettingEnabled(player, SETTING_ITEM_QUALITY_LEVEL))
         {
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Enable Iron Man Mode", 0, SETTING_IRON_MAN);
@@ -1812,6 +1829,50 @@ public:
                 guild->DeleteMember(player->GetGUID());
             }
         }
+
+        if (action == 9000)
+        {
+            uint32 accountId = player->GetSession()->GetAccountId();
+            uint32 guid = player->GetGUIDLow();
+
+            // Check if this account has already boosted a different character
+            QueryResult result = CharacterDatabase.PQuery(
+                "SELECT guid FROM boosted_characters WHERE account_id = %u", accountId
+            );
+
+            if (result)
+            {
+                Field* fields = result->Fetch();
+                uint32 existingGuid = fields[0].GetUInt32();
+
+                if (existingGuid != guid)
+                {
+                    ChatHandler(player->GetSession()).SendSysMessage("This account has already used its one-time boost on another character.");
+                    ChatHandler(player->GetSession()).SendSysMessage("You must delete the other boosted character in order to boost a new one.");
+                    player->CLOSE_GOSSIP_MENU();
+                    return true;
+                }
+            }
+
+            // Apply boost to level 58
+            player->GiveLevel(58);
+            player->InitTalentForLevel(); // Ensure talents are scaled
+
+            // OPTIONAL: Equip green gear, spells, mounts, etc.
+
+            // Save boosted character to DB
+            CharacterDatabase.PExecute(
+                "INSERT INTO boosted_characters (account_id, guid) VALUES (%u, %u) "
+                "ON DUPLICATE KEY UPDATE guid = VALUES(guid)",
+                accountId, guid
+            );
+
+            // Send them to the portal zone
+            ChatHandler(player->GetSession()).SendSysMessage("You have been boosted to level 58.");
+            player->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+
         ChatHandler(player->GetSession()).PSendSysMessage("Challenge enabled.");
         CloseGossipMenuFor(player);
         return true;
@@ -1953,4 +2014,5 @@ void AddSC_mod_challenge_modes()
     new ChallengeMode_LonerMode();
     new LonerGuildRestriction();
     new Challenge_CommandScript();
+    new BoostTracker();
 }
