@@ -1707,7 +1707,7 @@ class BoostTracker : public PlayerScript
 public:
     BoostTracker() : PlayerScript("BoostTracker") { }
 
-    void OnPlayerDelete(ObjectGuid guid, uint32 accountId) override
+    void OnDelete(ObjectGuid guid, uint32 accountId) override
     {
         CharacterDatabase.Execute(
             Acore::StringFormat("DELETE FROM boosted_characters WHERE guid = {} AND account_id = {}", guid.GetCounter(), accountId)
@@ -1831,7 +1831,7 @@ public:
         if (action == 9000)
         {
             uint32 accountId = player->GetSession()->GetAccountId();
-            uint32 guid = player->GetGUID().getCounter();
+            uint32 guid = player->GetGUID().GetCounter();
 
             // Check if this account has already boosted a different character
             QueryResult result = CharacterDatabase.Query(
@@ -1841,7 +1841,7 @@ public:
             if (result)
             {
                 Field* fields = result->Fetch();
-                uint32 existingGuid = fields[0].GetUInt32();
+                uint32 existingGuid = fields[0].Get<uint32>();
 
                 if (existingGuid != guid)
                 {
