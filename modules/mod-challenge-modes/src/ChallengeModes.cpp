@@ -1814,19 +1814,6 @@ public:
 
     bool OnGossipSelect(Player* player, GameObject* /*go*/, uint32 /*sender*/, uint32 action) override
     {
-        player->UpdatePlayerSetting("mod-challenge-modes", action, 1);
-        if ( action == SETTING_CASHLESS ) {
-            player->SetMoney(0);
-        }
-        if ( action == SETTING_SELFMADE ) {
-            DeleteAllItemsForPlayer(player);
-            DeleteHighQualityItems(player);
-            player->SetMoney(0);
-            Guild* guild = player->GetGuild();
-            if(guild) {
-                guild->DeleteMember(player->GetGUID());
-            }
-        }
 
         if (action == 9000)
         {
@@ -1869,6 +1856,20 @@ public:
             ChatHandler(player->GetSession()).SendSysMessage("You have been boosted to level 58.");
             CloseGossipMenuFor(player);
             return true;
+        }
+
+        player->UpdatePlayerSetting("mod-challenge-modes", action, 1);
+        if ( action == SETTING_CASHLESS ) {
+            player->SetMoney(0);
+        }
+        if ( action == SETTING_SELFMADE ) {
+            DeleteAllItemsForPlayer(player);
+            DeleteHighQualityItems(player);
+            player->SetMoney(0);
+            Guild* guild = player->GetGuild();
+            if(guild) {
+                guild->DeleteMember(player->GetGUID());
+            }
         }
 
         ChatHandler(player->GetSession()).PSendSysMessage("Challenge enabled.");
