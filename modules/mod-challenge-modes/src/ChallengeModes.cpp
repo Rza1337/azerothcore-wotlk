@@ -1199,13 +1199,13 @@ public:
     {
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            // Remove phase 9200 so they can't see mailboxes
-            player->RemovePhase(9200);
+            // Remove phase 131072 so they can't see mailboxes
+            player->RemovePhase(131072);
         }
         else
         {
-            // Ensure regular players have phase 9200
-            player->AddPhase(9200);
+            // Ensure regular players have phase 131072
+            player->AddPhase(131072);
         }
     }
 };
