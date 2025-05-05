@@ -1709,9 +1709,11 @@ public:
 
     void OnDelete(ObjectGuid guid, uint32 accountId) override
     {
-        CharacterDatabase.Execute(
-            Acore::StringFormat("DELETE FROM boosted_characters WHERE guid = {} AND account_id = {}", guid.GetCounter(), accountId)
-        );
+        std::string deleteQuery =
+        "DELETE FROM boosted_characters WHERE guid = " + std::to_string(guid.GetCounter()) +
+        " AND account_id = " + std::to_string(accountId);
+    
+        CharacterDatabase.Execute(deleteQuery);
     }
 };
 
@@ -1821,9 +1823,8 @@ public:
             uint32 guid = player->GetGUID().GetCounter();
 
             // Check if this account has already boosted a different character
-            QueryResult result = CharacterDatabase.Query(
-                "SELECT guid FROM boosted_characters WHERE account_id = %u", accountId
-            );
+            std::string query = "SELECT guid FROM boosted_characters WHERE account_id = " + std::to_string(accountId);
+            QueryResult result = CharacterDatabase.Query(query);            
 
             if (result)
             {
@@ -1846,11 +1847,13 @@ public:
             // OPTIONAL: Equip green gear, spells, mounts, etc.
 
             // Save boosted character to DB
-            CharacterDatabase.Execute(
-                "INSERT INTO boosted_characters (account_id, guid) VALUES (%u, %u) "
-                "ON DUPLICATE KEY UPDATE guid = VALUES(guid)",
-                accountId, guid
-            );
+            std::string insertQuery =
+            "INSERT INTO boosted_characters (account_id, guid) VALUES (" +
+            std::to_string(accountId) + ", " + std::to_string(guid) + ") " +
+            "ON DUPLICATE KEY UPDATE guid = VALUES(guid)";
+        
+            CharacterDatabase.Execute(insertQuery);
+        
 
             // Send them to the portal zone
             ChatHandler(player->GetSession()).SendSysMessage("You have been boosted to level 58.");
