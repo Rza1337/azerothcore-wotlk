@@ -1195,19 +1195,26 @@ public:
         ApplyPhaseRestrictions(player);
     }
 
-    void ApplyPhaseRestrictions(Player* player)
+    static constexpr uint32 MAILBOX_PHASE = 131072;
+
+    void UpdateMailboxPhase(Player* player)
     {
+        uint32 current = player->GetPhaseMask();
+    
         if (sChallengeModes->challengeEnabledForPlayer(SETTING_SELFMADE, player))
         {
-            // Remove phase 131072 so they can't see mailboxes
-            player->RemovePhase(131072);
+            // Remove mailbox phase
+            current &= ~MAILBOX_PHASE;
         }
         else
         {
-            // Ensure regular players have phase 131072
-            player->AddPhase(131072);
+            // Add mailbox phase
+            current |= MAILBOX_PHASE;
         }
+    
+        player->SetPhaseMask(current, true);
     }
+    
 };
 
 class SelfMadeGuildRestriction : public GuildScript
