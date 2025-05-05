@@ -1197,7 +1197,7 @@ public:
 
     static constexpr uint32 MAILBOX_PHASE = 131072;
 
-    void UpdateMailboxPhase(Player* player)
+    void ApplyPhaseRestrictions(Player* player)
     {
         uint32 current = player->GetPhaseMask();
     
@@ -1214,7 +1214,7 @@ public:
     
         player->SetPhaseMask(current, true);
     }
-    
+
 };
 
 class SelfMadeGuildRestriction : public GuildScript
