@@ -1710,9 +1710,8 @@ public:
 
     void OnPlayerDelete(ObjectGuid guid, uint32 accountId) override
     {
-        CharacterDatabase.PExecute(
-            "DELETE FROM boosted_characters WHERE guid = %u AND account_id = %u",
-            guid.GetCounter(), accountId
+        CharacterDatabase.Execute(
+            Acore::StringFormat("DELETE FROM boosted_characters WHERE guid = {} AND account_id = {}", guid.GetCounter(), accountId)
         );
     }
 };
@@ -1833,10 +1832,10 @@ public:
         if (action == 9000)
         {
             uint32 accountId = player->GetSession()->GetAccountId();
-            uint32 guid = player->GetGUIDLow();
+            uint32 guid = player->GetGUID().getCounter();
 
             // Check if this account has already boosted a different character
-            QueryResult result = CharacterDatabase.PQuery(
+            QueryResult result = CharacterDatabase.Query(
                 "SELECT guid FROM boosted_characters WHERE account_id = %u", accountId
             );
 
@@ -1849,7 +1848,7 @@ public:
                 {
                     ChatHandler(player->GetSession()).SendSysMessage("This account has already used its one-time boost on another character.");
                     ChatHandler(player->GetSession()).SendSysMessage("You must delete the other boosted character in order to boost a new one.");
-                    player->CLOSE_GOSSIP_MENU();
+                    CloseGossipMenuFor(player);
                     return true;
                 }
             }
@@ -1861,7 +1860,7 @@ public:
             // OPTIONAL: Equip green gear, spells, mounts, etc.
 
             // Save boosted character to DB
-            CharacterDatabase.PExecute(
+            CharacterDatabase.Execute(
                 "INSERT INTO boosted_characters (account_id, guid) VALUES (%u, %u) "
                 "ON DUPLICATE KEY UPDATE guid = VALUES(guid)",
                 accountId, guid
@@ -1869,7 +1868,7 @@ public:
 
             // Send them to the portal zone
             ChatHandler(player->GetSession()).SendSysMessage("You have been boosted to level 58.");
-            player->CLOSE_GOSSIP_MENU();
+            CloseGossipMenuFor(player);
             return true;
         }
 
