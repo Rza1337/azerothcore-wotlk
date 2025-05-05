@@ -1610,7 +1610,6 @@ public:
                 return;
             }
             damage = 0;
-            player.setlevel
             ChatHandler(player->GetSession()).PSendSysMessage("Pacifists cannot deal damage.");
         }
     }
