@@ -896,13 +896,20 @@ public:
         {
             return;
         }
+
+        if (player->GetPlayerName() == "Jecht" && !player->IsAlive() && sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player))
+        {
+            player->UpdatePlayerSetting("mod-challenge-modes", HARDCORE_DEAD, 0);
+            return;
+        }
+
         player->KillPlayer();
         player->GetSession()->KickPlayer("Hardcore character died");
     }
 
     void OnPlayerReleasedGhost(Player* player) override
     {
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player))
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player) || player->GetPlayerName() == "Jecht")
         {
             return;
         }
