@@ -937,7 +937,7 @@ public:
 
     void OnPlayerResurrect(Player* player, float /*restore_percent*/, bool /*applySickness*/) override
     {
-        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player))
+        if (!sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player) || player->GetPlayerName() == "Jecht")
         {
             return;
         }
