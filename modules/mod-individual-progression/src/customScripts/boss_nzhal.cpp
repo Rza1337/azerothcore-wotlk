@@ -47,6 +47,20 @@ public:
         uint8 interruptedHeads = 0;
         bool headCasting = false;
 
+        std::list<Player*> GetAllPlayersInInstance()
+        {
+            std::list<Player*> playerList;
+            Map::PlayerList const& players = me->GetMap()->GetPlayers();
+
+            for (Map::PlayerList::const_iterator itr = players.begin(); itr != players.end(); ++itr)
+            {
+                if (Player* player = itr->GetSource())
+                    if (player->IsAlive() && player->GetDistance(me) <= 100.0f)
+                        playerList.push_back(player);
+            }
+            return playerList;
+        }
+
         void Reset() override
         {
             events.Reset();
@@ -63,8 +77,7 @@ public:
 
         void DoCrescendo()
         {
-            std::list<Player*> players;
-            GetPlayerListInGrid(players, me, 100.0f);
+            std::list<Player*> players = GetAllPlayersInInstance();
 
             switch (interruptedHeads)
             {
@@ -122,8 +135,7 @@ public:
                     headCasting = true;
                     currentHead++;
 
-                    std::list<Player*> players;
-                    GetPlayerListInGrid(players, me, 100.0f);
+                    std::list<Player*> players = GetAllPlayersInInstance();
 
                     switch (currentHead)
                     {
