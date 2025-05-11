@@ -3,8 +3,14 @@
 
 enum Spells
 {
-    SPELL_SHADOW_BOLT = 9613,    // Example spell
-    SPELL_ENRAGE      = 8599     // Generic enrage
+    SPELL_SHADOW_BOLT = 9613,
+    SPELL_ENRAGE = 8599
+};
+
+enum Events
+{
+    EVENT_SHADOW_BOLT = 1,
+    EVENT_ENRAGE = 2
 };
 
 class boss_nzhal : public CreatureScript
@@ -16,39 +22,54 @@ public:
     {
         boss_nzhalAI(Creature* creature) : ScriptedAI(creature) { }
 
+        EventMap events;
+        bool enraged;
+
         void Reset() override
         {
-            shadowBoltTimer = 5s;
+            events.Reset();
             enraged = false;
+            events.ScheduleEvent(EVENT_SHADOW_BOLT, 5000);
+            events.ScheduleEvent(EVENT_ENRAGE, 1000);
         }
 
-        void EnterCombat(Unit* /*who*/) override { }
+        void JustEngagedWith(Unit* who) override
+        {
+            me->CallForHelp(60.0f);
+        }
 
         void UpdateAI(uint32 diff) override
         {
             if (!UpdateVictim())
                 return;
 
-            if (shadowBoltTimer <= 0s)
-            {
-                DoCastVictim(SPELL_SHADOW_BOLT);
-                shadowBoltTimer = 5s;
-            }
-            else
-                shadowBoltTimer -= diff;
+            events.Update(diff);
 
-            if (!enraged && me->HealthBelowPct(30))
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            switch (events.ExecuteEvent())
             {
-                DoCast(me, SPELL_ENRAGE);
-                enraged = true;
+                case EVENT_SHADOW_BOLT:
+                    DoCastVictim(SPELL_SHADOW_BOLT);
+                    events.ScheduleEvent(EVENT_SHADOW_BOLT, 5000);
+                    break;
+
+                case EVENT_ENRAGE:
+                    if (!enraged && me->HealthBelowPct(30))
+                    {
+                        DoCast(me, SPELL_ENRAGE);
+                        enraged = true;
+                    }
+                    else
+                    {
+                        events.ScheduleEvent(EVENT_ENRAGE, 1000);
+                    }
+                    break;
             }
 
             DoMeleeAttackIfReady();
         }
-
-    private:
-        Time shadowBoltTimer;
-        bool enraged;
     };
 
     CreatureAI* GetAI(Creature* creature) const override
