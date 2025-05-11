@@ -1,14 +1,16 @@
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
+#include "Player.h"
+#include "SpellAuraEffects.h"
 
 enum Spells
 {
-    SPELL_VERSE_1 = 70011, // Armor debuff (tank killer)
-    SPELL_VERSE_2 = 70012, // Reflect damage (DPS punisher)
-    SPELL_VERSE_3 = 70013, // Healing = damage (healer trap)
-    SPELL_CRESCENDO = 70014, // AoE scaling effect
-    SPELL_CRESCENDO_DOT = 70015, // Lingering DOT
-    SPELL_SUMMON_ECHO = 70016, // Summon Twisted Echo
+    SPELL_VERSE_1 = 70011,
+    SPELL_VERSE_2 = 70012,
+    SPELL_VERSE_3 = 70013,
+    SPELL_CRESCENDO = 70014,
+    SPELL_CRESCENDO_DOT = 70015,
+    SPELL_SUMMON_ECHO = 70016,
 };
 
 enum Events
@@ -59,53 +61,45 @@ public:
             events.ScheduleEvent(EVENT_HEAD_CAST, 8000);
         }
 
-        void SpellInterrupted(uint32 spellId, uint32 /*school*/) override
-        {
-            if (headCasting && (spellId == SPELL_VERSE_1 || spellId == SPELL_VERSE_2 || spellId == SPELL_VERSE_3))
-            {
-                interruptedHeads++;
-                headCasting = false;
-                Talk(SAY_INTERRUPTED);
-                // Remove auras if needed
-                for (Player* player : me->GetPlayersInRange(100.0f))
-                {
-                    player->RemoveAura(SPELL_VERSE_2);
-                    player->RemoveAura(SPELL_VERSE_3);
-                }
-            }
-        }
-
         void DoCrescendo()
         {
+            std::list<Player*> players;
+            GetPlayerListInGrid(players, me, 100.0f);
+
             switch (interruptedHeads)
             {
                 case 0:
                     Talk(SAY_CRESCENDO_0);
-                    DoCastAOE(38628); // Fel Explosion
-                    for (Player* player : me->GetPlayersInRange(100.0f))
+                    me->CastSpell(me, 38628, true);
+                    for (Player* player : players)
                     {
-                        me->CastSpell(player, 17293, true); // Shadow DOT
+                        me->CastSpell(player, 17293, true);
                         float x = player->GetPositionX() + frand(-2.f, 2.f);
                         float y = player->GetPositionY() + frand(-2.f, 2.f);
                         float z = player->GetPositionZ();
-                        if (Creature* add = me->SummonCreature(15318, x, y, z, 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
-                            add->Attack(player, true);
+                        if (Creature* drone = me->SummonCreature(15318, x, y, z, 0.0f, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
+                        {
+                            drone->SetReactState(REACT_AGGRESSIVE);
+                            drone->Attack(player, true);
+                            drone->SetInCombatWithZone();
+                        }
                     }
                     break;
                 case 1:
                     Talk(SAY_CRESCENDO_1);
-                    DoCastAOE(38628);
-                    for (Player* player : me->GetPlayersInRange(100.0f))
+                    me->CastSpell(me, 38628, true);
+                    for (Player* player : players)
                         me->CastSpell(player, 17293, true);
                     break;
                 case 2:
                     Talk(SAY_CRESCENDO_2);
-                    DoCastAOE(38628);
+                    me->CastSpell(me, 38628, true);
                     break;
                 case 3:
                     Talk(SAY_CRESCENDO_3);
                     break;
             }
+
             currentHead = 0;
             interruptedHeads = 0;
             events.ScheduleEvent(EVENT_HEAD_CAST, 20000);
@@ -127,6 +121,10 @@ public:
                 {
                     headCasting = true;
                     currentHead++;
+
+                    std::list<Player*> players;
+                    GetPlayerListInGrid(players, me, 100.0f);
+
                     switch (currentHead)
                     {
                         case 1:
@@ -136,13 +134,13 @@ public:
                             break;
                         case 2:
                             Talk(SAY_HEAD_2);
-                            for (Player* player : me->GetPlayersInRange(100.0f))
-                                player->AddAura(33711, player); // Spell Reflection
+                            for (Player* player : players)
+                                player->CastSpell(player, 33711, true); // Reflect Aura
                             break;
                         case 3:
                             Talk(SAY_HEAD_3);
-                            for (Player* player : me->GetPlayersInRange(100.0f))
-                                player->AddAura(28194, player); // Corrupted Healing
+                            for (Player* player : players)
+                                player->CastSpell(player, 28194, true); // Corrupted Healing
                             break;
                     }
 
@@ -158,7 +156,7 @@ public:
                     break;
                 case EVENT_VERSE_1_TICK:
                     if (Unit* tank = me->GetVictim())
-                        tank->AddAura(27177, tank); // Sunder Armor
+                        tank->CastSpell(tank, 27177, true); // Sunder Armor
                     break;
             }
 
